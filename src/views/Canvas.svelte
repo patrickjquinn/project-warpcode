@@ -1,48 +1,117 @@
 <script lang="ts">
 	import { HSplitPane, VSplitPane } from 'svelte-split-pane'
 	import Monaco from '../components/Editor.svelte'
+	import { fileExcelO, filePictureO, fileText } from 'svelte-awesome/icons'
 
-	import Tree from 'svelte-tree'
-	const tree: Array<Record<string, unknown>> = [
+	const DIRECTORY = 'DIRECTORY'
+	const FILE = 'FILE'
+
+	const extensionToIconMap = {
+		txt: fileText,
+		xlsx: fileExcelO,
+		png: filePictureO
+	}
+
+	import FileExplorer from '../modules/libs/svelte-file-tree/FileExplorer.svelte'
+	let files = [
 		{
-			name: 'This is a root node',
+			type: DIRECTORY,
+			name: 'Project Demo',
 			children: [
 				{
-					name: 'And it has'
-				},
-				{
-					name: 'two children'
-				}
-			]
-		},
-		{
-			name: 'This is another root node',
-			children: [
-				{
-					name: 'This one is alone'
-				},
-				{
-					name: 'But this one has nested children',
+					type: DIRECTORY,
+					name: 'views',
+					expanded: false,
 					children: [
 						{
-							name: 'Like this'
+							type: DIRECTORY,
+							name: 'web',
+							children: [
+								{
+									type: FILE,
+									name: 'Login'
+								},
+								{
+									type: FILE,
+									name: 'Home'
+								},
+								{
+									type: FILE,
+									name: 'Article'
+								}
+							]
 						},
 						{
-							name: 'and this'
+							type: DIRECTORY,
+							name: 'mobile',
+							expanded: false,
+							children: [
+								{
+									type: FILE,
+									name: 'Login'
+								},
+								{
+									type: FILE,
+									name: 'Home'
+								},
+								{
+									type: FILE,
+									name: 'Article'
+								}
+							]
+						},
+						{
+							type: DIRECTORY,
+							name: 'mobile',
+							expanded: false,
+							children: [
+								{
+									type: FILE,
+									name: 'Login'
+								},
+								{
+									type: FILE,
+									name: 'Home'
+								},
+								{
+									type: FILE,
+									name: 'Article'
+								}
+							]
+						}
+					]
+				},
+				{
+					type: DIRECTORY,
+					name: 'components',
+					expanded: false,
+					children: [
+						{
+							type: FILE,
+							name: 'fancyView'
+						},
+						{
+							type: FILE,
+							name: 'styledTextfield'
+						},
+						{
+							type: FILE,
+							name: 'file-3.js'
 						}
 					]
 				}
 			]
 		}
 	]
+	let icons = (extension) => extensionToIconMap[extension]
+	let expanded = true
+	let selected = false
 </script>
 
 <div id="header"></div>
 <div id="contents_wrapper">
 	<div class="sidenav">
-		<Tree tree="{tree}" let:node>
-			<div class="name">{node.name}</div>
-		</Tree>
+		<FileExplorer files="{files}" icons="{icons}" expanded="{expanded}" selected="{selected}" />
 	</div>
 	<div class="wrapper">
 		<HSplitPane
