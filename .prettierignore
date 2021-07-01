@@ -1,0 +1,6 @@
+.svelte-kit/**
+public/static/**
+public/build/**
+dist/**
+node_modules/**
+worker-site/**
