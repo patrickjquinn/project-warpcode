@@ -9,32 +9,40 @@ export class CodeMap {
 	}
 
 	public mapToCode(canvas: Record<string, unknown>): string {
-        console.log(canvas)
+		console.log(canvas)
 		const items: Array<Record<string, unknown>> = canvas.items as Array<Record<string, unknown>>
 		let scriptItems = ``
 		let mainItems = ``
 		for (const item of items) {
 			const widgetType: string = item.widget as string
+			const widgetID: string = item.id as string
 			scriptItems =
 				scriptItems +
-				`
-                import {'${CodeMap.capFirstLetter(widgetType)}' } from "@components/warp/
+				`import {'${CodeMap.capFirstLetter(widgetType)}' } from "@components/warp/
             `
-			mainItems =
-				mainItems +
-				`
-                <${CodeMap.capFirstLetter(widgetType)}/>
+
+			if (item === items[items.length - 1]) {
+				mainItems =
+					mainItems + `<${CodeMap.capFirstLetter(widgetType)} id="${widgetType + widgetID}"/>`
+			} else {
+				mainItems =
+					mainItems +
+					`<${CodeMap.capFirstLetter(widgetType)} id="${widgetType + widgetID}"/>
             `
+			}
 		}
 
 		return `
         <script lang=${this.lang}>
-            ${scriptItems}
+            ${scriptItems.trim()}
         </script>
 
         <main>
             ${mainItems}
         </main>
+
+		<style>
+		</style>
         `
 	}
 

@@ -11,14 +11,13 @@
 	let editor: monaco.editor.IStandaloneCodeEditor
 	let Monaco: any
 
-    export let code
+	export let code
 
-    $: {
-        if (editor?.getValue){
-            editor.setValue(code)
-        }
-    }
-
+	$: {
+		if (editor?.getValue) {
+			editor.setValue(code)
+		}
+	}
 
 	onMount(async () => {
 		// @ts-ignore

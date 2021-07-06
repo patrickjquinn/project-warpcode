@@ -11,7 +11,7 @@
 		{ id: 54, name: 'scroll container', icon: square, widget: 'scrollContainer' },
 		{ id: 55, name: 'image', icon: image, widget: 'container' },
 		{ id: 56, name: 'button', icon: square, widget: 'button' },
-		{ id: 57, name: 'video player', icon: videoCamera, widget: 'container' },
+		{ id: 57, name: 'video player', icon: videoCamera, widget: 'videoPlayer' },
 		{ id: 58, name: 'audio player', icon: textWidth, widget: 'container' },
 		{ id: 59, name: 'checkbox', icon: square, widget: 'container' },
 		{ id: 60, name: 'list view', icon: square, widget: 'container' },

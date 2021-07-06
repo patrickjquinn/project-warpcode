@@ -1,7 +1,8 @@
 <script lang="ts">
+	export let id
 </script>
 
-<div></div>
+<div id="{id}"></div>
 
 <style>
 	div {

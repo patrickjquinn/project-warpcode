@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { flip } from 'svelte/animate'
 	import { dndzone } from 'svelte-dnd-action'
-    import { createEventDispatcher } from 'svelte';
+	import { createEventDispatcher } from 'svelte'
 	import {
 		Container,
 		ScrollContainer,
@@ -10,6 +10,7 @@
 		TextInput,
 		Button
 	} from './warp/widgets/index'
+import VideoPlayer from './warp/widgets/VideoPlayer.svelte';
 	let columnItems = [
 		{
 			id: 1,
@@ -18,7 +19,7 @@
 	]
 
 	const flipDurationMs = 200
-    const dispatch = createEventDispatcher();
+	const dispatch = createEventDispatcher()
 
 	function handleDndConsiderColumns(e) {
 		columnItems = e.detail.items
@@ -35,14 +36,14 @@
 		const colIdx = columnItems.findIndex((c) => c.id === cid)
 		columnItems[colIdx].items = e.detail.items
 		columnItems = [...columnItems]
-        canvasChanged()
+		canvasChanged()
 	}
 
-    function canvasChanged () {
-        dispatch('message', {
+	function canvasChanged() {
+		dispatch('message', {
 			items: columnItems[0].items
 		})
-    }
+	}
 </script>
 
 <section
@@ -61,17 +62,19 @@
 			>
 				{#each column.items as item (item.id)}
 					{#if item.widget === 'container'}
-						<Container />
+						<Container id={item.id} />
 					{:else if item.widget === 'label'}
-						<Label />
+						<Label id={item.id} />
 					{:else if item.widget === 'scrollContainer'}
-						<ScrollContainer />
+						<ScrollContainer id={item.id} />
 					{:else if item.widget === 'button'}
-						<Button />
+						<Button id={item.id} />
 					{:else if item.widget === 'textInput'}
-						<TextInput />
+						<TextInput id={item.id} />
 					{:else if item.widget === 'textBox'}
-						<TextBox />
+						<TextBox id={item.id} />
+					{:else if item.widget === 'videoPlayer'}
+						<VideoPlayer id={item.id} />
 					{/if}
 				{/each}
 			</div>

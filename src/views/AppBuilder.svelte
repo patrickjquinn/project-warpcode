@@ -6,7 +6,7 @@
 	import UICanvas from '../components/UICanvas.svelte'
 	import ProjectExplorer from '../components/ProjectExplorer.svelte'
 
-	let currentCode = ``
+	let currentCode = '<script lang="ts"></script'+'><main></main>\n\n<style></style>'
 
 	function handleCanvasChange(event){
 		const canvas = event.detail

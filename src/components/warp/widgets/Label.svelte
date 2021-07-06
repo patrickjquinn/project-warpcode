@@ -1,7 +1,8 @@
 <script lang="ts">
+	export let id
 </script>
 
-<p contenteditable="true">Label</p>
+<p id="{id}" contenteditable="true">Label</p>
 
 <style>
 	p {

@@ -1,10 +1,12 @@
 <script lang="ts">
+	export let id
 </script>
 
-<input type="text" id="fname" name="fname" />
+<input id="{id}" type="text" name="fname" />
 
 <style>
 	input {
 		color: black;
+		width: 100%;
 	}
 </style>

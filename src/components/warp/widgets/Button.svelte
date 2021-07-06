@@ -1,7 +1,8 @@
 <script lang="ts">
+	export let id
 </script>
 
-<button contenteditable="true">Button</button>
+<button id="{id}" contenteditable="true">Button</button>
 
 <style>
 	button {
