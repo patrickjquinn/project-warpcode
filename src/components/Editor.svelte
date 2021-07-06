@@ -11,12 +11,16 @@
 	let editor: monaco.editor.IStandaloneCodeEditor
 	let Monaco: any
 
+    export let code
+
+    $: {
+        if (editor?.getValue){
+            editor.setValue(code)
+        }
+    }
+
+
 	onMount(async () => {
-		const svelteCode = `
-	<div>
-		<span>Some HTML here</span>
-	</div>
-	`
 		// @ts-ignore
 		self.MonacoEnvironment = {
 			getWorker: function (_moduleId: any, label: string) {
@@ -38,7 +42,7 @@
 
 		Monaco = await import('monaco-editor')
 		editor = Monaco.editor.create(divEl, {
-			value: [svelteCode].join('\n'),
+			value: [code].join('\n'),
 			language: 'html',
 			automaticLayout: true,
 			theme: 'vs-dark',

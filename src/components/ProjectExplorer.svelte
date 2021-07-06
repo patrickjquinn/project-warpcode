@@ -1,7 +1,6 @@
 <script lang="ts">
-	import { HSplitPane, VSplitPane } from 'svelte-split-pane'
-	import Monaco from '../components/Editor.svelte'
 	import { fileExcelO, filePictureO, fileText } from 'svelte-awesome/icons'
+	import FileExplorer from '../modules/libs/svelte-file-tree/FileExplorer.svelte'
 
 	const DIRECTORY = 'DIRECTORY'
 	const FILE = 'FILE'
@@ -12,7 +11,6 @@
 		png: filePictureO
 	}
 
-	import FileExplorer from '../modules/libs/svelte-file-tree/FileExplorer.svelte'
 	let files = [
 		{
 			type: DIRECTORY,
@@ -108,49 +106,15 @@
 	let selected = false
 </script>
 
-<div id="header"></div>
-<div id="contents_wrapper">
-	<div class="sidenav">
-		<FileExplorer files="{files}" icons="{icons}" expanded="{expanded}" selected="{selected}" />
-	</div>
-	<div class="wrapper">
-		<HSplitPane
-			updateCallback="{() => {
-				console.log('HSplitPane Updated!')
-			}}"
-		>
-			<left slot="left"> <Monaco /> </left>
-			<right slot="right"> Visual Editor </right>
-		</HSplitPane>
-	</div>
+<div class="project_nav">
+	<FileExplorer files="{files}" icons="{icons}" expanded="{expanded}" selected="{selected}" />
 </div>
 
 <style>
-	#contents_wrapper {
-		width: 100vw;
-		height: 95vh;
-	}
-	.wrapper {
-		height: 100%;
-		margin-left: 10vw;
-	}
-	#header {
+	.project_nav {
 		width: 100%;
-		height: 5vh;
-		line-height: 5vh;
-		background-color: darkslategray;
-	}
-	.sidenav {
 		height: 100%;
-		width: 10vw;
-		z-index: 1;
 		float: left;
-		/* position: absolute; */
-		top: 0;
-		left: 0;
-		background-color: #111;
-		overflow-x: hidden;
-		padding-top: 20px;
-		color: white !important;
+		background-color: #1e1e1e;
 	}
 </style>

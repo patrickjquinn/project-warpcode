@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Canvas from './views/Canvas.svelte'
+	import Canvas from './views/AppBuilder.svelte'
 </script>
 
 <main>
