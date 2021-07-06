@@ -10,7 +10,7 @@
 		TextInput,
 		Button
 	} from './warp/widgets/index'
-import VideoPlayer from './warp/widgets/VideoPlayer.svelte';
+	import VideoPlayer from './warp/widgets/VideoPlayer.svelte'
 	let columnItems = [
 		{
 			id: 1,
@@ -62,19 +62,19 @@ import VideoPlayer from './warp/widgets/VideoPlayer.svelte';
 			>
 				{#each column.items as item (item.id)}
 					{#if item.widget === 'container'}
-						<Container id={item.id} />
+						<Container id="{item.id}" />
 					{:else if item.widget === 'label'}
-						<Label id={item.id} />
+						<Label id="{item.id}" />
 					{:else if item.widget === 'scrollContainer'}
-						<ScrollContainer id={item.id} />
+						<ScrollContainer id="{item.id}" />
 					{:else if item.widget === 'button'}
-						<Button id={item.id} />
+						<Button id="{item.id}" />
 					{:else if item.widget === 'textInput'}
-						<TextInput id={item.id} />
+						<TextInput id="{item.id}" />
 					{:else if item.widget === 'textBox'}
-						<TextBox id={item.id} />
+						<TextBox id="{item.id}" />
 					{:else if item.widget === 'videoPlayer'}
-						<VideoPlayer id={item.id} />
+						<VideoPlayer id="{item.id}" />
 					{/if}
 				{/each}
 			</div>

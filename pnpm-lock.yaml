@@ -23,11 +23,13 @@ specifiers:
   svelte-preprocess: ^4.7.3
   svelte-split-pane: ^0.1.2
   svelte-tree: ^0.7.0
+  svelte-watch-resize: ^1.0.3
   tiny-glob: ^0.2.9
   tslib: ^2.3.0
   typescript: ^4.3.5
   vite: ^2.4.0
   xterm: ^4.13.0
+  xterm-addon-fit: ^0.5.0
   xterm-webfont: ^2.0.0
 
 devDependencies:
@@ -53,11 +55,13 @@ devDependencies:
   svelte-preprocess: 4.7.3_svelte@3.38.3+typescript@4.3.5
   svelte-split-pane: 0.1.2
   svelte-tree: 0.7.0
+  svelte-watch-resize: 1.0.3
   tiny-glob: 0.2.9
   tslib: 2.3.0
   typescript: 4.3.5
   vite: 2.4.0
   xterm: 4.13.0
+  xterm-addon-fit: 0.5.0_xterm@4.13.0
   xterm-webfont: 2.0.0
 
 packages:
@@ -786,6 +790,10 @@ packages:
     dev: true
     optional: true
 
+  /batch-processor/1.0.0:
+    resolution: { integrity: sha1-dclcMrdI4IUNEMKxaPa9vpiRrOg= }
+    dev: true
+
   /binary-extensions/2.2.0:
     resolution:
       {
@@ -1452,6 +1460,15 @@ packages:
       extract-zip: 1.7.0
     transitivePeerDependencies:
       - supports-color
+    dev: true
+
+  /element-resize-detector/1.2.3:
+    resolution:
+      {
+        integrity: sha512-+dhNzUgLpq9ol5tyhoG7YLoXL3ssjfFW+0gpszXPwRU6NjGr1fVHMEAF8fVzIiRJq57Nre0RFeIjJwI8Nh2NmQ==
+      }
+    dependencies:
+      batch-processor: 1.0.0
     dev: true
 
   /emoji-regex/7.0.3:
@@ -3621,6 +3638,15 @@ packages:
       }
     dev: true
 
+  /svelte-watch-resize/1.0.3:
+    resolution:
+      {
+        integrity: sha512-ktqTnkdqfx4YRqeMJcX1jeSnQ2kJUVlj4/rLdaLbhM+RrxN87vS2EZ0cxlGZ7eXV86Ef05Q3dVqEiR+12PeoIw==
+      }
+    dependencies:
+      element-resize-detector: 1.2.3
+    dev: true
+
   /svelte/3.38.3:
     resolution:
       {
@@ -3990,6 +4016,17 @@ packages:
     engines: { node: '>=10.0.0' }
     dev: true
     optional: true
+
+  /xterm-addon-fit/0.5.0_xterm@4.13.0:
+    resolution:
+      {
+        integrity: sha512-DsS9fqhXHacEmsPxBJZvfj2la30Iz9xk+UKjhQgnYNkrUIN5CYLbw7WEfz117c7+S86S/tpHPfvNxJsF5/G8wQ==
+      }
+    peerDependencies:
+      xterm: ^4.0.0
+    dependencies:
+      xterm: 4.13.0
+    dev: true
 
   /xterm-webfont/2.0.0:
     resolution:
