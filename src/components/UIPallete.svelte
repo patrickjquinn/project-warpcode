@@ -9,7 +9,7 @@
 		{ id: 52, name: 'text box', icon: textWidth, widget: 'textBox' },
 		{ id: 53, name: 'container', icon: square, widget: 'container' },
 		{ id: 54, name: 'scroll container', icon: square, widget: 'scrollContainer' },
-		{ id: 55, name: 'image', icon: image, widget: 'container' },
+		{ id: 55, name: 'image', icon: image, widget: 'image' },
 		{ id: 56, name: 'button', icon: square, widget: 'button' },
 		{ id: 57, name: 'video player', icon: videoCamera, widget: 'videoPlayer' },
 		{ id: 58, name: 'audio player', icon: textWidth, widget: 'container' },
@@ -55,7 +55,8 @@
 >
 	{#each items as item (item.id)}
 		<div animate:flip="{{ duration: flipDurationMs }}">
-			<Icon data="{item.icon}" />     {item.name}
+			<Icon data="{item.icon}" />
+			{item.name}
 		</div>
 	{/each}
 </section>

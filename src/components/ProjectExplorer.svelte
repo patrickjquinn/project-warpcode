@@ -27,15 +27,7 @@
 							children: [
 								{
 									type: FILE,
-									name: 'Login'
-								},
-								{
-									type: FILE,
-									name: 'Home'
-								},
-								{
-									type: FILE,
-									name: 'Article'
+									name: 'Start'
 								}
 							]
 						},
@@ -46,34 +38,7 @@
 							children: [
 								{
 									type: FILE,
-									name: 'Login'
-								},
-								{
-									type: FILE,
-									name: 'Home'
-								},
-								{
-									type: FILE,
-									name: 'Article'
-								}
-							]
-						},
-						{
-							type: DIRECTORY,
-							name: 'mobile',
-							expanded: false,
-							children: [
-								{
-									type: FILE,
-									name: 'Login'
-								},
-								{
-									type: FILE,
-									name: 'Home'
-								},
-								{
-									type: FILE,
-									name: 'Article'
+									name: 'Start'
 								}
 							]
 						}

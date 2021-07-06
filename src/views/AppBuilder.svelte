@@ -5,9 +5,9 @@
 	import UIPallete from '../components/UIPallete.svelte'
 	import UICanvas from '../components/UICanvas.svelte'
 	import ProjectExplorer from '../components/ProjectExplorer.svelte'
-	import Terminal from "../components/Terminal.svelte"
+	import Terminal from '../components/Terminal.svelte'
 
-	let currentCode = '<script lang="ts"></script' + '><main></main>\n\n<style></style>'
+	let currentCode = '<script lang="ts">\n\n</script' + '>\n\n<main>\n\n</main>\n\n<style></style>'
 
 	function handleCanvasChange(event) {
 		const canvas = event.detail
@@ -16,6 +16,68 @@
 		console.log(currentCode)
 	}
 </script>
+<main>
+	<div id="header"></div>
+	<div id="contents_wrapper">
+		<div class="sidenav"></div>
+		<div class="wrapper">
+			<HSplitPane
+				leftPaneSize="60%"
+				rightPaneSize="40%"
+				minLeftPaneSize="250px"
+				minRightPaneSize="250px"
+				updateCallback="{() => {
+					console.log('HSplitPane Updated!')
+				}}"
+			>
+				<left slot="left">
+					<HSplitPane
+						leftPaneSize="22%"
+						rightPaneSize="78%"
+						updateCallback="{() => {
+							console.log('HSplitPane Updated!')
+						}}"
+					>
+						<left slot="left">
+							<ProjectExplorer />
+						</left>
+						<right slot="right">
+							<VSplitPane
+								topPanelSize="100%"
+								downPanelSize="0%"
+								minTopPaneSize="50px"
+								minDownPaneSize="0px"
+							>
+								<top slot="top">
+									<Monaco code="{currentCode}" />
+								</top>
+								<down slot="down">
+									<Terminal />
+								</down>
+							</VSplitPane>
+						</right>
+					</HSplitPane>
+				</left>
+				<right slot="right">
+					<HSplitPane
+						leftPaneSize="78%"
+						rightPaneSize="22%"
+						updateCallback="{() => {
+							console.log('HSplitPane Updated!')
+						}}"
+					>
+						<left slot="left">
+							<UICanvas on:message="{handleCanvasChange}" />
+						</left>
+						<right slot="right">
+							<UIPallete />
+						</right>
+					</HSplitPane>
+				</right>
+			</HSplitPane>
+		</div>
+	</div>
+</main>
 
 <style>
 	#contents_wrapper {
@@ -45,55 +107,3 @@
 		color: white !important;
 	}
 </style>
-
-<div id="header"></div>
-<div id="contents_wrapper">
-	<div class="sidenav"></div>
-	<div class="wrapper">
-		<HSplitPane
-			leftPaneSize="60%"
-			rightPaneSize="40%"
-			minLeftPaneSize="250px"
-			minRightPaneSize="250px"
-			updateCallback="{() => {
-				console.log('HSplitPane Updated!')
-			}}"
-		>
-			<left slot="left">
-				<HSplitPane
-					leftPaneSize="22%"
-					rightPaneSize="78%"
-					updateCallback="{() => {
-						console.log('HSplitPane Updated!')
-					}}"
-				>
-					<left slot="left">
-						<ProjectExplorer />
-					</left>
-					<right slot="right">
-						<Monaco code="{currentCode}" />
-					</right>
-				</HSplitPane>
-			</left>
-			<right slot="right">
-				<HSplitPane
-					leftPaneSize="80%"
-					rightPaneSize="20%"
-					updateCallback="{() => {
-						console.log('HSplitPane Updated!')
-					}}"
-				>
-					<left slot="left">
-						<UICanvas on:message="{handleCanvasChange}" />
-
-						
-						
-					</left>
-					<right slot="right">
-						<UIPallete/>
-					</right>
-				</HSplitPane>
-			</right>
-		</HSplitPane>
-	</div>
-</div>

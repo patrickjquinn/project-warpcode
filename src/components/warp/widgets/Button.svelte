@@ -15,6 +15,10 @@
 
 <style>
 	button {
+		width: 85%;
+		border-radius: 4;
+		background-color: white;
+		height: 40px;
 		color: black;
 	}
 </style>

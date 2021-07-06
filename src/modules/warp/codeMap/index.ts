@@ -10,8 +10,8 @@ export class CodeMap {
 
 	public mapToCode(canvas: Record<string, unknown>): string {
 		const items: Array<Record<string, unknown>> = canvas.items as Array<Record<string, unknown>>
-		let scriptItems: string = ``
-		let mainItems: string = ``
+		let scriptItems = ``
+		let mainItems = ``
 		for (const item of items) {
 			const widgetType: string = item.widget as string
 			const widgetID: string = item.id as string
