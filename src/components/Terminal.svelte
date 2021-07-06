@@ -78,8 +78,10 @@
 	let bgColor = '#222'
 
 	$: {
-		bgColor = theme.background
-		terminalController.setOption('theme', theme)
+		if (terminalController) {
+			bgColor = theme.background
+			terminalController.setOption('theme', theme)
+		}
 	}
 
 	function initializeXterm() {

@@ -9,10 +9,9 @@ export class CodeMap {
 	}
 
 	public mapToCode(canvas: Record<string, unknown>): string {
-		console.log(canvas)
 		const items: Array<Record<string, unknown>> = canvas.items as Array<Record<string, unknown>>
-		let scriptItems = ``
-		let mainItems = ``
+		let scriptItems: string = ``
+		let mainItems: string = ``
 		for (const item of items) {
 			const widgetType: string = item.widget as string
 			const widgetID: string = item.id as string
@@ -50,7 +49,7 @@ export class CodeMap {
 		let mainObject: string = code.split('<main>')[0]
 		mainObject = mainObject.split('</main>')[0]
 
-		const components: any = mainObject.split(/\n/)
+		const components: Array<unknown> = mainObject.split(/\n/)
 		console.log(components)
 	}
 }

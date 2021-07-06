@@ -5,6 +5,7 @@
 	import UIPallete from '../components/UIPallete.svelte'
 	import UICanvas from '../components/UICanvas.svelte'
 	import ProjectExplorer from '../components/ProjectExplorer.svelte'
+	import Terminal from "../components/Terminal.svelte"
 
 	let currentCode = '<script lang="ts"></script' + '><main></main>\n\n<style></style>'
 
@@ -15,6 +16,35 @@
 		console.log(currentCode)
 	}
 </script>
+
+<style>
+	#contents_wrapper {
+		width: 100vw;
+		height: 95vh;
+	}
+	.wrapper {
+		height: 100%;
+		margin-left: 5vw;
+	}
+	#header {
+		width: 100%;
+		height: 5vh;
+		line-height: 5vh;
+		background-color: darkslategray;
+	}
+	.sidenav {
+		height: 95vh;
+		width: 5vw;
+		z-index: 1;
+		float: left;
+		top: 0;
+		left: 0;
+		background-color: black;
+		overflow-x: hidden;
+		padding-top: 0px;
+		color: white !important;
+	}
+</style>
 
 <div id="header"></div>
 <div id="contents_wrapper">
@@ -47,26 +77,23 @@
 			</left>
 			<right slot="right">
 				<HSplitPane
-					leftPaneSize="60%"
-					rightPaneSize="40%"
+					leftPaneSize="80%"
+					rightPaneSize="20%"
 					updateCallback="{() => {
 						console.log('HSplitPane Updated!')
 					}}"
 				>
 					<left slot="left">
-						<div class="smartphone">
-							<div class="content">
-								<UICanvas on:message="{handleCanvasChange}" />
-							</div>
-						</div>
+						<UICanvas on:message="{handleCanvasChange}" />
+
+						
+						
 					</left>
-					<right style="width: 200px; !important" slot="right">
-						<UIPallete />
+					<right slot="right">
+						<UIPallete/>
 					</right>
 				</HSplitPane>
 			</right>
 		</HSplitPane>
 	</div>
 </div>
-
-<style></style>

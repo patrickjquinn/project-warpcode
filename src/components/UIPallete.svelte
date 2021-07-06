@@ -55,7 +55,7 @@
 >
 	{#each items as item (item.id)}
 		<div animate:flip="{{ duration: flipDurationMs }}">
-			<Icon data="{item.icon}" />{item.name}
+			<Icon data="{item.icon}" />     {item.name}
 		</div>
 	{/each}
 </section>
