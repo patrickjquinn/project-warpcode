@@ -45,7 +45,7 @@
 	import '../../node_modules/xterm/css/xterm.css'
 	import * as xterm from 'xterm'
 	import WebfontLoader from 'xterm-webfont';
-    import pty from 'node-pty';
+    // import pty from 'node-pty';
     import defaultShell from 'default-shell';
 	import * as fit from 'xterm-addon-fit'
 	import { watchResize } from 'svelte-watch-resize'
@@ -91,15 +91,15 @@
 	function initializeXterm() {
 		terminalController = new xterm.Terminal()
 
-		proc = pty.spawn(defaultShell, ['--login'], {
-					name: 'xterm-color',
-					cols: 80,
-					rows: 40,
-				});
+		// proc = pty.spawn(defaultShell, ['--login'], {
+		// 			name: 'xterm-color',
+		// 			cols: 80,
+		// 			rows: 40,
+		// 		});
 
-		proc.on('data', data => {
-			terminalController.write(data);
-		})
+		// proc.on('data', data => {
+		// 	terminalController.write(data);
+		// })
 
 		termFit = new fit.FitAddon()
 		terminalController.loadAddon(termFit)
