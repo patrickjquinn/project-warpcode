@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { remote } from 'electron';
 	import { CodeMap } from '../modules/warp/codeMap'
 	import { HSplitPane, VSplitPane } from 'svelte-split-pane'
 	import Monaco from '../components/Editor.svelte'
@@ -7,7 +8,10 @@
 	import ProjectExplorer from '../components/ProjectExplorer.svelte'
 	import Terminal from '../components/Terminal.svelte'
 
+
 	let currentCode = '<script lang="ts">\n\n</script' + '>\n\n<main>\n\n</main>\n\n<style></style>'
+
+	const win = remote.BrowserWindow.getFocusedWindow();
 
 	function handleCanvasChange(event) {
 		const canvas = event.detail
@@ -17,7 +21,14 @@
 	}
 </script>
 <main>
-	<div id="header"></div>
+	<div id="header">
+		<div id="title">Warp Code</div>
+		<div id="title-bar-btns">
+			<button on:click={win.minimize} id="min-btn">-</button>
+			<button on:click={win.maximize} id="max-btn">+</button>
+			<button on:click={win.close} id="close-btn">x</button>
+		</div>
+	</div>
 	<div id="contents_wrapper">
 		<div class="sidenav"></div>
 		<div class="wrapper">
@@ -93,6 +104,21 @@
 		height: 5vh;
 		line-height: 5vh;
 		background-color: darkslategray;
+		-webkit-app-region: drag;
+	}
+	#title {
+		position: fixed;
+		top: 0px;
+		left: 6px; 
+	}
+
+	#title-bar-btns {
+		-webkit-app-region: no-drag;
+		position: fixed;
+		top: 0px;
+		right: 6px;
+		-webkit-app-region: no-drag;
+
 	}
 	.sidenav {
 		height: 95vh;
