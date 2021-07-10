@@ -44,14 +44,13 @@
 
 	import '../../node_modules/xterm/css/xterm.css'
 	import * as xterm from 'xterm'
-	import WebfontLoader from 'xterm-webfont';
+	import WebfontLoader from 'xterm-webfont'
 	import * as fit from 'xterm-addon-fit'
 	import { watchResize } from 'svelte-watch-resize'
-	const { remote, ipcRenderer } = window.require('electron');
+	const { remote, ipcRenderer } = window.require('electron')
 
 	let terminalElement
-	let proc;
-
+	let proc
 
 	const SOLARIZED_DARK: xterm.ITheme = Object.freeze<xterm.ITheme>({
 		foreground: '#839496',
@@ -96,14 +95,14 @@
 		terminalController.open(terminalElement)
 		termFit.fit()
 
-		terminalController.write('\x1b[32mWelcome to Warp code!\x1b[m\r\n');
-        terminalController.onData(e => {
-            ipcRenderer.send("terminal-into", e);
-        });
-        
-        ipcRenderer.on('terminal-incData', (event, data) => {
-            terminalController.write(data);
-        });
+		terminalController.write('\x1b[32mWelcome to Warp code!\x1b[m\r\n')
+		terminalController.onData((e) => {
+			ipcRenderer.send('terminal-into', e)
+		})
+
+		ipcRenderer.on('terminal-incData', (event, data) => {
+			terminalController.write(data)
+		})
 	}
 
 	onMount(async () => {

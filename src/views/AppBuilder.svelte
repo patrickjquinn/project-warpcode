@@ -1,5 +1,5 @@
 <script lang="ts">
-	const electron = window.require("electron")
+	const electron = window.require('electron')
 	import { CodeMap } from '../modules/warp/codeMap'
 	import { HSplitPane, VSplitPane } from 'svelte-split-pane'
 	import Monaco from '../components/Editor.svelte'
@@ -7,7 +7,7 @@
 	import UICanvas from '../components/UICanvas.svelte'
 	import ProjectExplorer from '../components/ProjectExplorer.svelte'
 	import Terminal from '../components/Terminal.svelte'
-	
+
 	function minimize() {
 		let window: any = remote.BrowserWindow.getFocusedWindow()
 		window.minimize()
@@ -23,12 +23,11 @@
 		window.close()
 	}
 
-	const {remote} = electron
-
+	const { remote } = electron
 
 	let currentCode = '<script lang="ts">\n\n</script' + '>\n\n<main>\n\n</main>\n\n<style></style>'
 
-	const win: any = remote.BrowserWindow.getFocusedWindow();
+	const win: any = remote.BrowserWindow.getFocusedWindow()
 
 	// win.minimize()
 
@@ -38,12 +37,10 @@
 		currentCode = codeMap.mapToCode(canvas)
 		console.log(currentCode)
 	}
-
 </script>
+
 <main>
-	<div id="header">
-		
-	</div>
+	<div id="header"></div>
 	<div id="contents_wrapper">
 		<div class="sidenav"></div>
 		<div class="wrapper">
@@ -121,34 +118,7 @@
 		background-color: #2f4f4f;
 		-webkit-app-region: drag;
 	}
-	#title {
-		position: fixed;
-		top: 0px;
-		right: 30px; 
-	}
 
-	#title-bar-btns {
-		-webkit-app-region: no-drag;
-		position: fixed;
-		top: 0px;
-		left: 6px;
-		-webkit-app-region: no-drag;
-	}
-	#min-btn {
-		border-radius: 100%;
-		background-color: yellow;
-		border: none
-	}
-	#max-btn {
-		border-radius: 100%;
-		background-color: green;
-		border: none
-	}
-	#close-btn {
-		border-radius: 100%;
-		background-color: red ;
-		border: none
-	}
 	.sidenav {
 		height: 95vh;
 		width: 5vw;

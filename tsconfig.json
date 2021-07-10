@@ -1,27 +1,22 @@
 {
 	"extends": "@tsconfig/svelte/tsconfig.json",
 	"compilerOptions": {
-	  "target": "ESNEXT",
+		"target": "ESNEXT",
 		"lib": ["ESNEXT", "dom"],
 		"module": "ESNEXT",
 		"moduleResolution": "node",
-	  "importHelpers": true,
-	  "esModuleInterop": true,
-	  "sourceMap": true,
-	  "baseUrl": "./",
-	  "strict": false,
-	  "types": [
-		"vite/client",
-		"node"
-	  ],
-	  "paths": {
-		"@/*": ["src/*", "elec/*"],
-		"root/*": ["/*"]
-	  },
-	  "allowSyntheticDefaultImports": true
+		"importHelpers": true,
+		"esModuleInterop": true,
+		"sourceMap": true,
+		"baseUrl": "./",
+		"strict": false,
+		"types": ["vite/client", "node"],
+		"paths": {
+			"@/*": ["src/*", "elec/*"],
+			"root/*": ["/*"]
+		},
+		"allowSyntheticDefaultImports": true
 	},
-	"include": [
-	  "src/**/*"
-	],
+	"include": ["src/**/*"],
 	"exclude": ["node_modules/*", "public/*", "dist/*"]
-  }
+}
