@@ -63,6 +63,7 @@ export default (env = 'production') => {
       'https',
       'path',
       'electron',
+      'node-pty'
     ],
   }
 }

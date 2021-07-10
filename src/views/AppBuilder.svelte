@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { remote } from 'electron';
+	const electron = window.require("electron")
 	import { CodeMap } from '../modules/warp/codeMap'
 	import { HSplitPane, VSplitPane } from 'svelte-split-pane'
 	import Monaco from '../components/Editor.svelte'
@@ -7,11 +7,30 @@
 	import UICanvas from '../components/UICanvas.svelte'
 	import ProjectExplorer from '../components/ProjectExplorer.svelte'
 	import Terminal from '../components/Terminal.svelte'
+	
+	function minimize() {
+		let window: any = remote.BrowserWindow.getFocusedWindow()
+		window.minimize()
+	}
+
+	function maximize() {
+		let window: any = remote.BrowserWindow.getFocusedWindow()
+		window.maximize()
+	}
+
+	function close() {
+		let window: any = remote.BrowserWindow.getFocusedWindow()
+		window.close()
+	}
+
+	const {remote} = electron
 
 
 	let currentCode = '<script lang="ts">\n\n</script' + '>\n\n<main>\n\n</main>\n\n<style></style>'
 
-	const win = remote.BrowserWindow.getFocusedWindow();
+	const win: any = remote.BrowserWindow.getFocusedWindow();
+
+	// win.minimize()
 
 	function handleCanvasChange(event) {
 		const canvas = event.detail
@@ -19,15 +38,11 @@
 		currentCode = codeMap.mapToCode(canvas)
 		console.log(currentCode)
 	}
+
 </script>
 <main>
 	<div id="header">
-		<div id="title">Warp Code</div>
-		<div id="title-bar-btns">
-			<button on:click={win.minimize} id="min-btn">-</button>
-			<button on:click={win.maximize} id="max-btn">+</button>
-			<button on:click={win.close} id="close-btn">x</button>
-		</div>
+		
 	</div>
 	<div id="contents_wrapper">
 		<div class="sidenav"></div>
@@ -103,22 +118,36 @@
 		width: 100%;
 		height: 5vh;
 		line-height: 5vh;
-		background-color: darkslategray;
+		background-color: #2f4f4f;
 		-webkit-app-region: drag;
 	}
 	#title {
 		position: fixed;
 		top: 0px;
-		left: 6px; 
+		right: 30px; 
 	}
 
 	#title-bar-btns {
 		-webkit-app-region: no-drag;
 		position: fixed;
 		top: 0px;
-		right: 6px;
+		left: 6px;
 		-webkit-app-region: no-drag;
-
+	}
+	#min-btn {
+		border-radius: 100%;
+		background-color: yellow;
+		border: none
+	}
+	#max-btn {
+		border-radius: 100%;
+		background-color: green;
+		border: none
+	}
+	#close-btn {
+		border-radius: 100%;
+		background-color: red ;
+		border: none
 	}
 	.sidenav {
 		height: 95vh;

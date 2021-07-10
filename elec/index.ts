@@ -6,6 +6,10 @@ import { app, BrowserWindow, ipcMain } from 'electron'
 import is_dev from 'electron-is-dev'
 import dotenv from 'dotenv'
 import Store from 'electron-store'
+import pty from 'node-pty'
+// import os from 'os'
+import defaultShell from 'default-shell'
+
 
 const store = new Store()
 ipcMain.on('store:set', async (e, args) => {
@@ -29,8 +33,9 @@ class createWin {
       width: 800,
       height: 600,
       webPreferences: {
-        nodeIntegration: false,
+        nodeIntegration: true,
         enableRemoteModule: true,
+        contextIsolation: false
       },
       show: false
     })
@@ -43,6 +48,23 @@ class createWin {
       : `file://${join(__dirname, '../../dist/index.html')}` // vite 构建后的静态文件地址
   
     win.loadURL(URL)
+
+    // const shell = os.platform() === "win32" ? "powershell.exe" : "bash";
+    const ptyProcess = pty.spawn(defaultShell, [], {
+          name: 'xterm-color',
+          cols: 80,
+          rows: 24,
+          cwd: process.env.HOME,
+          env: process.env
+      });
+    
+    ptyProcess.on("data", (data) => {
+      win.webContents.send("terminal-incData", data);
+    });
+
+    ipcMain.on("terminal-into", (event, data)=> {
+      ptyProcess.write(data);
+    })
   }
 }
 

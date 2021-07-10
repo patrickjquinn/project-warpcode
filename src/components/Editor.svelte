@@ -7,14 +7,14 @@
 	import htmlWorker from 'monaco-editor/esm/vs/language/html/html.worker?worker'
 	import tsWorker from 'monaco-editor/esm/vs/language/typescript/ts.worker?worker'
 
-	let divEl: HTMLDivElement = null
+	let divEl: HTMLDivElement
 	let editor: monaco.editor.IStandaloneCodeEditor
 	let Monaco: any
 
 	export let code
 
 	$: {
-		if (editor?.getValue) {
+		if (editor?.getValue()) {
 			editor.setValue(code)
 		}
 	}
