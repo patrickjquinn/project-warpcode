@@ -1,14 +1,11 @@
-/**
- * electron 主文件
- */
 import { join } from 'path'
 import { app, BrowserWindow, ipcMain } from 'electron'
 import is_dev from 'electron-is-dev'
 import dotenv from 'dotenv'
 import Store from 'electron-store'
 import pty from 'node-pty'
-// import os from 'os'
 import defaultShell from 'default-shell'
+import os from 'os'
 
 const store = new Store()
 ipcMain.on('store:set', async (e, args) => {
@@ -43,17 +40,19 @@ class createWin {
 		win.show()
 
 		const URL = is_dev
-			? 'http://localhost:3000' // vite 启动的服务器地址
-			: `file://${join(__dirname, '../../dist/index.html')}` // vite 构建后的静态文件地址
+			? 'http://localhost:3000'
+			: `file://${join(__dirname, '../../dist/index.html')}`
 
 		win.loadURL(URL)
+
+		console.log(`Warp dir: ${os.homedir()}/warpspace/Demo`)
 
 		// const shell = os.platform() === "win32" ? "powershell.exe" : "bash";
 		const ptyProcess = pty.spawn(defaultShell, [], {
 			name: 'xterm-color',
 			cols: 80,
 			rows: 24,
-			cwd: process.env.HOME,
+			cwd: `${os.homedir()}/warpspace/Demo`,
 			env: process.env
 		})
 

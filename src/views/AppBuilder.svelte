@@ -7,6 +7,7 @@
 	import UICanvas from '../components/UICanvas.svelte'
 	import ProjectExplorer from '../components/ProjectExplorer.svelte'
 	import Terminal from '../components/Terminal.svelte'
+	import Warp from "../assets/warp.png"
 
 	function minimize() {
 		let window: any = remote.BrowserWindow.getFocusedWindow()
@@ -42,7 +43,15 @@
 <main>
 	<div id="header"></div>
 	<div id="contents_wrapper">
-		<div class="sidenav"></div>
+		<div class="sidenav">
+			<div class="icon-bar">
+				<a class="active" href="#"><img width="50" height="50" src={Warp} alt=""/></a>
+				<a href="#"><i class="fa fa-search"></i></a>
+				<a href="#"><i class="fa fa-envelope"></i></a>
+				<a href="#"><i class="fa fa-globe"></i></a>
+				<a href="#"><i class="fa fa-trash"></i></a>
+			</div>
+		</div>
 		<div class="wrapper">
 			<HSplitPane
 				leftPaneSize="60%"
@@ -131,4 +140,25 @@
 		padding-top: 0px;
 		color: white !important;
 	}
+	.icon-bar {
+    height: 100%;
+    width: 90px;
+    text-align: center;
+    background-color: #555;
+}
+
+.icon-bar a {
+    padding: 16px;
+    display: block;
+    transition: all 0.3s ease;
+    color: white;
+    font-size: 36px;
+}
+
+.icon-bar a:hover {
+    background-color: #000;
+}
+
+.active {
+}
 </style>

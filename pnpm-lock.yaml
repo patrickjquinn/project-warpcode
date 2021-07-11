@@ -7,6 +7,7 @@ specifiers:
   '@rollup/plugin-node-resolve': ^13.0.0
   '@sveltejs/vite-plugin-svelte': ^1.0.0-next.12
   '@tsconfig/svelte': ^2.0.1
+  '@types/node': ^16.3.1
   '@typescript-eslint/eslint-plugin': ^4.28.2
   '@typescript-eslint/parser': ^4.28.2
   chalk: ^4.1.1
@@ -64,6 +65,7 @@ devDependencies:
   '@rollup/plugin-node-resolve': 13.0.0_rollup@2.53.0
   '@sveltejs/vite-plugin-svelte': 1.0.0-next.12_f12c9f9d23bfcd8ce220a7045af5a956
   '@tsconfig/svelte': 2.0.1
+  '@types/node': 16.3.1
   '@typescript-eslint/eslint-plugin': 4.28.2_5031fffb45dfb7117e61c1d8ea1ef3ff
   '@typescript-eslint/parser': 4.28.2_eslint@7.30.0+typescript@4.3.5
   chalk: 4.1.1
