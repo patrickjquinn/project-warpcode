@@ -10,7 +10,7 @@
 	import Warp from '../assets/warpwhite.png'
 	import OnlyTabs from '../components/warp/OnlyTab.svelte'
 	import Icon from 'svelte-awesome';
-	import { bell, refresh, comment, codeFork, archive, ban } from 'svelte-awesome/icons';
+	import { bell, refresh, comment, codeFork } from 'svelte-awesome/icons';
 
 	const consoleTabs = [
 		{ label: 'OUTPUT', value: 1 },
@@ -63,11 +63,11 @@
 	<div id="contents_wrapper">
 		<div class="sidenav">
 			<div class="icon-bar">
-				<a class="active first-nav" href="#"><img width="20" height="20" src="{Warp}" alt="" /></a>
-				<a href="#"><Icon data={refresh} style="color: white; width: 20px; height: 20px" /></a>
-				<a href="#"><Icon data={codeFork} style="color: white; width: 20px; height: 20px" /></a>
-				<a href="#"><Icon data={bell} style="color: white; width: 20px; height: 20px" /></a>
-				<a href="#"><Icon data={comment} style="color: white; width: 20px; height: 20px" /></a>
+				<a class="active first-nav" href="/#"><img width="20" height="20" src="{Warp}" alt="" /></a>
+				<a href="/#"><Icon data={refresh} style="color: white; width: 20px; height: 20px" /></a>
+				<a href="/#"><Icon data={codeFork} style="color: white; width: 20px; height: 20px" /></a>
+				<a href="/#"><Icon data={bell} style="color: white; width: 20px; height: 20px" /></a>
+				<a href="/#"><Icon data={comment} style="color: white; width: 20px; height: 20px" /></a>
 			</div>
 		</div>
 		<div class="wrapper">
