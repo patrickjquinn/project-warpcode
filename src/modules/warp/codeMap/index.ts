@@ -32,7 +32,7 @@ export class CodeMap {
 		}
 
 		return `
-        <script lang=${this.lang}>
+        <script lang="${this.lang}">
             ${scriptItems.trim()}
         </script>
 
