@@ -40,7 +40,7 @@
 		"prettier": "~2.3.2",
 		"prettier-plugin-svelte": "^2.3.1",
 		"pretty-ms": "^7.0.1",
-		"rollup": "^2.53.0",
+		"rollup": "^2.53.1",
 		"rollup-plugin-esbuild": "^4.5.0",
 		"svelte": "^3.38.3",
 		"svelte-awesome": "^2.3.2",
@@ -48,6 +48,7 @@
 		"svelte-dnd-action": "^0.9.9",
 		"svelte-preprocess": "^4.7.4",
 		"svelte-split-pane": "^0.1.2",
+		"svelte-tabs": "^1.1.0",
 		"svelte-tree": "^0.7.0",
 		"svelte-watch-resize": "^1.0.3",
 		"tiny-glob": "^0.2.9",
@@ -58,8 +59,10 @@
 		"wait-on": "^6.0.0"
 	},
 	"dependencies": {
+		"directory-tree": "^2.2.9",
 		"electron-is-dev": "^2.0.0",
 		"electron-store": "^8.0.0",
+		"glob": "^7.1.7",
 		"node-pty": "^0.10.1",
 		"xterm": "^4.13.0",
 		"xterm-addon-fit": "^0.5.0",

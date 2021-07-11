@@ -6,6 +6,7 @@ import Store from 'electron-store'
 import pty from 'node-pty'
 import defaultShell from 'default-shell'
 import os from 'os'
+import directoryTree from 'directory-tree'
 
 const store = new Store()
 ipcMain.on('store:set', async (e, args) => {
@@ -18,6 +19,10 @@ ipcMain.handle('store:get', async (e, args) => {
 ipcMain.on('store:delete', async (e, args) => {
 	store.delete(args)
 })
+
+function buildTree(rootPath: string) {
+	return directoryTree(rootPath)
+}
 
 dotenv.config({ path: join(__dirname, '../../.env') })
 
@@ -45,14 +50,15 @@ class createWin {
 
 		win.loadURL(URL)
 
-		console.log(`Warp dir: ${os.homedir()}/warpspace/Demo`)
+		const projectDir = `${os.homedir()}/warpspace/Demo`
 
-		// const shell = os.platform() === "win32" ? "powershell.exe" : "bash";
+		console.log(JSON.stringify(buildTree(projectDir), null, 2))
+
 		const ptyProcess = pty.spawn(defaultShell, [], {
 			name: 'xterm-color',
 			cols: 80,
 			rows: 24,
-			cwd: `${os.homedir()}/warpspace/Demo`,
+			cwd: `${projectDir}/src`,
 			env: process.env
 		})
 

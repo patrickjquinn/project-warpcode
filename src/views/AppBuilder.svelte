@@ -7,7 +7,28 @@
 	import UICanvas from '../components/UICanvas.svelte'
 	import ProjectExplorer from '../components/ProjectExplorer.svelte'
 	import Terminal from '../components/Terminal.svelte'
-	import Warp from "../assets/warp.png"
+	import Warp from '../assets/warpwhite.png'
+	import OnlyTabs from '../components/warp/OnlyTab.svelte'
+	import Icon from 'svelte-awesome';
+	import { bell, refresh, comment, codeFork, archive, ban } from 'svelte-awesome/icons';
+
+	const consoleTabs = [
+		{ label: 'OUTPUT', value: 1 },
+		{ label: 'PROBLEM', value: 2},
+		{ label: 'TERMINAL', value: 3}
+	]
+
+	let currentCode = '<script lang="ts">\n\n</script' + '>\n\n<main>\n\n</main>\n\n<style></style>'
+
+	const editorTabs = [
+		{ label: 'Start.svelte', value: 1}
+	]
+
+	const upControlTabs = [
+		{ label: 'Widgets', value: 1},
+		{ label: 'Layout', value: 2},
+		{ label: 'Style', value: 3}
+	]
 
 	function minimize() {
 		let window: any = remote.BrowserWindow.getFocusedWindow()
@@ -25,9 +46,6 @@
 	}
 
 	const { remote } = electron
-
-	let currentCode = '<script lang="ts">\n\n</script' + '>\n\n<main>\n\n</main>\n\n<style></style>'
-
 	const win: any = remote.BrowserWindow.getFocusedWindow()
 
 	// win.minimize()
@@ -45,11 +63,11 @@
 	<div id="contents_wrapper">
 		<div class="sidenav">
 			<div class="icon-bar">
-				<a class="active" href="#"><img width="50" height="50" src={Warp} alt=""/></a>
-				<a href="#"><i class="fa fa-search"></i></a>
-				<a href="#"><i class="fa fa-envelope"></i></a>
-				<a href="#"><i class="fa fa-globe"></i></a>
-				<a href="#"><i class="fa fa-trash"></i></a>
+				<a class="active first-nav" href="#"><img width="20" height="20" src="{Warp}" alt="" /></a>
+				<a href="#"><Icon data={refresh} style="color: white; width: 20px; height: 20px" /></a>
+				<a href="#"><Icon data={codeFork} style="color: white; width: 20px; height: 20px" /></a>
+				<a href="#"><Icon data={bell} style="color: white; width: 20px; height: 20px" /></a>
+				<a href="#"><Icon data={comment} style="color: white; width: 20px; height: 20px" /></a>
 			</div>
 		</div>
 		<div class="wrapper">
@@ -81,10 +99,12 @@
 								minDownPaneSize="0px"
 							>
 								<top slot="top">
-									<Monaco code="{currentCode}" />
+									<OnlyTabs items={editorTabs} add={true}/>
+									<Monaco code={currentCode}/>
 								</top>
 								<down slot="down">
-									<Terminal />
+									<OnlyTabs items={consoleTabs} add={false}/>
+									<Terminal/>
 								</down>
 							</VSplitPane>
 						</right>
@@ -92,8 +112,8 @@
 				</left>
 				<right slot="right">
 					<HSplitPane
-						leftPaneSize="78%"
-						rightPaneSize="22%"
+						leftPaneSize="60%"
+						rightPaneSize="40%"
 						updateCallback="{() => {
 							console.log('HSplitPane Updated!')
 						}}"
@@ -102,6 +122,7 @@
 							<UICanvas on:message="{handleCanvasChange}" />
 						</left>
 						<right slot="right">
+							<OnlyTabs items={upControlTabs} add={false}/>
 							<UIPallete />
 						</right>
 					</HSplitPane>
@@ -118,7 +139,7 @@
 	}
 	.wrapper {
 		height: 100%;
-		margin-left: 5vw;
+		margin-left: 3vw;
 	}
 	#header {
 		width: 100%;
@@ -130,35 +151,41 @@
 
 	.sidenav {
 		height: 95vh;
-		width: 5vw;
+		width: 3vw;
 		z-index: 1;
 		float: left;
 		top: 0;
 		left: 0;
-		background-color: black;
+		background-color: #282828;
 		overflow-x: hidden;
 		padding-top: 0px;
 		color: white !important;
 	}
 	.icon-bar {
-    height: 100%;
-    width: 90px;
-    text-align: center;
-    background-color: #555;
-}
+		height: 100%;
+		width: 100%;
+		text-align: center;
+	}
 
-.icon-bar a {
-    padding: 16px;
-    display: block;
-    transition: all 0.3s ease;
-    color: white;
-    font-size: 36px;
-}
+	.first-nav {
+		margin-top: 0 !important;
+	}
 
-.icon-bar a:hover {
-    background-color: #000;
-}
+	.icon-bar a {
+		padding: 15px;
+		opacity: 70%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		margin-top: 20px;
+	}
 
-.active {
-}
+	.icon-bar a:hover {
+		background-color: #555;
+	}
+
+	.active {
+		background-color: black;
+		opacity: 100% !important;
+	}
 </style>

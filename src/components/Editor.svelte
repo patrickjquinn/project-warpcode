@@ -16,6 +16,7 @@
 	$: {
 		if (editor?.getValue()) {
 			editor.setValue(code)
+			editor.trigger('anyString', 'editor.action.formatDocument', null)
 		}
 	}
 
@@ -45,6 +46,7 @@
 			language: 'html',
 			automaticLayout: true,
 			theme: 'vs-dark',
+			formatOnType: true,
 			minimap: {
 				enabled: false
 			}
@@ -61,6 +63,7 @@
 <style>
 	.h-screen {
 		width: 100%;
-		height: 100%;
+		height: 95%;
+		min-height: 50px;
 	}
 </style>
