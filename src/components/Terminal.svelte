@@ -44,6 +44,7 @@
 
 	import '../../node_modules/xterm/css/xterm.css'
 	import * as xterm from 'xterm'
+	import './xterm.css';
 	import WebfontLoader from 'xterm-webfont'
 	import * as fit from 'xterm-addon-fit'
 	import { watchResize } from 'svelte-watch-resize'
@@ -94,6 +95,7 @@
 
 		terminalController.open(terminalElement)
 		termFit.fit()
+
 
 		terminalController.write('\x1b[32mWelcome to Warp code!\x1b[m\r\n')
 		terminalController.onData((e) => {
