@@ -17,8 +17,7 @@ export class CodeMap {
 			const widgetID: string = item.id as string
 			scriptItems =
 				scriptItems +
-				`import {${CodeMap.capFirstLetter(widgetType)}} from "@components/warp/"
-			`
+				`import {${CodeMap.capFirstLetter(widgetType)}} from "@components/warp/"\n`
 
 			if (item === items[items.length - 1]) {
 				mainItems =

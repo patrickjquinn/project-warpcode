@@ -11,11 +11,11 @@
 	import OnlyTabs from '../components/warp/OnlyTab.svelte'
 	import Icon from 'svelte-awesome'
 	import { bell, refresh, comment, codeFork } from 'svelte-awesome/icons'
-	
+
 	const consoleTabs = [
-		{ label: 'OUTPUT', value: 1 },
+		{ label: 'TERMINAL', value: 1 },
 		{ label: 'PROBLEMS', value: 2},
-		{ label: 'TERMINAL', value: 3}
+		{ label: 'OUTPUT', value: 3}
 	]
 
 	let currentCode = '<script lang="ts">\n\n</script' + '>\n\n<main>\n\n</main>\n\n<style></style>'
