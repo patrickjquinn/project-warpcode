@@ -19,7 +19,7 @@
 	]
 
 	const flipDurationMs = 300
-	let shouldIgnoreDndEvents = false
+	let shouldIgnoreDndEvents = true
 	function handleDndConsider(e) {
 		const { trigger, id } = e.detail.info
 		if (trigger === TRIGGERS.DRAG_STARTED) {
@@ -37,13 +37,12 @@
 		}
 	}
 	function handleDndFinalize(e) {
-		console.warn(`got finalize ${JSON.stringify(e.detail, null, 2)}`)
-		if (!shouldIgnoreDndEvents) {
-			items = e.detail.items
-		} else {
-			items = [...items]
-			shouldIgnoreDndEvents = false
-		}
+		// if (!shouldIgnoreDndEvents) {
+		// 	items = e.detail.items
+		// } else {
+		// 	items = [...items]
+		// 	shouldIgnoreDndEvents = false
+		// }
 	}
 </script>
 

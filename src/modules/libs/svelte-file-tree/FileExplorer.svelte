@@ -16,7 +16,7 @@
 		margin: 0;
 	}
 	main :global(ul) {
-		padding-left: 1rem;
+		padding-left: 0.4rem;
 	}
 	/* main :global(> ul) {
 		padding: 0;

@@ -9,12 +9,12 @@
 	import Terminal from '../components/Terminal.svelte'
 	import Warp from '../assets/warpwhite.png'
 	import OnlyTabs from '../components/warp/OnlyTab.svelte'
-	import Icon from 'svelte-awesome';
-	import { bell, refresh, comment, codeFork } from 'svelte-awesome/icons';
-
+	import Icon from 'svelte-awesome'
+	import { bell, refresh, comment, codeFork } from 'svelte-awesome/icons'
+	
 	const consoleTabs = [
 		{ label: 'OUTPUT', value: 1 },
-		{ label: 'PROBLEM', value: 2},
+		{ label: 'PROBLEMS', value: 2},
 		{ label: 'TERMINAL', value: 3}
 	]
 
@@ -93,8 +93,8 @@
 						</left>
 						<right slot="right">
 							<VSplitPane
-								topPanelSize="100%"
-								downPanelSize="0%"
+								topPanelSize="97.4%"
+								downPanelSize="3.6%"
 								minTopPaneSize="50px"
 								minDownPaneSize="0px"
 							>

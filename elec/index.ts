@@ -6,9 +6,13 @@ import Store from 'electron-store'
 import pty from 'node-pty'
 import defaultShell from 'default-shell'
 import os from 'os'
+import fs from 'fs'
 import directoryTree from 'directory-tree'
+import createApplicationMenu from './appbar'
 
 const store = new Store()
+const projectDir = `${os.homedir()}/warpspace/Demo`
+
 ipcMain.on('store:set', async (e, args) => {
 	store.set(args.key, args.value)
 })
@@ -18,6 +22,16 @@ ipcMain.handle('store:get', async (e, args) => {
 })
 ipcMain.on('store:delete', async (e, args) => {
 	store.delete(args)
+})
+
+ipcMain.on('request-proj-struct', (e, args) => {
+	e.sender.send('send-proj-struct', buildTree(projectDir));
+})
+
+fs.watch(projectDir, (eventType, filename) => {
+	console.log(eventType);
+	win.webContents.send('send-proj-struct', buildTree(projectDir));
+	console.log(filename);
 })
 
 function buildTree(rootPath: string) {
@@ -33,6 +47,7 @@ class createWin {
 		win = new BrowserWindow({
 			width: 800,
 			height: 600,
+			title: "Warp Code",
 			webPreferences: {
 				nodeIntegration: true,
 				enableRemoteModule: true,
@@ -49,10 +64,6 @@ class createWin {
 			: `file://${join(__dirname, '../../dist/index.html')}`
 
 		win.loadURL(URL)
-
-		const projectDir = `${os.homedir()}/warpspace/Demo`
-
-		console.log(JSON.stringify(buildTree(projectDir), null, 2))
 
 		const ptyProcess = pty.spawn(defaultShell, [], {
 			name: 'xterm-color',
@@ -72,7 +83,10 @@ class createWin {
 	}
 }
 
-app.whenReady().then(() => new createWin())
+app.whenReady().then(() => {
+	createApplicationMenu()
+	new createWin()
+})
 
 app.on('window-all-closed', () => {
 	if (process.platform !== 'darwin') {

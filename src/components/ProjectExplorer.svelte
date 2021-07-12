@@ -1,71 +1,38 @@
 <script lang="ts">
 	import { fileExcelO, filePictureO, fileText } from 'svelte-awesome/icons'
+	import svelte from '../assets/svelte.png'
 	import FileExplorer from '../modules/libs/svelte-file-tree/FileExplorer.svelte'
+	import { onMount } from 'svelte'
 
+
+
+	const { remote, ipcRenderer } = window.require('electron')	
 	const DIRECTORY = 'DIRECTORY'
 	const FILE = 'FILE'
+	const SVELTE = 'SVELTE'
+
+	let files = [
+	]
+
+	ipcRenderer.on('send-proj-struct', (event, arg) => {
+    	console.log(arg)
+		files[0] = arg
+	})
+
+	onMount(async () => {
+		ipcRenderer.send('request-proj-struct');
+	})
+
+	
 
 	const extensionToIconMap = {
 		txt: fileText,
-		xlsx: fileExcelO,
-		png: filePictureO
+		xlsx: fileText,
+		png: fileText,
+		svelte: fileText
 	}
 
-	let files = [
-		{
-			type: DIRECTORY,
-			name: 'Project Demo',
-			children: [
-				{
-					type: DIRECTORY,
-					name: 'views',
-					expanded: false,
-					children: [
-						{
-							type: DIRECTORY,
-							name: 'web',
-							children: [
-								{
-									type: FILE,
-									name: 'Start'
-								}
-							]
-						},
-						{
-							type: DIRECTORY,
-							name: 'mobile',
-							expanded: false,
-							children: [
-								{
-									type: FILE,
-									name: 'Start'
-								}
-							]
-						}
-					]
-				},
-				{
-					type: DIRECTORY,
-					name: 'components',
-					expanded: false,
-					children: [
-						{
-							type: FILE,
-							name: 'fancyView'
-						},
-						{
-							type: FILE,
-							name: 'styledTextfield'
-						},
-						{
-							type: FILE,
-							name: 'file-3.js'
-						}
-					]
-				}
-			]
-		}
-	]
+	
 	let icons = (extension) => extensionToIconMap[extension]
 	let expanded = true
 	let selected = false
