@@ -13,7 +13,7 @@
 		Image
 	} from './warp/widgets/index'
 
-	let columnItems = [
+	let columnItems: Array<Record<any, any>> = [
 		{
 			id: 1,
 			items: []

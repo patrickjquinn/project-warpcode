@@ -1,5 +1,5 @@
 import { join } from 'path'
-import { app, BrowserWindow, ipcMain } from 'electron'
+import { app, BrowserWindow, ipcMain, dialog } from 'electron'
 import is_dev from 'electron-is-dev'
 import dotenv from 'dotenv'
 import Store from 'electron-store'
@@ -9,9 +9,18 @@ import os from 'os'
 import fs from 'fs'
 import directoryTree from 'directory-tree'
 import createApplicationMenu from './appbar'
+import exec from './shared/exec';
+import readJSON from './shared/readJSON';
+import * as path from 'path';
+import degit from 'degit'
+
 
 const store = new Store()
-const projectDir = `${os.homedir()}/warpspace/Demo`
+let projectDir = `${os.homedir()}/warpspace/Demo`
+let launcherWindow;
+
+const userData = app.getPath('userData');
+const recent = readJSON(path.join(userData, 'recent.json')) || [];
 
 ipcMain.on('store:set', async (e, args) => {
 	store.set(args.key, args.value)
@@ -24,7 +33,7 @@ ipcMain.on('store:delete', async (e, args) => {
 	store.delete(args)
 })
 
-ipcMain.on('request-proj-struct', (e, args) => {
+ipcMain.on('request-proj-struct', (e) => {
 	e.sender.send('send-proj-struct', buildTree(projectDir));
 })
 
@@ -83,9 +92,26 @@ class createWin {
 	}
 }
 
+function launch() {
+	launcherWindow = new BrowserWindow({
+		width: 800,
+		height: 600,
+		minWidth: 600,
+		backgroundColor: 'white',
+		titleBarStyle: 'hidden',
+    webPreferences: {
+      nodeIntegration: true,
+      enableRemoteModule: true,
+      contextIsolation: false
+    }
+	});
+
+	launcherWindow.loadURL('http://localhost:3000/#/launch')
+
+}
+
 app.whenReady().then(() => {
-	createApplicationMenu()
-	new createWin()
+	launch()
 })
 
 app.on('window-all-closed', () => {
@@ -97,5 +123,71 @@ app.on('window-all-closed', () => {
 app.on('activate', () => {
 	if (BrowserWindow.getAllWindows().length === 0) {
 		new createWin()
+	}
+})
+
+function openProject(dir) {
+	const index = recent.indexOf(dir);
+	if (index !== -1) recent.splice(index, 1);
+	recent.unshift(dir);
+	while (recent.length > 5) recent.pop();
+	fs.writeFileSync(path.join(userData, 'recent.json'), JSON.stringify(recent));
+  projectDir = dir
+  launcherWindow.close()
+  createApplicationMenu()
+	new createWin()
+}
+
+
+// Quit when all windows are closed.
+app.on('window-all-closed', function() {
+	// On OS X it is common for applications and their menu bar
+	// to stay active until the user quits explicitly with Cmd + Q
+	if (process.platform !== 'darwin') {
+		app.quit();
+	}
+});
+
+ipcMain.on('create-new-project', event => {
+	// dialog.showSaveDialog(launcherWindow, {
+	dialog.showOpenDialog(launcherWindow, {
+		title: 'Create project',
+		buttonLabel: 'Create project',
+		properties: ['openDirectory', 'createDirectory'],
+	}).then( async (results) => {
+		if (!results.filePaths) return;
+
+		const [filename] = results.filePaths;
+
+		event.sender.send('status', `cloning repo to ${path.basename(filename)}...`);
+
+		// clone repo
+		const emitter = degit('lukem121/svelte-vite-tailwind-template');
+		await emitter.clone(filename);
+
+		event.sender.send('status', `installing dependencies...`);
+
+		// install dependencies
+		await exec(`npm install`, { cwd: filename });
+
+		openProject(filename);
+	});
+});
+
+ipcMain.on('open-existing-project', (event, dir) => {
+	if (dir) {
+		openProject(dir);
+	} else {
+		dialog.showOpenDialog(launcherWindow, {
+			title: 'Open project',
+			buttonLabel: 'Open project',
+			properties: ['openDirectory'],
+		}).then(result => {
+			if (!result.filePaths) return;
+
+			setTimeout(() => {
+				openProject(result.filePaths[0])
+			}, 0);
+		});
 	}
 })

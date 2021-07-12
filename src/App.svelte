@@ -1,9 +1,17 @@
 <script lang="ts">
 	import Canvas from './views/AppBuilder.svelte'
+	import Launcher from './views/Launcher.svelte'
+	import Router from 'svelte-spa-router'
+
 </script>
 
 <main>
-	<Canvas />
+	<Router
+	routes="{{
+		'/': Canvas,
+		'/launch/': Launcher
+	}}"
+/>
 </main>
 
 <style>
