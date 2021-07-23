@@ -16,4 +16,22 @@
 
 </script>
 
-<Folder name="{files['name']}" children={files["children"]} expanded={false}/>
+
+<main>
+    <div>
+        <Folder name="{files['name']}" children={files["children"]} expanded={false}/>
+    </div>
+</main>
+
+<style>
+    main {
+        height: 100%;
+        width: 100%;
+        background-color: #1e1e1e;
+    }
+
+    div {
+        padding-left: 1rem;
+        padding-top: 1rem;
+    }
+</style>
