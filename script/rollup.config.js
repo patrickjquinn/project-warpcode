@@ -61,7 +61,8 @@ export default (env = 'production') => {
 			'https',
 			'path',
 			'electron',
-			'node-pty'
+			'node-pty',
+			'chokidar'
 		]
 	}
 }

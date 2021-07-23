@@ -15,11 +15,11 @@
 {#each items as item}
 	{#if activeTabValue == item.value}
 		<div class="box">
-            {#if items.props}
-			    <svelte:component this="{item.component}" {...items.props}/>
-            {:else}
-                <svelte:component this="{item.component}"/>
-            {/if}
+			{#if items.props}
+				<svelte:component this="{item.component}" {...items.props} />
+			{:else}
+				<svelte:component this="{item.component}" />
+			{/if}
 		</div>
 	{/if}
 {/each}

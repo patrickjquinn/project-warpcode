@@ -1,6 +1,6 @@
 <script>
 	export let items = []
-    export let add
+	export let add
 	export let activeTabValue = 1
 
 	const handleClick = (tabValue) => () => (activeTabValue = tabValue)
@@ -12,11 +12,11 @@
 			<span on:click="{handleClick(item.value)}">{item.label}</span>
 		</li>
 	{/each}
-    {#if add}
-        <li>
-            <span>+</span>
-        </li>
-    {/if}
+	{#if add}
+		<li>
+			<span>+</span>
+		</li>
+	{/if}
 </ul>
 
 <style>

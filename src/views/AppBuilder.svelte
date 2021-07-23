@@ -6,6 +6,7 @@
 	import UIPallete from '../components/UIPallete.svelte'
 	import UICanvas from '../components/UICanvas.svelte'
 	import ProjectExplorer from '../components/ProjectExplorer.svelte'
+	import Explorer from '../components/fileExplorer/Explorer.svelte'
 	import Terminal from '../components/Terminal.svelte'
 	import Warp from '../assets/warpwhite.png'
 	import OnlyTabs from '../components/warp/OnlyTab.svelte'
@@ -14,20 +15,54 @@
 
 	const consoleTabs = [
 		{ label: 'TERMINAL', value: 1 },
-		{ label: 'PROBLEMS', value: 2},
-		{ label: 'OUTPUT', value: 3}
+		{ label: 'PROBLEMS', value: 2 },
+		{ label: 'OUTPUT', value: 3 }
 	]
 
 	let currentCode = '<script lang="ts">\n\n</script' + '>\n\n<main>\n\n</main>\n\n<style></style>'
 
-	const editorTabs = [
-		{ label: 'Start.svelte', value: 1}
-	]
+	const editorTabs = [{ label: 'Start.svelte', value: 1 }]
 
 	const upControlTabs = [
-		{ label: 'Widgets', value: 1},
-		{ label: 'Layout', value: 2},
-		{ label: 'Style', value: 3}
+		{ label: 'Widgets', value: 1 },
+		{ label: 'Layout', value: 2 },
+		{ label: 'Style', value: 3 }
+	]
+
+	const root = [
+		{
+			type: 'folder',
+			name: 'Important work stuff',
+			children: [
+				{ type: 'file', name: 'quarterly-results.xlsx' }
+			]
+		},
+		{
+			type: 'folder',
+			name: 'Animal GIFs',
+			children: [
+				{
+					type: 'folder',
+					name: 'Dogs',
+					children: [
+						{ type: 'file', name: 'treadmill.gif' },
+						{ type: 'file', name: 'rope-jumping.gif' }
+					]
+				},
+				{
+					type: 'folder',
+					name: 'Goats',
+					children: [
+						{ type: 'file', name: 'parkour.gif' },
+						{ type: 'file', name: 'rampage.gif' }
+					]
+				},
+				{ type: 'file', name: 'cat-roomba.gif' },
+				{ type: 'file', name: 'duck-shuffle.gif' },
+				{ type: 'file', name: 'monkey-on-a-pig.gif' }
+			]
+		},
+		{ type: 'file', name: 'TODO.md' }
 	]
 
 	function minimize() {
@@ -64,10 +99,10 @@
 		<div class="sidenav">
 			<div class="icon-bar">
 				<a class="active first-nav" href="/#"><img width="20" height="20" src="{Warp}" alt="" /></a>
-				<a href="/#"><Icon data={refresh} style="color: white; width: 20px; height: 20px" /></a>
-				<a href="/#"><Icon data={codeFork} style="color: white; width: 20px; height: 20px" /></a>
-				<a href="/#"><Icon data={bell} style="color: white; width: 20px; height: 20px" /></a>
-				<a href="/#"><Icon data={comment} style="color: white; width: 20px; height: 20px" /></a>
+				<a href="/#"><Icon data="{refresh}" style="color: white; width: 20px; height: 20px" /></a>
+				<a href="/#"><Icon data="{codeFork}" style="color: white; width: 20px; height: 20px" /></a>
+				<a href="/#"><Icon data="{bell}" style="color: white; width: 20px; height: 20px" /></a>
+				<a href="/#"><Icon data="{comment}" style="color: white; width: 20px; height: 20px" /></a>
 			</div>
 		</div>
 		<div class="wrapper">
@@ -89,7 +124,7 @@
 						}}"
 					>
 						<left slot="left">
-							<ProjectExplorer />
+							<Explorer></Explorer>
 						</left>
 						<right slot="right">
 							<VSplitPane
@@ -99,12 +134,12 @@
 								minDownPaneSize="0px"
 							>
 								<top slot="top">
-									<OnlyTabs items={editorTabs} add={true}/>
-									<Monaco code={currentCode}/>
+									<OnlyTabs items="{editorTabs}" add="{true}" />
+									<Monaco code="{currentCode}" />
 								</top>
 								<down slot="down">
-									<OnlyTabs items={consoleTabs} add={false}/>
-									<Terminal/>
+									<OnlyTabs items="{consoleTabs}" add="{false}" />
+									<Terminal />
 								</down>
 							</VSplitPane>
 						</right>
@@ -122,7 +157,7 @@
 							<UICanvas on:message="{handleCanvasChange}" />
 						</left>
 						<right slot="right">
-							<OnlyTabs items={upControlTabs} add={false}/>
+							<OnlyTabs items="{upControlTabs}" add="{false}" />
 							<UIPallete />
 						</right>
 					</HSplitPane>
@@ -133,7 +168,7 @@
 </main>
 
 <style>
-	#contents_wrapper {
+		#contents_wrapper {
 		width: 100vw;
 		height: 95vh;
 	}

@@ -1,35 +1,32 @@
 <script>
-	import readJSON from '../../elec/shared/readJSON';
-    const path = window.require('path')
-    const os = window.require('os')
-    const { remote, ipcRenderer } = window.require('electron')
+	import readJSON from '../../elec/shared/readJSON'
+	const path = window.require('path')
+	const os = window.require('os')
+	const { remote, ipcRenderer } = window.require('electron')
 
+	let status
 
-    let status
+	const userData = remote.app.getPath('userData')
+	const recent = ['Demo', 'Demo 2']
 
-	const userData = remote.app.getPath('userData');
-	const recent = ['Demo', 'Demo 2'];
-
-    ipcRenderer.on('status', (event, stat) => {
+	ipcRenderer.on('status', (event, stat) => {
 		status = stat
 	})
 
-    ipcRenderer.on('project-open', (event, stat) => {
-		
-	})
+	ipcRenderer.on('project-open', (event, stat) => {})
 
-    const data = () => {
-        return {
+	const data = () => {
+		return {
 			recent
 		}
-    }
+	}
 
-    const openExistingProject = (dir) => {
-		ipcRenderer.send('open-existing-project', dir);
+	const openExistingProject = (dir) => {
+		ipcRenderer.send('open-existing-project', dir)
 	}
 
 	const createNewProject = () => {
-		ipcRenderer.send('create-new-project');
+		ipcRenderer.send('create-new-project')
 	}
 </script>
 
@@ -41,7 +38,11 @@
 			<button class="large" on:click="{() => openExistingProject(null)}">Open project</button>
 
 			{#each recent as dir}
-				<button class="small" on:click="{() => openExistingProject(`${os.homedir()}/warpcode/${dir}`)}">{path.basename(dir)}</button>
+				<button
+					class="small"
+					on:click="{() => openExistingProject(`${os.homedir()}/warpcode/${dir}`)}"
+					>{path.basename(dir)}</button
+				>
 			{:else}
 				<p>recent projects will appear here</p>
 			{/each}
@@ -67,7 +68,7 @@
 		color: white;
 		margin: 0 0 1em 0;
 		text-transform: uppercase;
-        padding-bottom: 10px;
+		padding-bottom: 10px;
 	}
 
 	main {
@@ -76,14 +77,16 @@
 		box-sizing: border-box;
 	}
 
-    p {color:white}
+	p {
+		color: white;
+	}
 
 	h1 {
 		text-align: center;
 		font-size: 3.2em;
 		font-weight: 300;
 		margin: 0 0 1em 0;
-		border-bottom: 1px solid rgba(170,30,30,0.4);
+		border-bottom: 1px solid rgba(170, 30, 30, 0.4);
 	}
 
 	.menu {
@@ -91,7 +94,8 @@
 		max-width: 40em;
 	}
 
-	.left, .right {
+	.left,
+	.right {
 		width: 50%;
 		float: left;
 		padding: 0.5em;
@@ -101,12 +105,12 @@
 	button {
 		font-weight: normal;
 		color: #333;
-        border-radius: 4px;
+		border-radius: 4px;
 	}
 
 	.large {
 		padding: 0.5em 2em;
-		background-color: rgb(170,30,30);
+		background-color: rgb(170, 30, 30);
 		color: white;
 		text-transform: uppercase;
 		line-height: 1;

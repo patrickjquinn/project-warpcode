@@ -4,26 +4,21 @@
 	import FileExplorer from '../modules/libs/svelte-file-tree/FileExplorer.svelte'
 	import { onMount } from 'svelte'
 
-
-
-	const { remote, ipcRenderer } = window.require('electron')	
+	const { remote, ipcRenderer } = window.require('electron')
 	const DIRECTORY = 'DIRECTORY'
 	const FILE = 'FILE'
 	const SVELTE = 'SVELTE'
 
-	let files = [
-	]
+	let files = []
 
 	ipcRenderer.on('send-proj-struct', (event, arg) => {
-    	console.log(arg)
+		console.log(arg)
 		files[0] = arg
 	})
 
 	onMount(async () => {
-		ipcRenderer.send('request-proj-struct');
+		ipcRenderer.send('request-proj-struct')
 	})
-
-	
 
 	const extensionToIconMap = {
 		txt: fileText,
@@ -32,7 +27,6 @@
 		svelte: fileText
 	}
 
-	
 	let icons = (extension) => extensionToIconMap[extension]
 	let expanded = true
 	let selected = false

@@ -6,21 +6,22 @@ import Store from 'electron-store'
 import pty from 'node-pty'
 import defaultShell from 'default-shell'
 import os from 'os'
-import fs from 'fs'
+import fs, { watch } from 'fs'
 import directoryTree from 'directory-tree'
 import createApplicationMenu from './appbar'
-import exec from './shared/exec';
-import readJSON from './shared/readJSON';
-import * as path from 'path';
+import exec from './shared/exec'
+import readJSON from './shared/readJSON'
+import * as path from 'path'
 import degit from 'degit'
+import chokidar from 'chokidar';
 
 
 const store = new Store()
 let projectDir = `${os.homedir()}/warpspace/Demo`
-let launcherWindow;
+let launcherWindow
 
-const userData = app.getPath('userData');
-const recent = readJSON(path.join(userData, 'recent.json')) || [];
+const userData = app.getPath('userData')
+const recent = readJSON(path.join(userData, 'recent.json')) || []
 
 ipcMain.on('store:set', async (e, args) => {
 	store.set(args.key, args.value)
@@ -34,13 +35,7 @@ ipcMain.on('store:delete', async (e, args) => {
 })
 
 ipcMain.on('request-proj-struct', (e) => {
-	e.sender.send('send-proj-struct', buildTree(projectDir));
-})
-
-fs.watch(projectDir, (eventType, filename) => {
-	console.log(eventType);
-	win.webContents.send('send-proj-struct', buildTree(projectDir));
-	console.log(filename);
+	e.sender.send('send-proj-struct', buildTree(projectDir))
 })
 
 function buildTree(rootPath: string) {
@@ -56,7 +51,7 @@ class createWin {
 		win = new BrowserWindow({
 			width: 800,
 			height: 600,
-			title: "Warp Code",
+			title: 'Warp Code',
 			webPreferences: {
 				nodeIntegration: true,
 				enableRemoteModule: true,
@@ -99,15 +94,40 @@ function launch() {
 		minWidth: 600,
 		backgroundColor: 'white',
 		titleBarStyle: 'hidden',
-    webPreferences: {
-      nodeIntegration: true,
-      enableRemoteModule: true,
-      contextIsolation: false
-    }
-	});
+		webPreferences: {
+			nodeIntegration: true,
+			enableRemoteModule: true,
+			contextIsolation: false
+		}
+	})
 
 	launcherWindow.loadURL('http://localhost:3000/#/launch')
+}
 
+function notifyAppOfFolderChanges() {
+	win.webContents.send('send-proj-struct', buildTree(projectDir))
+}
+
+function watchProjectForChanges() {
+	const watcher = chokidar.watch(projectDir, { ignored: /^\./, persistent: true });
+
+	watcher
+		.on('add', (path) => { 
+			// console.log('File', path, 'has been added')
+			// notifyAppOfFolderChanges()
+		})
+		.on('change', (path) => { 
+			// console.log('File', path, 'has been changed') 
+			notifyAppOfFolderChanges()
+		})
+		.on('unlink', (path) => { 
+			console.log('File', path, 'has been removed')
+			// notifyAppOfFolderChanges()
+		})
+		.on('error', (error) => {
+			console.error('Error happened', error)
+			// notifyAppOfFolderChanges()
+		})
 }
 
 app.whenReady().then(() => {
@@ -127,67 +147,76 @@ app.on('activate', () => {
 })
 
 function openProject(dir) {
-	const index = recent.indexOf(dir);
-	if (index !== -1) recent.splice(index, 1);
-	recent.unshift(dir);
-	while (recent.length > 5) recent.pop();
-	fs.writeFileSync(path.join(userData, 'recent.json'), JSON.stringify(recent));
-  projectDir = dir
-  launcherWindow.close()
-  createApplicationMenu()
+	const index = recent.indexOf(dir)
+	if (index !== -1) recent.splice(index, 1)
+	recent.unshift(dir)
+	while (recent.length > 5) recent.pop()
+	fs.writeFileSync(path.join(userData, 'recent.json'), JSON.stringify(recent))
+	projectDir = dir
+	launcherWindow.close()
+	createApplicationMenu()
 	new createWin()
+	// watchProjectForChanges()
+	fs.watch(projectDir, {recursive:true}, (eventType, filename) => {
+		console.log(eventType)
+		win.webContents.send('send-proj-struct', buildTree(projectDir))
+		console.log(filename)
+	})
 }
 
-
 // Quit when all windows are closed.
-app.on('window-all-closed', function() {
+app.on('window-all-closed', function () {
 	// On OS X it is common for applications and their menu bar
 	// to stay active until the user quits explicitly with Cmd + Q
 	if (process.platform !== 'darwin') {
-		app.quit();
+		app.quit()
 	}
-});
+})
 
-ipcMain.on('create-new-project', event => {
+ipcMain.on('create-new-project', (event) => {
 	// dialog.showSaveDialog(launcherWindow, {
-	dialog.showOpenDialog(launcherWindow, {
-		title: 'Create project',
-		buttonLabel: 'Create project',
-		properties: ['openDirectory', 'createDirectory'],
-	}).then( async (results) => {
-		if (!results.filePaths) return;
+	dialog
+		.showOpenDialog(launcherWindow, {
+			title: 'Create project',
+			buttonLabel: 'Create project',
+			properties: ['openDirectory', 'createDirectory']
+		})
+		.then(async (results) => {
+			if (!results.filePaths) return
 
-		const [filename] = results.filePaths;
+			const [filename] = results.filePaths
 
-		event.sender.send('status', `cloning repo to ${path.basename(filename)}...`);
+			event.sender.send('status', `cloning repo to ${path.basename(filename)}...`)
 
-		// clone repo
-		const emitter = degit('lukem121/svelte-vite-tailwind-template');
-		await emitter.clone(filename);
+			// clone repo
+			const emitter = degit('lukem121/svelte-vite-tailwind-template')
+			await emitter.clone(filename)
 
-		event.sender.send('status', `installing dependencies...`);
+			event.sender.send('status', `installing dependencies...`)
 
-		// install dependencies
-		await exec(`npm install`, { cwd: filename });
+			// install dependencies
+			await exec(`npm install`, { cwd: filename })
 
-		openProject(filename);
-	});
-});
+			openProject(filename)
+		})
+})
 
 ipcMain.on('open-existing-project', (event, dir) => {
 	if (dir) {
-		openProject(dir);
+		openProject(dir)
 	} else {
-		dialog.showOpenDialog(launcherWindow, {
-			title: 'Open project',
-			buttonLabel: 'Open project',
-			properties: ['openDirectory'],
-		}).then(result => {
-			if (!result.filePaths) return;
+		dialog
+			.showOpenDialog(launcherWindow, {
+				title: 'Open project',
+				buttonLabel: 'Open project',
+				properties: ['openDirectory']
+			})
+			.then((result) => {
+				if (!result.filePaths) return
 
-			setTimeout(() => {
-				openProject(result.filePaths[0])
-			}, 0);
-		});
+				setTimeout(() => {
+					openProject(result.filePaths[0])
+				}, 0)
+			})
 	}
 })

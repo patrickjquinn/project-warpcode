@@ -1,50 +1,9 @@
-<!-- <script>
-    import '../../node_modules/xterm/css/xterm.css';
-    import { Terminal } from 'xterm';
-    import { onMount } from 'svelte';
-    import fit from 'xterm-addon-fit';
-    import WebfontLoader from 'xterm-webfont';
-    import pty from 'node-pty';
-    import defaultShell from 'default-shell';
-
-    let proc;
-    let terminal;
-    let dir;
-    let ready;
-
-    const term = new Terminal({
-        cursorBlink: true,
-        cols: 80,
-        rows: 40,
-        fontFamily: 'Fira Code',
-        fontWeight: 300,
-        fontSize: 14,
-        theme: {
-            background: '#222'
-        }
-    });
-
-    term.loadAddon(fit);
-    term.loadAddon(WebfontLoader)
-    
-    onMount(() => {
-
-    })
-        
-    </script>
-    <svelte:window on:focus={term.focus} on:blur={term.blur}/>
-
-    <main>
-            <div id="terminal"></div>
-    </main>
-    <style>
-    </style> -->
 <script lang="ts">
 	import { onMount } from 'svelte'
 
 	import '../../node_modules/xterm/css/xterm.css'
 	import * as xterm from 'xterm'
-	import './xterm.css';
+	import './xterm.css'
 	import WebfontLoader from 'xterm-webfont'
 	import * as fit from 'xterm-addon-fit'
 	import { watchResize } from 'svelte-watch-resize'
@@ -95,7 +54,6 @@
 
 		terminalController.open(terminalElement)
 		termFit.fit()
-
 
 		terminalController.write('\x1b[32mWelcome to Warp code!\x1b[m\r\n')
 		terminalController.onData((e) => {
