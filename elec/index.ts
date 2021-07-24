@@ -7,6 +7,7 @@ import pty from 'node-pty'
 import defaultShell from 'default-shell'
 import os from 'os'
 import fs, { watch } from 'fs'
+import util from 'util'
 import directoryTree from 'directory-tree'
 import createApplicationMenu from './appbar'
 import exec from './shared/exec'
@@ -15,7 +16,7 @@ import * as path from 'path'
 import degit from 'degit'
 import chokidar from 'chokidar';
 
-
+const readFile = util.promisify(fs.readFile)
 const store = new Store()
 let projectDir = `${os.homedir()}/warpspace/Demo`
 let launcherWindow
@@ -104,30 +105,8 @@ function launch() {
 	launcherWindow.loadURL('http://localhost:3000/#/launch')
 }
 
-function notifyAppOfFolderChanges() {
-	win.webContents.send('send-proj-struct', buildTree(projectDir))
-}
-
-function watchProjectForChanges() {
-	const watcher = chokidar.watch(projectDir, { ignored: /^\./, persistent: true });
-
-	watcher
-		.on('add', (path) => { 
-			// console.log('File', path, 'has been added')
-			// notifyAppOfFolderChanges()
-		})
-		.on('change', (path) => { 
-			// console.log('File', path, 'has been changed') 
-			notifyAppOfFolderChanges()
-		})
-		.on('unlink', (path) => { 
-			console.log('File', path, 'has been removed')
-			// notifyAppOfFolderChanges()
-		})
-		.on('error', (error) => {
-			console.error('Error happened', error)
-			// notifyAppOfFolderChanges()
-		})
+async function readFileAt(path) {
+	return readFile(path, 'utf8')
 }
 
 app.whenReady().then(() => {
@@ -218,5 +197,17 @@ ipcMain.on('open-existing-project', (event, dir) => {
 					openProject(result.filePaths[0])
 				}, 0)
 			})
+	}
+})
+
+ipcMain.on('open-file', async (e, filePath) => {
+	if (filePath) {
+		try {
+			const fileContents = await readFileAt(filePath)
+			e.sender.send('file-sent', fileContents)
+		} catch (err) {
+			e.sender.send('file-sent', `And error occured opening ${filePath}`)
+		}
+		
 	}
 })

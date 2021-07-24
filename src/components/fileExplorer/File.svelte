@@ -7,6 +7,16 @@
 
 	let extension: string
 
+	const fileClicked = () => {
+		const event = new CustomEvent("fileSelected", {
+			detail: {name, type, path},
+			bubbles: true,
+			cancelable: true,
+			composed: false,
+		})
+  		window.dispatchEvent(event)
+	}
+
 	$: {
 		extension = name.slice(name.lastIndexOf('.') + 1)
 
@@ -53,7 +63,7 @@
 	console.log(`${size} + ${path}`)
 </script>
 
-<span style="background-image: url({icon});">{name}</span>
+<span on:click={fileClicked} style="background-image: url({icon});">{name}</span>
 
 <style>
 	span {

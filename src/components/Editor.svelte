@@ -6,12 +6,33 @@
 	import cssWorker from 'monaco-editor/esm/vs/language/css/css.worker?worker'
 	import htmlWorker from 'monaco-editor/esm/vs/language/html/html.worker?worker'
 	import tsWorker from 'monaco-editor/esm/vs/language/typescript/ts.worker?worker'
+	const { remote, ipcRenderer } = window.require('electron')
 
 	let divEl: HTMLDivElement
 	let editor: monaco.editor.IStandaloneCodeEditor
 	let Monaco: any
 
 	export let code
+	
+	window.addEventListener('fileSelected', (event: CustomEvent) => {
+		// window.alert(JSON.stringify(event.detail))
+		ipcRenderer.send('open-file', event.detail.path)
+
+	}, false)
+
+	ipcRenderer.on('file-sent', (event, file) => {
+		code = file
+	})
+
+	function openFile (filePath) {
+		// ipcRenderer.on('send-proj-struct', (event, value) => {
+		
+		// })
+
+		// ipcRenderer.send('open-file', filePath)
+
+	
+	} 
 
 	$: {
 		if (editor?.getValue()) {
