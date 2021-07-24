@@ -14,7 +14,6 @@ import exec from './shared/exec'
 import readJSON from './shared/readJSON'
 import * as path from 'path'
 import degit from 'degit'
-import chokidar from 'chokidar';
 
 const readFile = util.promisify(fs.readFile)
 const store = new Store()
@@ -53,6 +52,7 @@ class createWin {
 			width: 800,
 			height: 600,
 			title: 'Warp Code',
+			titleBarStyle: 'hidden',
 			webPreferences: {
 				nodeIntegration: true,
 				enableRemoteModule: true,
@@ -167,7 +167,6 @@ ipcMain.on('create-new-project', (event) => {
 
 			event.sender.send('status', `cloning repo to ${path.basename(filename)}...`)
 
-			// clone repo
 			const emitter = degit('lukem121/svelte-vite-tailwind-template')
 			await emitter.clone(filename)
 

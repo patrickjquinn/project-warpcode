@@ -13,26 +13,41 @@
 	let Monaco: any
 
 	export let code
-	
-	window.addEventListener('fileSelected', (event: CustomEvent) => {
-		// window.alert(JSON.stringify(event.detail))
-		ipcRenderer.send('open-file', event.detail.path)
+	let lang = 'html'
 
-	}, false)
+	window.addEventListener(
+		'fileSelected',
+		(event: CustomEvent) => {
+			ipcRenderer.send('open-file', event.detail.path)
+			lang = fileExtension(event.detail.name)
+		},
+		false
+	)
 
 	ipcRenderer.on('file-sent', (event, file) => {
 		code = file
 	})
 
-	function openFile (filePath) {
-		// ipcRenderer.on('send-proj-struct', (event, value) => {
-		
-		// })
+	const fileExtension = (name) => {
+		const extension = name.slice(name.lastIndexOf('.') + 1)
 
-		// ipcRenderer.send('open-file', filePath)
-
-	
-	} 
+		switch (extension) {
+			case 'svelte':
+				return 'svelte'
+			case 'js':
+				return 'javascript'
+			case 'ts':
+				return 'typescript'
+			case 'json':
+				return 'json'
+			case 'xml':
+				return 'html'
+			case 'html':
+				return 'svelte'
+			default:
+				return 'html'
+		}
+	}
 
 	$: {
 		if (editor?.getValue()) {
@@ -51,7 +66,7 @@
 				if (label === 'css' || label === 'scss' || label === 'less') {
 					return new cssWorker()
 				}
-				if (label === 'html' || label === 'handlebars' || label === 'razor') {
+				if (label === 'html' || label === 'svelte' || label === 'handlebars' || label === 'razor') {
 					return new htmlWorker()
 				}
 				if (label === 'typescript' || label === 'javascript') {
@@ -64,7 +79,7 @@
 		Monaco = await import('monaco-editor')
 		editor = Monaco.editor.create(divEl, {
 			value: [code].join('\n'),
-			language: 'html',
+			language: lang,
 			automaticLayout: true,
 			theme: 'vs-dark',
 			formatOnType: true,
