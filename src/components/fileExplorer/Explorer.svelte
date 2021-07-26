@@ -1,8 +1,8 @@
-<script lang="ts"> 
+<script lang="ts">
 	import Folder from './Folder.svelte'
-    import { onMount } from 'svelte'
+	import { onMount } from 'svelte'
 
-    const { ipcRenderer } = window.require('electron')
+	const { ipcRenderer } = window.require('electron')
 
 	let files = []
 
@@ -13,25 +13,23 @@
 	onMount(async () => {
 		ipcRenderer.send('request-proj-struct')
 	})
-
 </script>
 
-
 <main>
-    <div>
-        <Folder name="{files['name']}" children={files["children"]} expanded={false}/>
-    </div>
+	<div>
+		<Folder name="{files['name']}" children="{files['children']}" expanded="{false}" />
+	</div>
 </main>
 
 <style>
-    main {
-        height: 100%;
-        width: 100%;
-        background-color: #1e1e1e;
-    }
+	main {
+		height: 100%;
+		width: 100%;
+		background-color: #1e1e1e;
+	}
 
-    div {
-        padding-left: 1rem;
-        padding-top: 1rem;
-    }
+	div {
+		padding-left: 1rem;
+		padding-top: 1rem;
+	}
 </style>

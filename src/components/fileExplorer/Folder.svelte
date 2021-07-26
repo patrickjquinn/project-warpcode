@@ -1,26 +1,26 @@
 <script lang="ts">
-	import File from './File.svelte';
-	import {slide} from 'svelte/transition'
-	
-	export let expanded: boolean = false;
-	export let name: string;
-	export let children: Array<any>;
+	import File from './File.svelte'
+	import { slide } from 'svelte/transition'
+
+	export let expanded = false
+	export let name: string
+	export let children: Array<any>
 
 	function toggle() {
-		expanded = !expanded;
+		expanded = !expanded
 	}
 </script>
 
-<span class:expanded on:click={toggle}>{name}</span>
+<span class:expanded on:click="{toggle}">{name}</span>
 
 {#if expanded}
-	<ul transition:slide={{duration:300}}>
+	<ul transition:slide="{{ duration: 300 }}">
 		{#each children as file}
 			<li>
 				{#if file.type === 'directory'}
-					<svelte:self {...file}/>
+					<svelte:self {...file} />
 				{:else}
-					<File {...file}/>
+					<File {...file} />
 				{/if}
 			</li>
 		{/each}
@@ -28,13 +28,13 @@
 {/if}
 
 <style>
-    span {
+	span {
 		padding: 0 0 0 1.5em;
 		background: url(https://svelte.dev/tutorial/icons/folder.svg) 0 0.1em no-repeat;
 		background-size: 1em 1em;
 		font-weight: bold;
 		cursor: pointer;
-        color: white;
+		color: white;
 	}
 
 	.expanded {
@@ -49,6 +49,6 @@
 
 	li {
 		padding: 0.2em 0;
-        color: white
+		color: white;
 	}
 </style>

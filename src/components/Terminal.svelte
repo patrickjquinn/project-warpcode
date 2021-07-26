@@ -53,7 +53,7 @@
 		terminalController.loadAddon(termFit)
 
 		terminalController.open(terminalElement)
-		terminalController.setOption('logLevel', 'debug');
+		terminalController.setOption('logLevel', 'debug')
 
 		termFit.fit()
 
@@ -78,8 +78,7 @@
 
 <div id="terminal" bind:this="{terminalElement}" use:watchResize="{handleTermResize}"></div>
 
-<svelte:window on:resize={handleTermResize}/>
-
+<svelte:window on:resize="{handleTermResize}" />
 
 <style>
 	:global(.terminal) {

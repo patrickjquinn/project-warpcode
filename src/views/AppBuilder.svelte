@@ -1,19 +1,19 @@
 <script lang="ts">
-	const electron = window.require('electron')
 	import { CodeMap } from '../modules/warp/codeMap'
 	import { HSplitPane, VSplitPane } from 'svelte-split-pane'
 	import Monaco from '../components/Editor.svelte'
 	import UIPallete from '../components/UIPallete.svelte'
 	import UICanvas from '../components/UICanvas.svelte'
-	import ProjectExplorer from '../components/ProjectExplorer.svelte'
 	import Explorer from '../components/fileExplorer/Explorer.svelte'
 	import Terminal from '../components/Terminal.svelte'
 	import Warp from '../assets/warpwhite.png'
-	import OnlyTabs from '../components/warp/OnlyTab.svelte'
+	import OnlyTabs from '../components/tabs/OnlyTabs.svelte'
+	import RemovableTabs from '../components/tabs/RemovableTabs.svelte'
+
 	import Icon from 'svelte-awesome'
 	import { bell, refresh, comment, codeFork } from 'svelte-awesome/icons'
 
-	const consoleTabs = [
+	let consoleTabs = [
 		{ label: 'TERMINAL', value: 1 },
 		{ label: 'PROBLEMS', value: 2 },
 		{ label: 'OUTPUT', value: 3 }
@@ -21,7 +21,7 @@
 
 	let currentCode = '<script lang="ts">\n\n</script' + '>\n\n<main>\n\n</main>\n\n<style></style>'
 
-	const editorTabs = [{ label: 'Start.svelte', value: 1 }]
+	let editorTabs = [{ label: 'Start.svelte', value: 1, path: './start.svelte', type: 'file' }]
 
 	const upControlTabs = [
 		{ label: 'Widgets', value: 1 },
@@ -29,63 +29,33 @@
 		{ label: 'Style', value: 3 }
 	]
 
-	const root = [
-		{
-			type: 'folder',
-			name: 'Important work stuff',
-			children: [
-				{ type: 'file', name: 'quarterly-results.xlsx' }
-			]
+	window.addEventListener(
+		'fileSelected',
+		(event: CustomEvent) => {
+			for (let [index] of editorTabs.entries()) {
+				if (editorTabs[index].path === event.detail.path) {
+					editorTabs.splice(index, 1)
+				}
+			}
+			editorTabs.unshift({
+				label: event.detail.name,
+				value: 1,
+				path: event.detail.path,
+				type: event.detail.type
+			})
+			incrementTabs(event.detail)
 		},
-		{
-			type: 'folder',
-			name: 'Animal GIFs',
-			children: [
-				{
-					type: 'folder',
-					name: 'Dogs',
-					children: [
-						{ type: 'file', name: 'treadmill.gif' },
-						{ type: 'file', name: 'rope-jumping.gif' }
-					]
-				},
-				{
-					type: 'folder',
-					name: 'Goats',
-					children: [
-						{ type: 'file', name: 'parkour.gif' },
-						{ type: 'file', name: 'rampage.gif' }
-					]
-				},
-				{ type: 'file', name: 'cat-roomba.gif' },
-				{ type: 'file', name: 'duck-shuffle.gif' },
-				{ type: 'file', name: 'monkey-on-a-pig.gif' }
-			]
-		},
-		{ type: 'file', name: 'TODO.md' }
-	]
+		false
+	)
 
-	function minimize() {
-		let window: any = remote.BrowserWindow.getFocusedWindow()
-		window.minimize()
+	const incrementTabs = (file) => {
+		// editorTabs = editorTabs.filter((el) => { return (el.label != file.name && el.path != file.path) });
+		for (let [index] of editorTabs.entries()) {
+			editorTabs[index].value = index + 1
+		}
 	}
 
-	function maximize() {
-		let window: any = remote.BrowserWindow.getFocusedWindow()
-		window.maximize()
-	}
-
-	function close() {
-		let window: any = remote.BrowserWindow.getFocusedWindow()
-		window.close()
-	}
-
-	const { remote } = electron
-	const win: any = remote.BrowserWindow.getFocusedWindow()
-
-	// win.minimize()
-
-	function handleCanvasChange(event) {
+	const handleCanvasChange = (event) => {
 		const canvas = event.detail
 		const codeMap = new CodeMap('ts')
 		currentCode = codeMap.mapToCode(canvas)
@@ -124,7 +94,7 @@
 						}}"
 					>
 						<left slot="left">
-							<Explorer></Explorer>
+							<Explorer />
 						</left>
 						<right slot="right">
 							<VSplitPane
@@ -134,7 +104,7 @@
 								minDownPaneSize="0px"
 							>
 								<top slot="top">
-									<OnlyTabs items="{editorTabs}" add="{true}" />
+									<RemovableTabs bind:items="{editorTabs}" add="{true}" />
 									<Monaco code="{currentCode}" />
 								</top>
 								<down slot="down">
@@ -168,7 +138,7 @@
 </main>
 
 <style>
-		#contents_wrapper {
+	#contents_wrapper {
 		width: 100vw;
 		height: 95vh;
 	}

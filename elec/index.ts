@@ -136,7 +136,7 @@ function openProject(dir) {
 	createApplicationMenu()
 	new createWin()
 	// watchProjectForChanges()
-	fs.watch(projectDir, {recursive:true}, (eventType, filename) => {
+	fs.watch(projectDir, { recursive: true }, (eventType, filename) => {
 		console.log(eventType)
 		win.webContents.send('send-proj-struct', buildTree(projectDir))
 		console.log(filename)
@@ -207,6 +207,5 @@ ipcMain.on('open-file', async (e, filePath) => {
 		} catch (err) {
 			e.sender.send('file-sent', `And error occured opening ${filePath}`)
 		}
-		
 	}
 })

@@ -24,6 +24,15 @@
 		false
 	)
 
+	window.addEventListener(
+		'fileSelectedDirect',
+		(event: CustomEvent) => {
+			ipcRenderer.send('open-file', event.detail.path)
+			lang = fileExtension(event.detail.name)
+		},
+		false
+	)
+
 	ipcRenderer.on('file-sent', (event, file) => {
 		code = file
 	})
