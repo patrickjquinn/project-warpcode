@@ -13,8 +13,8 @@
 	let proc
 
 	const SOLARIZED_DARK: xterm.ITheme = Object.freeze<xterm.ITheme>({
-		foreground: '#839496',
-		background: '#002b36',
+		foreground: '#fffff',
+		background: '#1e1e1e',
 		black: '#073642',
 		blue: '#268bd2',
 		cyan: '#2aa198',
@@ -37,7 +37,7 @@
 	let termFit
 
 	let theme: xterm.ITheme = SOLARIZED_DARK
-	let bgColor: any = '#222'
+	let bgColor: any = '#1e1e1e'
 
 	$: {
 		if (terminalController) {
@@ -53,6 +53,8 @@
 		terminalController.loadAddon(termFit)
 
 		terminalController.open(terminalElement)
+		terminalController.setOption('logLevel', 'debug');
+
 		termFit.fit()
 
 		terminalController.write('\x1b[32mWelcome to Warp code!\x1b[m\r\n')
@@ -75,6 +77,9 @@
 </script>
 
 <div id="terminal" bind:this="{terminalElement}" use:watchResize="{handleTermResize}"></div>
+
+<svelte:window on:resize={handleTermResize}/>
+
 
 <style>
 	:global(.terminal) {
