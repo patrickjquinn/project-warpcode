@@ -26,6 +26,10 @@ specifiers:
   eslint: ^7.31.0
   eslint-config-prettier: ^8.3.0
   eslint-plugin-svelte3: ^3.2.0
+  fast-xml-parser: ^3.19.0
+  he: ^1.2.0
+  himalaya: ^1.1.0
+  html2json: ^1.0.2
   minimist: ^1.2.5
   monaco-editor: ^0.25.2
   node-pty: ^0.10.1
@@ -89,6 +93,10 @@ devDependencies:
   eslint: 7.31.0
   eslint-config-prettier: 8.3.0_eslint@7.31.0
   eslint-plugin-svelte3: 3.2.0_eslint@7.31.0+svelte@3.40.3
+  fast-xml-parser: 3.19.0
+  he: 1.2.0
+  himalaya: 1.1.0
+  html2json: 1.0.2
   minimist: 1.2.5
   monaco-editor: 0.25.2
   ora: 5.4.1
@@ -1972,6 +1980,11 @@ packages:
     resolution: {integrity: sha1-PYpcZog6FqMMqGQ+hR8Zuqd5eRc=}
     dev: true
 
+  /fast-xml-parser/3.19.0:
+    resolution: {integrity: sha512-4pXwmBplsCPv8FOY1WRakF970TjNGnGnfbOnLqjlYvMiF1SR3yOHyxMR/YCXpPTOspNF5gwudqktIP4VsWkvBg==}
+    hasBin: true
+    dev: true
+
   /fastq/1.11.1:
     resolution: {integrity: sha512-HOnr8Mc60eNYl1gzwp6r5RoUyAn5/glBolUzP/Ez6IFVPMPirxn/9phgL6zhOtaTy7ISwPvQ+wT+hfcRZh/bzw==}
     dependencies:
@@ -2312,6 +2325,15 @@ packages:
       function-bind: 1.1.1
     dev: true
 
+  /he/1.2.0:
+    resolution: {integrity: sha512-F/1DnUGPopORZi0ni+CvrCgHQ5FyEAHRLSApuYWMmrbSwoN2Mn/7k+Gl38gJnR7yyDZk6WLXwiGod1JOWNDKGw==}
+    hasBin: true
+    dev: true
+
+  /himalaya/1.1.0:
+    resolution: {integrity: sha512-LLase1dHCRMel68/HZTFft0N0wti0epHr3nNY7ynpLbyZpmrKMQ8YIpiOV77TM97cNpC8Wb2n6f66IRggwdWPw==}
+    dev: true
+
   /hosted-git-info/2.8.9:
     resolution: {integrity: sha512-mxIDAb9Lsm6DoOJ7xH+5+X4y1LU/4Hi50L9C5sIswK3JzULS4bwk1FvjdBgvYR4bzT4tuUQiC15FE2f5HbLvYw==}
     dev: true
@@ -2321,6 +2343,10 @@ packages:
     engines: {node: '>=10'}
     dependencies:
       lru-cache: 6.0.0
+    dev: true
+
+  /html2json/1.0.2:
+    resolution: {integrity: sha1-ydbSAvplQCOGwgKzRc9RvOgO0e8=}
     dev: true
 
   /http-cache-semantics/4.1.0:

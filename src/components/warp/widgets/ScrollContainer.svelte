@@ -2,7 +2,7 @@
 	export let id
 </script>
 
-<div id="{id}"></div>
+<div id="{id}"><slot></slot></div>
 
 <style>
 	div {

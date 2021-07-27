@@ -97,6 +97,10 @@
 			}
 		})
 
+		editor.onDidChangeModelContent ((e) => {
+			code = editor.getValue()
+		})
+
 		return () => {
 			editor.dispose()
 		}

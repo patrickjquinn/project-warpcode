@@ -13,7 +13,7 @@
 		Image
 	} from './warp/widgets/index'
 
-	let columnItems: Array<Record<any, any>> = [
+	let columnItems = [
 		{
 			id: 1,
 			items: []
@@ -128,21 +128,21 @@
 									>
 										{#each column.items as item (item.id)}
 											{#if item.widget === 'container'}
-												<Container id="{item.id}" />
+												<Container id="{item.id}">{item.value ?? ''}</Container>
 											{:else if item.widget === 'label'}
-												<Label id="{item.id}" />
+												<Label id="{item.id}">{item.value ?? ''}</Label>
 											{:else if item.widget === 'scrollContainer'}
-												<ScrollContainer id="{item.id}" />
+												<ScrollContainer id="{item.id}">{item.value ?? ''}</ScrollContainer>
 											{:else if item.widget === 'button'}
-												<Button id="{item.id}" />
+												<Button id="{item.id}">item.value ?? ''}</Button>
 											{:else if item.widget === 'textInput'}
-												<TextInput id="{item.id}" />
+												<TextInput value={item.value ?? ''} id="{item.id}"/>
 											{:else if item.widget === 'textBox'}
 												<TextBox id="{item.id}" />
 											{:else if item.widget === 'videoPlayer'}
-												<VideoPlayer id="{item.id}" />
+												<VideoPlayer src="{item.value ?? ''}}" id="{item.id}" />
 											{:else if item.widget === 'image'}
-												<Image id="{item.id}" />
+												<Image src="{item.value ?? ''}" id="{item.id}" />
 											{/if}
 										{/each}
 									</div>

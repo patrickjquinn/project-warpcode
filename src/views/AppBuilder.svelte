@@ -23,6 +23,12 @@
 
 	let currentCode = '<script lang="ts">\n\n</script' + '>\n\n<main>\n\n</main>\n\n<style></style>'
 
+	$: {
+		const codeMap = new CodeMap('ts')
+
+		console.log(JSON.stringify(codeMap.convertCodeToCanvas(currentCode)))
+	}
+
 	let editorTabs = [{ label: 'Start.svelte', value: 1, path: './start.svelte', type: 'file' }]
 
 	const upControlTabs = [
@@ -61,7 +67,6 @@
 		const canvas = event.detail
 		const codeMap = new CodeMap('ts')
 		currentCode = codeMap.mapToCode(canvas)
-		console.log(currentCode)
 	}
 </script>
 
@@ -107,7 +112,7 @@
 							>
 								<top slot="top">
 									<RemovableTabs bind:items="{editorTabs}" add="{true}" />
-									<Monaco code="{currentCode}" />
+									<Monaco bind:code={currentCode} />
 								</top>
 								<down slot="down">
 									<OnlyTabs items="{consoleTabs}" add="{false}" />

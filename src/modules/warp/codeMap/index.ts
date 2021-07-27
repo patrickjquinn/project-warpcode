@@ -1,3 +1,5 @@
+import {parse} from 'himalaya'
+
 export class CodeMap {
 	lang: string
 	constructor(lang: string) {
@@ -13,18 +15,28 @@ export class CodeMap {
 		let scriptItems = ``
 		let mainItems = ``
 		for (const item of items) {
-			const widgetType: string = item.widget as string
-			const widgetID: string = item.id as string
+			const widgetType: any = item.widget as string
+			const widgetID: any = item.id as string
+			let widgetValue: any = item.value as string
+			let contentType: any = item.contentsType as string
+			if (!widgetValue) {
+				widgetValue = ''
+			}
+			if (!contentType) {
+				contentType = 'slot'
+			}
 			scriptItems =
 				scriptItems + `import {${CodeMap.capFirstLetter(widgetType)}} from "@components/warp/"\n`
 
+			const widget = this.transformTemplateToWidget({ type: contentType, widget: widgetType, value: widgetValue, id: widgetID })
+
 			if (item === items[items.length - 1]) {
 				mainItems =
-					mainItems + `<${CodeMap.capFirstLetter(widgetType)} id="${widgetType + widgetID}"/>`
+					mainItems + `${widget}`
 			} else {
 				mainItems =
 					mainItems +
-					`<${CodeMap.capFirstLetter(widgetType)} id="${widgetType + widgetID}"/>
+					`${widget}
             `
 			}
 		}
@@ -49,5 +61,21 @@ export class CodeMap {
 
 		const components: Array<unknown> = mainObject.split(/\n/)
 		console.log(components)
+	}
+
+	public convertCodeToCanvas(code: string) {
+		
+		const json = parse(code)
+
+		console.log(JSON.stringify(json))
+
+		return 'canvasObj'
+	}
+
+	private transformTemplateToWidget({ type, widget, value, id }): string {
+		if (type === 'slot') {
+			return `<${CodeMap.capFirstLetter(widget)} id="${widget + id}">${value}</${CodeMap.capFirstLetter(widget)}>`
+		}
+		return `<${CodeMap.capFirstLetter(widget)} ${type}="${value}" id="${widget + id}"/>`
 	}
 }

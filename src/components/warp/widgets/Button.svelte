@@ -11,7 +11,7 @@
 		.join(';')
 </script>
 
-<button id="{id}" contenteditable="true">Button</button>
+<button id="{id}" contenteditable="true"><slot></slot>></button>
 
 <style>
 	button {

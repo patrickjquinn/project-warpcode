@@ -2,7 +2,7 @@
 	export let id
 </script>
 
-<p id="{id}" contenteditable="true">Label</p>
+<p id="{id}" contenteditable="true"><slot></slot></p>
 
 <style>
 	p {
