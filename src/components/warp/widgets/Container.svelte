@@ -8,6 +8,7 @@
 	div {
 		background-color: lightgray;
 		width: 100%;
+		min-width: 50px;
 		height: 10rem;
 		overflow: hidden;
 		resize: both;

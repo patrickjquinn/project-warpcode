@@ -10,6 +10,8 @@
 	import OnlyTabs from '../components/tabs/OnlyTabs.svelte'
 	import RemovableTabs from '../components/tabs/RemovableTabs.svelte'
 
+	import TestCanvas from '../components/experimental/TestCanvas.svelte'
+
 	import Icon from 'svelte-awesome'
 	import { bell, refresh, comment, codeFork } from 'svelte-awesome/icons'
 
