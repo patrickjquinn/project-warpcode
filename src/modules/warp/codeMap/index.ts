@@ -1,5 +1,7 @@
 import {parse} from 'himalaya'
 
+import cssbeautify from 'cssbeautify'
+
 export class CodeMap {
 	lang: string
 	constructor(lang: string) {
@@ -67,9 +69,19 @@ export class CodeMap {
 		
 		const json = parse(code)
 
-		console.log(JSON.stringify(json))
+		const canvas = []
 
-		return 'canvasObj'
+		for (let item of json) {
+			if (item.tagName === 'main'){
+				for (const inner of item.children) {
+					if (inner.type === 'element') {
+						canvas.push(this.transformCodeToCanvas(inner))
+					}
+				}
+			}
+		}
+
+		return canvas
 	}
 
 	private transformTemplateToWidget({ type, widget, value, id }): string {
@@ -77,5 +89,44 @@ export class CodeMap {
 			return `<${CodeMap.capFirstLetter(widget)} id="${widget + id}">${value}</${CodeMap.capFirstLetter(widget)}>`
 		}
 		return `<${CodeMap.capFirstLetter(widget)} ${type}="${value}" id="${widget + id}"/>`
+	}
+
+	private transformCodeToCanvas(item) {
+		let id
+		let widget = item.tagName
+		let contentsType = ""
+		let value = ""
+
+		console.log(item)
+
+
+		for (const obj of item.attributes) {
+			if (obj.key === "src" || obj.key === "value"){
+				contentsType = obj.key
+				value = obj.value
+			}
+
+			if (obj.key === "id") {
+				id = parseInt(obj.value.split(item.tagName)[1])
+			}
+		}
+
+		if (contentsType.length === 0){
+			contentsType = 'slot'
+		}
+
+		if (value.length === 0 && item.children.length > 0) {
+			for (const child of item.children) {
+				value += child['content'] as string
+			}
+		}
+
+		return {
+			id,
+			name: widget,
+			widget,
+			value,
+			contentsType: 'slot'
+		}
 	}
 }

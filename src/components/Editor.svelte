@@ -59,7 +59,7 @@
 	}
 
 	$: {
-		if (editor?.getValue()) {
+		if (editor?.getValue() && editor.getValue() != code) {
 			editor.setValue(code)
 			editor.trigger('anyString', 'editor.action.formatDocument', null)
 		}
@@ -97,9 +97,16 @@
 			}
 		})
 
-		editor.onDidChangeModelContent ((e) => {
-			code = editor.getValue()
-		})
+		document.addEventListener("keydown", function(e) {
+			if ((window.navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)  && e.keyCode == 83) {
+				e.preventDefault();
+				code = editor.getValue()
+			}
+		}, false);
+
+		// editor.onDidChangeModelContent ((e) => {
+		// 	code = editor.getValue()
+		// })
 
 		return () => {
 			editor.dispose()

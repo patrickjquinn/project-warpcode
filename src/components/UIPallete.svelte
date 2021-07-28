@@ -11,16 +11,56 @@
 			icon: textHeight,
 			widget: 'label',
 			value: 'text',
-			contentsType: 'slot'
+			contentsType: 'slot',
+			style: {
+				label51: {
+					width: '100%',
+					height: '5rem',
+					color: 'white'
+				}
+			}
 		},
-		{ id: 52, name: 'text box', icon: textWidth, widget: 'textBox', contentsType: 'slot' },
-		{ id: 53, name: 'container', icon: square, widget: 'container', contentsType: 'slot' },
+		{
+			id: 52,
+			name: 'text box',
+			icon: textWidth,
+			widget: 'textBox',
+			contentsType: 'slot',
+			style: {
+				textBox52: {
+					width: '100%',
+					height: '5rem',
+					color: 'white'
+				}
+			}
+		},
+		{
+			id: 53,
+			name: 'container',
+			icon: square,
+			widget: 'container',
+			contentsType: 'slot',
+			style: {
+				label51: {
+					width: '100%',
+					height: '5rem',
+					color: 'white'
+				}
+			}
+		},
 		{
 			id: 54,
 			name: 'scroll container',
 			icon: square,
 			widget: 'scrollContainer',
-			contentsType: 'slot'
+			contentsType: 'slot',
+			style: {
+				label51: {
+					width: '100%',
+					height: '5rem',
+					color: 'white'
+				}
+			}
 		},
 		{
 			id: 55,
@@ -37,7 +77,14 @@
 			icon: square,
 			widget: 'button',
 			value: 'Button',
-			contentsType: 'slot'
+			contentsType: 'slot',
+			style: {
+				label51: {
+					width: '100%',
+					height: '5rem',
+					color: 'white'
+				}
+			}
 		},
 		{
 			id: 57,
@@ -45,18 +92,71 @@
 			icon: videoCamera,
 			widget: 'videoPlayer',
 			value: 'https://www.youtube.com/embed/jAaxVuz0uKk',
-			contentsType: 'src'
+			contentsType: 'src',
+			style: {
+				label51: {
+					width: '100%',
+					height: '5rem',
+					color: 'white'
+				}
+			}
 		},
-		{ id: 58, name: 'audio player', icon: textWidth, widget: 'container', contentsType: 'slot' },
-		{ id: 59, name: 'checkbox', icon: square, widget: 'container', contentsType: 'slot' },
-		{ id: 60, name: 'list view', icon: square, widget: 'container', contentsType: 'slot' },
+		{
+			id: 58,
+			name: 'audio player',
+			icon: textWidth,
+			widget: 'container',
+			contentsType: 'slot',
+			style: {
+				label51: {
+					width: '100%',
+					height: '5rem',
+					color: 'white'
+				}
+			}
+		},
+		{
+			id: 59,
+			name: 'checkbox',
+			icon: square,
+			widget: 'container',
+			contentsType: 'slot',
+			style: {
+				label51: {
+					width: '100%',
+					height: '5rem',
+					color: 'white'
+				}
+			}
+		},
+		{
+			id: 60,
+			name: 'list view',
+			icon: square,
+			widget: 'container',
+			contentsType: 'slot',
+			style: {
+				label51: {
+					width: '100%',
+					height: '5rem',
+					color: 'white'
+				}
+			}
+		},
 		{
 			id: 61,
 			name: 'text input',
 			icon: textWidth,
 			widget: 'textInput',
 			value: 'Text here',
-			contentsType: 'value'
+			contentsType: 'value',
+			style: {
+				label51: {
+					width: '100%',
+					height: '5rem',
+					color: 'white'
+				}
+			}
 		}
 	]
 

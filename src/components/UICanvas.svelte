@@ -13,37 +13,32 @@
 		Image
 	} from './warp/widgets/index'
 
-	let columnItems = [
-		{
-			id: 1,
-			items: []
-		}
-	]
+	export let items = []
 
 	const flipDurationMs = 200
 	const dispatch = createEventDispatcher()
 
 	function handleDndConsiderColumns(e) {
-		columnItems = e.detail.items
+		items = e.detail.items
 	}
 	function handleDndFinalizeColumns(e) {
-		columnItems = e.detail.items
+		items = e.detail.items
 	}
 	function handleDndConsiderCards(cid, e) {
-		const colIdx = columnItems.findIndex((c) => c.id === cid)
-		columnItems[colIdx].items = e.detail.items
-		columnItems = [...columnItems]
+		const colIdx = items.findIndex((c) => c.id === cid)
+		items[colIdx].items = e.detail.items
+		items = [...items]
 	}
 	function handleDndFinalizeCards(cid, e) {
-		const colIdx = columnItems.findIndex((c) => c.id === cid)
-		columnItems[colIdx].items = e.detail.items
-		columnItems = [...columnItems]
+		const colIdx = items.findIndex((c) => c.id === cid)
+		items[colIdx].items = e.detail.items
+		items = [...items]
 		canvasChanged()
 	}
 
 	function canvasChanged() {
 		dispatch('message', {
-			items: columnItems[0].items
+			items: items[0].items
 		})
 	}
 </script>
@@ -53,11 +48,11 @@
 		<div class="device-frame">
 			<section
 				class="board device-content"
-				use:dndzone="{{ items: columnItems, flipDurationMs, type: 'columns' }}"
+				use:dndzone="{{ items: items, flipDurationMs, type: 'columns' }}"
 				on:consider="{handleDndConsiderColumns}"
 				on:finalize="{handleDndFinalizeColumns}"
 			>
-				{#each columnItems as column (column.id)}
+				{#each items as column (column.id)}
 					<div class="column" animate:flip="{{ duration: flipDurationMs }}">
 						<div
 							class="column-content"
@@ -114,11 +109,11 @@
 					<div class="px__screen__frame">
 						<section
 							class="board device-content"
-							use:dndzone="{{ items: columnItems, flipDurationMs, type: 'columns' }}"
+							use:dndzone="{{ items: items, flipDurationMs, type: 'columns' }}"
 							on:consider="{handleDndConsiderColumns}"
 							on:finalize="{handleDndFinalizeColumns}"
 						>
-							{#each columnItems as column (column.id)}
+							{#each items as column (column.id)}
 								<div class="column" animate:flip="{{ duration: flipDurationMs }}">
 									<div
 										class="column-content"
@@ -134,7 +129,7 @@
 											{:else if item.widget === 'scrollContainer'}
 												<ScrollContainer id="{item.id}">{item.value ?? ''}</ScrollContainer>
 											{:else if item.widget === 'button'}
-												<Button id="{item.id}">item.value ?? ''}</Button>
+												<Button id="{item.id}">{item.value ?? ''}</Button>
 											{:else if item.widget === 'textInput'}
 												<TextInput value={item.value ?? ''} id="{item.id}"/>
 											{:else if item.widget === 'textBox'}

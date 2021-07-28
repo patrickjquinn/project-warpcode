@@ -74,7 +74,7 @@ class createWin {
 			name: 'xterm-color',
 			cols: 80,
 			rows: 24,
-			cwd: `${projectDir}/src`,
+			cwd: projectDir,
 			env: process.env
 		})
 

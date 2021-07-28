@@ -10,10 +10,15 @@
 	import OnlyTabs from '../components/tabs/OnlyTabs.svelte'
 	import RemovableTabs from '../components/tabs/RemovableTabs.svelte'
 
-	import TestCanvas from '../components/experimental/TestCanvas.svelte'
-
 	import Icon from 'svelte-awesome'
 	import { bell, refresh, comment, codeFork } from 'svelte-awesome/icons'
+
+	let editorItems = [
+		{
+			id: 1,
+			items: []
+		}
+	]
 
 	let consoleTabs = [
 		{ label: 'TERMINAL', value: 1 },
@@ -26,7 +31,12 @@
 	$: {
 		const codeMap = new CodeMap('ts')
 
-		console.log(JSON.stringify(codeMap.convertCodeToCanvas(currentCode)))
+		const codeCanvas = codeMap.convertCodeToCanvas(currentCode)
+
+		if (codeCanvas.length > 0) {
+			console.log(codeCanvas)
+			editorItems[0].items = codeCanvas
+		}
 	}
 
 	let editorTabs = [{ label: 'Start.svelte', value: 1, path: './start.svelte', type: 'file' }]
@@ -131,7 +141,7 @@
 						}}"
 					>
 						<left slot="left">
-							<UICanvas on:message="{handleCanvasChange}" />
+							<UICanvas items="{editorItems}" on:message="{handleCanvasChange}" />
 						</left>
 						<right slot="right">
 							<OnlyTabs items="{upControlTabs}" add="{false}" />
