@@ -1,7 +1,9 @@
-import {parse} from 'himalaya'
+import { parse } from 'himalaya'
 
 import cssbeautify from 'cssbeautify'
-
+import * as Css from 'json-to-css'
+import { toCSS, toJSON } from 'cssjson'
+import css2json from 'css2json'
 export class CodeMap {
 	lang: string
 	constructor(lang: string) {
@@ -12,10 +14,11 @@ export class CodeMap {
 		return input.charAt(0).toUpperCase() + input.slice(1)
 	}
 
-	public mapToCode(canvas: Record<string, unknown>): string {
+	public mapToCode(canvas: Record<string, unknown>, current: string): string {
 		const items: Array<Record<string, unknown>> = canvas.items as Array<Record<string, unknown>>
 		let scriptItems = ``
 		let mainItems = ``
+		let cssItems = ``
 		for (const item of items) {
 			const widgetType: any = item.widget as string
 			const widgetID: any = item.id as string
@@ -27,6 +30,9 @@ export class CodeMap {
 			if (!contentType) {
 				contentType = 'slot'
 			}
+
+			cssItems = cssItems + this.convertJSONToCSS(item.style)
+
 			scriptItems =
 				scriptItems + `import {${CodeMap.capFirstLetter(widgetType)}} from "@components/warp/"\n`
 
@@ -43,6 +49,8 @@ export class CodeMap {
 			}
 		}
 
+		// cssItems = cssItems + current.split('<style>').pop().split('</style>')[0];
+
 		return `
         <script lang="${this.lang}">
             ${scriptItems.trim()}
@@ -53,6 +61,7 @@ export class CodeMap {
         </main>
 
 		<style>
+			${cssItems}
 		</style>
         `
 	}
@@ -65,21 +74,52 @@ export class CodeMap {
 		console.log(components)
 	}
 
-	public convertCodeToCanvas(code: string) {
-		
+	public convertCodeToCanvas(code: string): any {
 		const json = parse(code)
 
 		const canvas = []
+		const cssItems = []
 
-		for (let item of json) {
-			if (item.tagName === 'main'){
+
+		for (const item of json) {
+			if (item.tagName === 'main') {
 				for (const inner of item.children) {
 					if (inner.type === 'element') {
 						canvas.push(this.transformCodeToCanvas(inner))
 					}
 				}
+			} else if (item.tagName === 'style') {
+				for (const style of item.children) {
+					if (style.type === 'text') {
+						const formatted = this.convertCSSToJSON(style.content)
+
+						if (formatted) {
+							cssItems.push(formatted)
+						}
+					}
+				}
 			}
 		}
+
+
+		console.log(`👉 ${JSON.stringify(canvas)}`)
+
+
+		if (canvas?.length > 0 && cssItems?.length > 0) {
+			for (const [index, item] of canvas.entries()) {
+				const id = `#${item.widget}${item.id}`
+	
+				for (const style of cssItems) {
+					if (style[id]) {
+						canvas[index].style = style
+						break
+					}
+				}
+			}
+		}
+		
+
+		console.log(`👉👉 ${JSON.stringify(canvas)}`)
 
 		return canvas
 	}
@@ -93,15 +133,12 @@ export class CodeMap {
 
 	private transformCodeToCanvas(item) {
 		let id
-		let widget = item.tagName
+		const widget = item.tagName
 		let contentsType = ""
 		let value = ""
 
-		console.log(item)
-
-
 		for (const obj of item.attributes) {
-			if (obj.key === "src" || obj.key === "value"){
+			if (obj.key === "src" || obj.key === "value") {
 				contentsType = obj.key
 				value = obj.value
 			}
@@ -111,7 +148,7 @@ export class CodeMap {
 			}
 		}
 
-		if (contentsType.length === 0){
+		if (contentsType.length === 0) {
 			contentsType = 'slot'
 		}
 
@@ -128,5 +165,33 @@ export class CodeMap {
 			value,
 			contentsType: 'slot'
 		}
+	}
+
+	private convertCSSToJSON(css: string) {
+		css = css.replaceAll('\t', '').trim()
+
+		if (css.length > 0) {
+			const beautified = cssbeautify(css, {
+				autosemicolon: true
+			})
+
+			return css2json(beautified)
+		}
+
+		return null
+	}
+
+	public convertJSONToCSS(json: Record<string,unknown>): string {
+		if (json) {
+			const r = Css.of(json)
+
+			const beautified = cssbeautify(r, {
+				autosemicolon: true
+			})
+
+			return beautified
+		}
+		return ``
+
 	}
 }

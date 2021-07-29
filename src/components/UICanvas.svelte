@@ -125,7 +125,7 @@
 											{#if item.widget === 'container'}
 												<Container id="{item.id}">{item.value ?? ''}</Container>
 											{:else if item.widget === 'label'}
-												<Label id="{item.id}">{item.value ?? ''}</Label>
+												<Label css="{item.style}" id="{item.id}">{item.value ?? ''}</Label>
 											{:else if item.widget === 'scrollContainer'}
 												<ScrollContainer id="{item.id}">{item.value ?? ''}</ScrollContainer>
 											{:else if item.widget === 'button'}

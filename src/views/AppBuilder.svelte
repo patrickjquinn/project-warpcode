@@ -36,6 +36,8 @@
 		if (codeCanvas.length > 0) {
 			console.log(codeCanvas)
 			editorItems[0].items = codeCanvas
+		} else {
+			editorItems[0].items = []
 		}
 	}
 
@@ -76,7 +78,7 @@
 	const handleCanvasChange = (event) => {
 		const canvas = event.detail
 		const codeMap = new CodeMap('ts')
-		currentCode = codeMap.mapToCode(canvas)
+		currentCode = codeMap.mapToCode(canvas, currentCode)
 	}
 </script>
 
