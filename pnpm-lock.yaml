@@ -5,9 +5,9 @@ specifiers:
   '@rollup/plugin-commonjs': ^19.0.2
   '@rollup/plugin-json': ^4.1.0
   '@rollup/plugin-node-resolve': ^13.0.4
-  '@sveltejs/vite-plugin-svelte': ^1.0.0-next.14
+  '@sveltejs/vite-plugin-svelte': ^1.0.0-next.15
   '@tsconfig/svelte': ^2.0.1
-  '@types/node': ^16.4.6
+  '@types/node': ^16.4.7
   '@typescript-eslint/eslint-plugin': ^4.28.5
   '@typescript-eslint/parser': ^4.28.5
   chalk: ^4.1.1
@@ -78,9 +78,9 @@ devDependencies:
   '@rollup/plugin-commonjs': 19.0.2_rollup@2.55.0
   '@rollup/plugin-json': 4.1.0_rollup@2.55.0
   '@rollup/plugin-node-resolve': 13.0.4_rollup@2.55.0
-  '@sveltejs/vite-plugin-svelte': 1.0.0-next.14_svelte@3.41.0+vite@2.4.4
+  '@sveltejs/vite-plugin-svelte': 1.0.0-next.15_svelte@3.41.0+vite@2.4.4
   '@tsconfig/svelte': 2.0.1
-  '@types/node': 16.4.6
+  '@types/node': 16.4.7
   '@typescript-eslint/eslint-plugin': 4.28.5_514553717ff968e20f6d1c6e521f8616
   '@typescript-eslint/parser': 4.28.5_eslint@7.31.0+typescript@4.3.5
   chalk: 4.1.1
@@ -383,8 +383,8 @@ packages:
     engines: {node: '>=10'}
     dev: true
 
-  /@sveltejs/vite-plugin-svelte/1.0.0-next.14_svelte@3.41.0+vite@2.4.4:
-    resolution: {integrity: sha512-46IKPtoGcdo6YLyUhvsXyC1Dg3m2HlbgreZqxM/h5DzavgUa75c/WHT5cIxxLppG+gxtct7V08/WNEdpFdmM3Q==}
+  /@sveltejs/vite-plugin-svelte/1.0.0-next.15_svelte@3.41.0+vite@2.4.4:
+    resolution: {integrity: sha512-8yGX7PxaqtvWw+GHiO2DV7lZ4M7DwIrFq+PgZGZ9X09PuoSeaWszm76GWQXJMKHoPPhdA9084662en9qbv4aRw==}
     engines: {node: ^12.20 || ^14.13.1 || >= 16}
     peerDependencies:
       diff-match-patch: ^1.0.5
@@ -429,7 +429,7 @@ packages:
     dependencies:
       '@types/http-cache-semantics': 4.0.1
       '@types/keyv': 3.1.2
-      '@types/node': 16.4.6
+      '@types/node': 16.4.7
       '@types/responselike': 1.0.0
     dev: true
 
@@ -450,14 +450,14 @@ packages:
   /@types/fs-extra/9.0.12:
     resolution: {integrity: sha512-I+bsBr67CurCGnSenZZ7v94gd3tc3+Aj2taxMT4yu4ABLuOgOjeFxX3dokG24ztSRg5tnT00sL8BszO7gSMoIw==}
     dependencies:
-      '@types/node': 16.4.6
+      '@types/node': 16.4.7
     dev: true
 
   /@types/glob/7.1.4:
     resolution: {integrity: sha512-w+LsMxKyYQm347Otw+IfBXOv9UWVjpHpCDdbBMt8Kz/xbvCYNjP+0qPh91Km3iKfSRLBB0P7fAMf0KHrPu+MyA==}
     dependencies:
       '@types/minimatch': 3.0.5
-      '@types/node': 16.4.6
+      '@types/node': 16.4.7
     dev: true
     optional: true
 
@@ -472,7 +472,7 @@ packages:
   /@types/keyv/3.1.2:
     resolution: {integrity: sha512-/FvAK2p4jQOaJ6CGDHJTqZcUtbZe820qIeTg7o0Shg7drB4JHeL+V/dhSaly7NXx6u8eSee+r7coT+yuJEvDLg==}
     dependencies:
-      '@types/node': 16.4.6
+      '@types/node': 16.4.7
     dev: true
 
   /@types/minimatch/3.0.5:
@@ -488,8 +488,8 @@ packages:
     resolution: {integrity: sha512-iBxsxU7eswQDGhlr3AiamBxOssaYxbM+NKXVil8jg9yFXvrfEFbDumLD/2dMTB+zYyg7w+Xjt8yuxfdbUHAtcQ==}
     dev: true
 
-  /@types/node/16.4.6:
-    resolution: {integrity: sha512-FKyawK3o5KL16AwbeFajen8G4K3mmqUrQsehn5wNKs8IzlKHE8TfnSmILXVMVziAEcnB23u1RCFU1NT6hSyr7Q==}
+  /@types/node/16.4.7:
+    resolution: {integrity: sha512-aDDY54sst8sx47CWT6QQqIZp45yURq4dic0+HCYfYNcY5Ejlb/CLmFnRLfy3wQuYafOeh3lB/DAKaqRKBtcZmA==}
     dev: true
 
   /@types/normalize-package-data/2.4.1:
@@ -499,7 +499,7 @@ packages:
   /@types/plist/3.0.2:
     resolution: {integrity: sha512-ULqvZNGMv0zRFvqn8/4LSPtnmN4MfhlPNtJCTpKuIIxGVGZ2rYWzFXrvEBoh9CVyqSE7D6YFRJ1hydLHI6kbWw==}
     dependencies:
-      '@types/node': 16.4.6
+      '@types/node': 16.4.7
       xmlbuilder: 15.1.1
     dev: true
     optional: true
@@ -511,19 +511,19 @@ packages:
   /@types/resolve/1.17.1:
     resolution: {integrity: sha512-yy7HuzQhj0dhGpD8RLXSZWEkLsV9ibvxvi6EiJ3bkqLAO1RGo0WbkWQiwpRlSFymTJRz0d3k5LM3kkx8ArDbLw==}
     dependencies:
-      '@types/node': 16.4.6
+      '@types/node': 16.4.7
     dev: true
 
   /@types/responselike/1.0.0:
     resolution: {integrity: sha512-85Y2BjiufFzaMIlvJDvTTB8Fxl2xfLo4HgmHzVBz08w4wDePCTjYw66PdrolO0kzli3yam/YCgRufyo1DdQVTA==}
     dependencies:
-      '@types/node': 16.4.6
+      '@types/node': 16.4.7
     dev: true
 
   /@types/sass/1.16.1:
     resolution: {integrity: sha512-iZUcRrGuz/Tbg3loODpW7vrQJkUtpY2fFSf4ELqqkApcS2TkZ1msk7ie8iZPB86lDOP8QOTTmuvWjc5S0R9OjQ==}
     dependencies:
-      '@types/node': 16.4.6
+      '@types/node': 16.4.7
     dev: true
 
   /@types/verror/1.10.5:

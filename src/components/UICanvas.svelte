@@ -44,53 +44,6 @@
 </script>
 
 <div id="canvas_container">
-	<!-- <div class="device device-iphone-x">
-		<div class="device-frame">
-			<section
-				class="board device-content"
-				use:dndzone="{{ items: items, flipDurationMs, type: 'columns' }}"
-				on:consider="{handleDndConsiderColumns}"
-				on:finalize="{handleDndFinalizeColumns}"
-			>
-				{#each items as column (column.id)}
-					<div class="column" animate:flip="{{ duration: flipDurationMs }}">
-						<div
-							class="column-content"
-							use:dndzone="{{ items: column.items, flipDurationMs }}"
-							on:consider="{(e) => handleDndConsiderCards(column.id, e)}"
-							on:finalize="{(e) => handleDndFinalizeCards(column.id, e)}"
-						>
-							{#each column.items as item (item.id)}
-								{#if item.widget === 'container'}
-									<Container id="{item.id}" />
-								{:else if item.widget === 'label'}
-									<Label id="{item.id}" />
-								{:else if item.widget === 'scrollContainer'}
-									<ScrollContainer id="{item.id}" />
-								{:else if item.widget === 'button'}
-									<Button id="{item.id}" />
-								{:else if item.widget === 'textInput'}
-									<TextInput id="{item.id}" />
-								{:else if item.widget === 'textBox'}
-									<TextBox id="{item.id}" />
-								{:else if item.widget === 'videoPlayer'}
-									<VideoPlayer id="{item.id}" />
-								{/if}
-							{/each}
-						</div>
-					</div>
-				{/each}
-			</section>
-		</div>
-		<div class="device-stripe"></div>
-		<div class="device-header"></div>
-		<div class="device-sensors"></div>
-		<div class="device-btns"></div>
-		<div class="device-power"></div>
-	</div>
-
-	 -->
-
 	<div class="temp-wrapper">
 		<div class="px">
 			<div class="px__body">

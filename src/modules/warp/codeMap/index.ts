@@ -51,17 +51,19 @@ export class CodeMap {
 
 		// cssItems = cssItems + current.split('<style>').pop().split('</style>')[0];
 
+		console.log(cssItems)
+
 		return `
         <script lang="${this.lang}">
             ${scriptItems.trim()}
         </script>
 
         <main>
-            ${mainItems}
+            ${mainItems.trim()}
         </main>
 
 		<style>
-			${cssItems}
+			${cssItems.trim()}
 		</style>
         `
 	}
