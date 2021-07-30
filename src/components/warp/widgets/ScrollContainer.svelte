@@ -5,7 +5,6 @@
 	export let css
 	export let id
 
-
 	let codeMap = new CodeMap('ts')
 	let styled
 	let rendered = false
@@ -21,7 +20,7 @@
 	})
 </script>
 
-<div id="{id}" style="{styled}"><slot></slot></div>
+<div id="{id}" style="{styled}"><slot /></div>
 
 <style>
 	div {

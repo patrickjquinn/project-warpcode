@@ -6,7 +6,6 @@
 	export let css
 	export let id
 
-
 	let codeMap = new CodeMap('ts')
 	let styled
 	let rendered = false
@@ -22,7 +21,7 @@
 	})
 </script>
 
-<textarea id="{id}" value="{value}" style="{styled}" name="textBox" rows="4" cols="50"/>
+<textarea id="{id}" value="{value}" style="{styled}" name="textBox" rows="4" cols="50"></textarea>
 
 <style>
 	textarea {

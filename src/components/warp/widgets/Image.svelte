@@ -22,11 +22,7 @@
 	})
 </script>
 
-<img style="{styled}"
-	src="{src}"
-	alt="img"
-	id="{id}"
-/>
+<img style="{styled}" src="{src}" alt="img" id="{id}" />
 
 <style>
 	img {

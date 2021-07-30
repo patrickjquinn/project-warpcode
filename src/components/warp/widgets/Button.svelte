@@ -5,7 +5,6 @@
 	export let css
 	export let id
 
-
 	let codeMap = new CodeMap('ts')
 	let styled
 	let rendered = false
@@ -19,11 +18,9 @@
 	onMount(async () => {
 		rendered = true
 	})
-
-
 </script>
 
-<button id="{id}" style="{styled}" contenteditable="true"><slot></slot></button>
+<button id="{id}" style="{styled}" contenteditable="true"><slot /></button>
 
 <style>
 	button {

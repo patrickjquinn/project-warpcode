@@ -1,12 +1,10 @@
 <script lang="ts">
-	export let value
-
 	import { onMount } from 'svelte'
 	import { CodeMap } from '../../../modules/warp/codeMap/index'
-
+	
+	export let value
 	export let css
 	export let id
-
 
 	let codeMap = new CodeMap('ts')
 	let styled

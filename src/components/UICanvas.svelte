@@ -19,15 +19,15 @@
 	const dispatch = createEventDispatcher()
 
 	const onKeyCombo = (e) => {
-		const key = e.keyCode;
-        if (key === 8 || key === 46) {
-            if (selectedItem) {
+		const key = e.keyCode
+		if (key === 8 || key === 46) {
+			if (selectedItem) {
 				const idx = items.findIndex((item) => item.id === selectedItem.id)
 				selectedItem = null
 				items.splice(idx, 1)
 				canvasChanged()
 			}
-        }
+		}
 	}
 
 	function canvasChanged() {
@@ -39,7 +39,7 @@
 	function handleDndConsider(e) {
 		const { trigger, id } = e.detail.info
 		// if (trigger === TRIGGERS.DRAGGED_OVER_INDEX){
-			items = e.detail.items
+		items = e.detail.items
 		// }
 		// if (trigger === TRIGGERS.DRAG_STARTED && trigger === TRIGGERS.DRAGGED_ENTERED_ANOTHER) {
 		// 	const idx = items.findIndex((item) => item.id === id)
@@ -54,7 +54,7 @@
 	}
 	function handleDndFinalize(e) {
 		const { trigger } = e.detail.info
-		if (trigger === TRIGGERS.DROPPED_INTO_ZONE){
+		if (trigger === TRIGGERS.DROPPED_INTO_ZONE) {
 			// items = e.detail.items
 			try {
 				canvasChanged()
@@ -62,7 +62,6 @@
 				console.log('no no, dont do that')
 			}
 		}
-
 	}
 
 	function removeSelectorHighlights() {
@@ -80,7 +79,7 @@
 	}
 </script>
 
-<svelte:window on:keydown={onKeyCombo}/>
+<svelte:window on:keydown="{onKeyCombo}" />
 
 <div id="canvas_container">
 	<div class="temp-wrapper">
@@ -122,15 +121,33 @@
 													>{item.value ?? ''}</ScrollContainer
 												>
 											{:else if item.widget === 'button'}
-												<Button css="{item.style}" id="{`${item.widget}${item.id}`}">{item.value ?? ''}</Button>
+												<Button css="{item.style}" id="{`${item.widget}${item.id}`}"
+													>{item.value ?? ''}</Button
+												>
 											{:else if item.widget === 'textInput'}
-												<TextInput css="{item.style}" value="{item.value ?? ''}" id="{`${item.widget}${item.id}`}" />
+												<TextInput
+													css="{item.style}"
+													value="{item.value ?? ''}"
+													id="{`${item.widget}${item.id}`}"
+												/>
 											{:else if item.widget === 'textBox'}
-												<TextBox css="{item.style}" value="{item.value ?? ''}" id="{`${item.widget}${item.id}`}" />
+												<TextBox
+													css="{item.style}"
+													value="{item.value ?? ''}"
+													id="{`${item.widget}${item.id}`}"
+												/>
 											{:else if item.widget === 'videoPlayer'}
-												<VideoPlayer css="{item.style}" src="{item.value ?? ''}}" id="{`${item.widget}${item.id}`}" />
+												<VideoPlayer
+													css="{item.style}"
+													src="{item.value ?? ''}}"
+													id="{`${item.widget}${item.id}`}"
+												/>
 											{:else if item.widget === 'image'}
-												<Image css="{item.style}" src="{item.value ?? ''}" id="{`${item.widget}${item.id}`}" />
+												<Image
+													css="{item.style}"
+													src="{item.value ?? ''}"
+													id="{`${item.widget}${item.id}`}"
+												/>
 											{/if}
 										</div>
 									{/each}

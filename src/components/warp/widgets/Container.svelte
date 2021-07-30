@@ -1,11 +1,9 @@
 <script lang="ts">
-
 	import { onMount } from 'svelte'
 	import { CodeMap } from '../../../modules/warp/codeMap/index'
 
 	export let css
 	export let id
-
 
 	let codeMap = new CodeMap('ts')
 	let styled
@@ -22,7 +20,7 @@
 	})
 </script>
 
-<div id="{id}" style="{styled}"><slot></slot></div>
+<div id="{id}" style="{styled}"><slot /></div>
 
 <style>
 	div {

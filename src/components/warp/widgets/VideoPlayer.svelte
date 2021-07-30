@@ -1,12 +1,10 @@
 <script lang="ts">
-	export let src
-
 	import { onMount } from 'svelte'
 	import { CodeMap } from '../../../modules/warp/codeMap/index'
 
 	export let css
 	export let id
-
+	export let src
 
 	let codeMap = new CodeMap('ts')
 	let styled
@@ -23,7 +21,8 @@
 	})
 </script>
 
-<iframe style="{styled}"
+<iframe
+	style="{styled}"
 	id="{id}"
 	width="auto"
 	height="auto"
