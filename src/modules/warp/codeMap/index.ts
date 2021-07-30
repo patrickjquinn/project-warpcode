@@ -2,6 +2,7 @@ import { parse } from 'himalaya'
 
 import cssbeautify from 'cssbeautify'
 import * as Css from 'json-to-css'
+import {validate} from 'csstree-validator'
 import css2json from 'css2json'
 export class CodeMap {
 	lang: string
@@ -74,10 +75,14 @@ export class CodeMap {
 
 		if (!id.includes('placeholder')){
 			const mapped = this.convertJSONToCSS(css)
+			
 			if (mapped) {
-				console.log(`#${id}`)
+				const validateCSS = validate(mapped)
+				if (validate(mapped).length !== 0){
+					console.log(`Invalid CSS on widget ${id} : ${validateCSS}`)
+					return ``
+				}
 				const styleSplit = mapped.split(`#${id}`)
-				console.log(styleSplit[1])
 				if (styleSplit?.length > 0) {
 					const splitValue = styleSplit[1].trim()
 					if (splitValue?.includes('{') && splitValue?.includes('}')) {
