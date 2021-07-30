@@ -12,15 +12,11 @@
 		Image
 	} from './warp/widgets/index'
 
-	export let items = []
+	export let items
 	let selectedItem
 
 	const flipDurationMs = 100
 	const dispatch = createEventDispatcher()
-
-	$: {
-		console.log(`❤️${JSON.stringify(items, null, 2)}`)
-	}
 
 	const onKeyCombo = (e) => {
 		const key = e.keyCode;

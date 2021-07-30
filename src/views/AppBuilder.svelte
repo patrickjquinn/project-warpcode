@@ -30,10 +30,10 @@
 
 		const codeCanvas = codeMap.convertCodeToCanvas(currentCode)
 
-		const isSame = JSON.stringify(codeCanvas.sort()) == JSON.stringify(editorItems.sort()) 
+		const isSame = JSON.stringify(codeCanvas) == JSON.stringify(editorItems) 
 
 		if (!isSame){
-			if (codeCanvas.length > 0) {
+			if (codeCanvas?.length > 0) {
 				editorItems = codeCanvas
 			} else {
 				editorItems = []

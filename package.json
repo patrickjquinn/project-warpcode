@@ -23,7 +23,7 @@
 		"@types/node": "^16.4.7",
 		"@typescript-eslint/eslint-plugin": "^4.28.5",
 		"@typescript-eslint/parser": "^4.28.5",
-		"chalk": "^4.1.1",
+		"chalk": "^4.1.2",
 		"concurrently": "^6.2.0",
 		"css2json": "^1.1.1",
 		"cssbeautify": "^0.3.1",

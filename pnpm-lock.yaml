@@ -10,7 +10,7 @@ specifiers:
   '@types/node': ^16.4.7
   '@typescript-eslint/eslint-plugin': ^4.28.5
   '@typescript-eslint/parser': ^4.28.5
-  chalk: ^4.1.1
+  chalk: ^4.1.2
   chokidar: ^3.5.2
   concurrently: ^6.2.0
   css2json: ^1.1.1
@@ -83,7 +83,7 @@ devDependencies:
   '@types/node': 16.4.7
   '@typescript-eslint/eslint-plugin': 4.28.5_514553717ff968e20f6d1c6e521f8616
   '@typescript-eslint/parser': 4.28.5_eslint@7.31.0+typescript@4.3.5
-  chalk: 4.1.1
+  chalk: 4.1.2
   concurrently: 6.2.0
   css2json: 1.1.1
   cssbeautify: 0.3.1
@@ -959,7 +959,7 @@ packages:
     dependencies:
       ansi-align: 3.0.0
       camelcase: 6.2.0
-      chalk: 4.1.1
+      chalk: 4.1.2
       cli-boxes: 2.2.1
       string-width: 4.2.2
       type-fest: 0.20.2
@@ -1029,7 +1029,7 @@ packages:
       app-builder-bin: 3.5.13
       bluebird-lst: 1.0.9
       builder-util-runtime: 8.7.7
-      chalk: 4.1.1
+      chalk: 4.1.2
       debug: 4.3.2
       fs-extra: 10.0.0
       is-ci: 3.0.0
@@ -1100,8 +1100,8 @@ packages:
       supports-color: 5.5.0
     dev: true
 
-  /chalk/4.1.1:
-    resolution: {integrity: sha512-diHzdDKxcU+bAsUboHLPEDQiw0qEe0qd7SYUn3HgcFlWgbDcfLGswOHYeGrHKzG9z6UYf01d9VFMfZxPM1xZSg==}
+  /chalk/4.1.2:
+    resolution: {integrity: sha512-oKnbhFyRIXpUuez8iBMmyEa4nbj4IOQyuhc/wy9kY7/WVPcwIO9VA668Pu8RkO7+0G76SLROeyw9CpQ061i4mA==}
     engines: {node: '>=10'}
     dependencies:
       ansi-styles: 4.3.0
@@ -1270,7 +1270,7 @@ packages:
     engines: {node: '>=10.0.0'}
     hasBin: true
     dependencies:
-      chalk: 4.1.1
+      chalk: 4.1.2
       date-fns: 2.23.0
       lodash: 4.17.21
       read-pkg: 5.2.0
@@ -1632,7 +1632,7 @@ packages:
       app-builder-lib: 22.11.7
       builder-util: 22.11.7
       builder-util-runtime: 8.7.7
-      chalk: 4.1.1
+      chalk: 4.1.2
       dmg-builder: 22.11.7
       fs-extra: 10.0.0
       is-ci: 3.0.0
@@ -1663,7 +1663,7 @@ packages:
       '@types/fs-extra': 9.0.12
       builder-util: 22.11.7
       builder-util-runtime: 8.7.7
-      chalk: 4.1.1
+      chalk: 4.1.2
       fs-extra: 10.0.0
       lazy-val: 1.0.5
       mime: 2.5.2
@@ -1854,7 +1854,7 @@ packages:
       '@eslint/eslintrc': 0.4.3
       '@humanwhocodes/config-array': 0.5.0
       ajv: 6.12.6
-      chalk: 4.1.1
+      chalk: 4.1.2
       cross-spawn: 7.0.3
       debug: 4.3.2
       doctrine: 3.0.0
@@ -2778,7 +2778,7 @@ packages:
     resolution: {integrity: sha512-8XPvpAA8uyhfteu8pIvQxpJZ7SYYdpUivZpGy6sFsBuKRY/7rQGavedeB8aK+Zkyq6upMFVL/9AW6vOYzfRyLg==}
     engines: {node: '>=10'}
     dependencies:
-      chalk: 4.1.1
+      chalk: 4.1.2
       is-unicode-supported: 0.1.0
     dev: true
 
@@ -3164,7 +3164,7 @@ packages:
     engines: {node: '>=10'}
     dependencies:
       bl: 4.1.0
-      chalk: 4.1.1
+      chalk: 4.1.2
       cli-cursor: 3.1.0
       cli-spinners: 2.6.0
       is-interactive: 1.0.0
@@ -3991,7 +3991,7 @@ packages:
     peerDependencies:
       svelte: ^3.24.0
     dependencies:
-      chalk: 4.1.1
+      chalk: 4.1.2
       chokidar: 3.5.2
       glob: 7.1.7
       import-fresh: 3.3.0
@@ -4329,7 +4329,7 @@ packages:
     engines: {node: '>=10'}
     dependencies:
       boxen: 5.0.1
-      chalk: 4.1.1
+      chalk: 4.1.2
       configstore: 5.0.1
       has-yarn: 2.1.0
       import-lazy: 2.1.0
