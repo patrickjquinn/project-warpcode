@@ -15,7 +15,8 @@
 			style: {
 				'#label51': {
 					height: '0.2rem',
-					color: 'black'
+					color: 'black',
+					'line-height': '0.2rem'
 				}
 			}
 		},
@@ -24,7 +25,8 @@
 			name: 'text box',
 			icon: textWidth,
 			widget: 'textBox',
-			contentsType: 'slot',
+			contentsType: 'value',
+			value: 'sample text inside of a big old text area!',
 			style: {
 				'#textBox52': {
 					width: '100%',
@@ -166,16 +168,34 @@
 		}
 	]
 
+	// for (const [index, item] of items.entries()) {
+	// 		const styleObj = {}
+	// 		styleObj[`#${item.widget}${index+1}`] = item.style[`#${item.widget}${item.id}`]
+	// 		items[index].style = styleObj
+	// 		items[index].id = index + 1
+	// }
+
+	$: {
+		// for (const [index, item] of items.entries()) {
+		// 	const styleObj = {}
+		// 	styleObj[`#${item.widget}${index+1}`] = item.style[`#${item.widget}${item.id}`]
+		// 	items[index].style = styleObj
+		// 	items[index].id = index + 1
+		// }
+	}
 	const flipDurationMs = 300
 	let shouldIgnoreDndEvents = true
 	function handleDndConsider(e) {
 		const { trigger, id } = e.detail.info
 		if (trigger === TRIGGERS.DRAG_STARTED) {
 			const idx = items.findIndex((item) => item.id === id)
-			const newId = `${id}_copy_${Math.round(Math.random() * 100000)}`
-
+			const item = items[idx]
+			const newId = id + Math.round(Math.random() * 100)
+			const style = {}
+			style[`#${item.widget}${newId}`] = item.style[`#${item.widget}${id}`]
 			e.detail.items = e.detail.items.filter((item) => !item[SHADOW_ITEM_MARKER_PROPERTY_NAME])
-			e.detail.items.splice(idx, 0, { ...items[idx], id: newId })
+			e.detail.items.splice(idx, 0, { ...items[idx], id: newId, style })
+
 			items = e.detail.items
 			shouldIgnoreDndEvents = true
 		} else if (!shouldIgnoreDndEvents) {

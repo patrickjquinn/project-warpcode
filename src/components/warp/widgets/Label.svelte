@@ -7,9 +7,19 @@
 
 	let codeMap = new CodeMap('ts')
 
-	console.log(JSON.stringify(css))
+	console.log(`🎨 ${JSON.stringify(css)}`)
+	let styled
 
-	$: styled = codeMap.convertJSONToCSS(css).split(`#label${id}`)[1].replace('{','').replace('}}','').trim()
+	$: {
+		const mapped = codeMap.convertJSONToCSS(css)
+		if (mapped) {
+			const styleSplit = mapped.split(`#label${id}`)
+			if (styleSplit?.length > 0){
+				if (styleSplit[1]?.includes('{') && styleSplit[1]?.includes('}}'))
+				styled = styleSplit[1].replace('{','').replace('}}','').trim()
+			}
+		}
+	}
 
 </script>
 

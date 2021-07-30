@@ -1,6 +1,5 @@
-<script lang="ts">
-	import { flip } from 'svelte/animate'
-	import { dndzone } from 'svelte-dnd-action'
+<script>
+	import { dndzone, TRIGGERS } from 'svelte-dnd-action'
 	import { createEventDispatcher } from 'svelte'
 	import {
 		Container,
@@ -14,34 +13,78 @@
 	} from './warp/widgets/index'
 
 	export let items = []
+	let selectedItem
 
-	const flipDurationMs = 200
+	const flipDurationMs = 100
 	const dispatch = createEventDispatcher()
 
-	function handleDndConsiderColumns(e) {
-		items = e.detail.items
+	$: {
+		console.log(`❤️${JSON.stringify(items, null, 2)}`)
 	}
-	function handleDndFinalizeColumns(e) {
-		items = e.detail.items
-	}
-	function handleDndConsiderCards(cid, e) {
-		const colIdx = items.findIndex((c) => c.id === cid)
-		items[colIdx].items = e.detail.items
-		items = [...items]
-	}
-	function handleDndFinalizeCards(cid, e) {
-		const colIdx = items.findIndex((c) => c.id === cid)
-		items[colIdx].items = e.detail.items
-		items = [...items]
-		canvasChanged()
+
+	const onKeyCombo = (e) => {
+		const key = e.keyCode;
+        if (key === 8 || key === 46) {
+            if (selectedItem) {
+				const idx = items.findIndex((item) => item.id === selectedItem.id)
+				selectedItem = null
+				items.splice(idx, 1)
+				canvasChanged()
+			}
+        }
 	}
 
 	function canvasChanged() {
 		dispatch('message', {
-			items: items[0].items
+			items
 		})
 	}
+
+	function handleDndConsider(e) {
+		const { trigger, id } = e.detail.info
+		// if (trigger === TRIGGERS.DRAGGED_OVER_INDEX){
+			items = e.detail.items
+		// }
+		// if (trigger === TRIGGERS.DRAG_STARTED && trigger === TRIGGERS.DRAGGED_ENTERED_ANOTHER) {
+		// 	const idx = items.findIndex((item) => item.id === id)
+		// 	if (idx) {
+		// 		const item = items[idx]
+		// 		const newId = id + Math.round(Math.random() * 100)
+		// 		const style = {}
+		// 		style[`#${item.widget}${newId}`] = item.style[`#${item.widget}${id}`]
+		// 		e.detail.items.splice(idx, 0, { ...items[idx], id: newId, style })
+		// 	}
+		// }
+	}
+	function handleDndFinalize(e) {
+		const { trigger } = e.detail.info
+		if (trigger === TRIGGERS.DROPPED_INTO_ZONE){
+			// items = e.detail.items
+			try {
+				canvasChanged()
+			} catch {
+				console.log('no no, dont do that')
+			}
+		}
+
+	}
+
+	function removeSelectorHighlights() {
+		selectedItem = null
+		const selectors = document.querySelectorAll('.selector')
+		selectors.forEach((selector) => {
+			selector.style.border = '0px solid transparent'
+		})
+	}
+
+	function onItemSelected(e, item) {
+		removeSelectorHighlights()
+		selectedItem = item
+		e.target.parentNode.style.border = '2px solid yellow'
+	}
 </script>
+
+<svelte:window on:keydown={onKeyCombo}/>
 
 <div id="canvas_container">
 	<div class="temp-wrapper">
@@ -60,7 +103,45 @@
 			<div class="px__screen">
 				<div class="px__screen__">
 					<div class="px__screen__frame">
-						<section
+						<section class="board device-content">
+							<div class="column">
+								<div
+									class="column-content"
+									use:dndzone="{{ items, flipDurationMs }}"
+									on:consider="{(e) => handleDndConsider(e)}"
+									on:finalize="{(e) => handleDndFinalize(e)}"
+								>
+									{#each items as item (item.id)}
+										<div on:click="{(e) => onItemSelected(e, item)}" class="selector">
+											{#if item.widget === 'container'}
+												<Container id="{`${item.widget}${`${item.widget}${item.id}`}`}"
+													>{item.value ?? ''}</Container
+												>
+											{:else if item.widget === 'label'}
+												<Label css="{item.style}" id="{`${item.widget}${item.id}`}"
+													>{item.value ?? ''}</Label
+												>
+											{:else if item.widget === 'scrollContainer'}
+												<ScrollContainer id="{`${item.widget}${item.id}`}"
+													>{item.value ?? ''}</ScrollContainer
+												>
+											{:else if item.widget === 'button'}
+												<Button id="{`${item.widget}${item.id}`}">{item.value ?? ''}</Button>
+											{:else if item.widget === 'textInput'}
+												<TextInput value="{item.value ?? ''}" id="{`${item.widget}${item.id}`}" />
+											{:else if item.widget === 'textBox'}
+												<TextBox value="{item.value ?? ''}" id="{`${item.widget}${item.id}`}" />
+											{:else if item.widget === 'videoPlayer'}
+												<VideoPlayer src="{item.value ?? ''}}" id="{`${item.widget}${item.id}`}" />
+											{:else if item.widget === 'image'}
+												<Image src="{item.value ?? ''}" id="{`${item.widget}${item.id}`}" />
+											{/if}
+										</div>
+									{/each}
+								</div>
+							</div>
+						</section>
+						<!-- <section
 							class="board device-content"
 							use:dndzone="{{ items: items, flipDurationMs, type: 'columns' }}"
 							on:consider="{handleDndConsiderColumns}"
@@ -76,27 +157,27 @@
 									>
 										{#each column.items as item (item.id)}
 											{#if item.widget === 'container'}
-												<Container id="{item.id}">{item.value ?? ''}</Container>
+												<Container id="{`${item.widget}${item.id}`}">{item.value ?? ''}</Container>
 											{:else if item.widget === 'label'}
-												<Label css="{item.style}" id="{item.id}">{item.value ?? ''}</Label>
+												<Label css="{item.style}" id="{`${item.widget}${item.id}`}">{item.value ?? ''}</Label>
 											{:else if item.widget === 'scrollContainer'}
-												<ScrollContainer id="{item.id}">{item.value ?? ''}</ScrollContainer>
+												<ScrollContainer id="{`${item.widget}${item.id}`}">{item.value ?? ''}</ScrollContainer>
 											{:else if item.widget === 'button'}
-												<Button id="{item.id}">{item.value ?? ''}</Button>
+												<Button id="{`${item.widget}${item.id}`}">{item.value ?? ''}</Button>
 											{:else if item.widget === 'textInput'}
-												<TextInput value={item.value ?? ''} id="{item.id}"/>
+												<TextInput value={item.value ?? ''} id="{`${item.widget}${item.id}`}"/>
 											{:else if item.widget === 'textBox'}
-												<TextBox id="{item.id}" />
+												<TextBox id="{`${item.widget}${item.id}`}" />
 											{:else if item.widget === 'videoPlayer'}
-												<VideoPlayer src="{item.value ?? ''}}" id="{item.id}" />
+												<VideoPlayer src="{item.value ?? ''}}" id="{`${item.widget}${item.id}`}" />
 											{:else if item.widget === 'image'}
-												<Image src="{item.value ?? ''}" id="{item.id}" />
+												<Image src="{item.value ?? ''}" id="{`${item.widget}${item.id}`}" />
 											{/if}
 										{/each}
 									</div>
 								</div>
 							{/each}
-						</section>
+						</section> -->
 					</div>
 				</div>
 			</div>
@@ -105,6 +186,8 @@
 </div>
 
 <style>
+	.selector {
+	}
 	.board {
 		height: 100%;
 		width: 100%;

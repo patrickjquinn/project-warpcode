@@ -14,7 +14,7 @@
 		"format": "prettier --write --plugin-search-dir=. ."
 	},
 	"devDependencies": {
-		"@rollup/plugin-alias": "^3.1.4",
+		"@rollup/plugin-alias": "^3.1.5",
 		"@rollup/plugin-commonjs": "^19.0.2",
 		"@rollup/plugin-json": "^4.1.0",
 		"@rollup/plugin-node-resolve": "^13.0.4",
@@ -47,7 +47,7 @@
 		"prettier": "~2.3.2",
 		"prettier-plugin-svelte": "^2.3.1",
 		"pretty-ms": "^7.0.1",
-		"rollup": "^2.55.0",
+		"rollup": "^2.55.1",
 		"rollup-plugin-esbuild": "^4.5.0",
 		"svelte": "^3.41.0",
 		"svelte-agnostic-draggable": "^0.1.11",

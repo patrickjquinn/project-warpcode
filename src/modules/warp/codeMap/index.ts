@@ -2,7 +2,6 @@ import { parse } from 'himalaya'
 
 import cssbeautify from 'cssbeautify'
 import * as Css from 'json-to-css'
-import { toCSS, toJSON } from 'cssjson'
 import css2json from 'css2json'
 export class CodeMap {
 	lang: string
@@ -22,8 +21,10 @@ export class CodeMap {
 		for (const item of items) {
 			const widgetType: any = item.widget as string
 			const widgetID: any = item.id as string
+			const widgetStyle: Record<string, unknown> = item.style as Record<string, unknown>
 			let widgetValue: any = item.value as string
 			let contentType: any = item.contentsType as string
+
 			if (!widgetValue) {
 				widgetValue = ''
 			}
@@ -31,7 +32,7 @@ export class CodeMap {
 				contentType = 'slot'
 			}
 
-			cssItems = cssItems + this.convertJSONToCSS(item.style)
+			cssItems = cssItems + this.convertJSONToCSS(widgetStyle)
 
 			scriptItems =
 				scriptItems + `import {${CodeMap.capFirstLetter(widgetType)}} from "@components/warp/"\n`
@@ -51,7 +52,7 @@ export class CodeMap {
 
 		// cssItems = cssItems + current.split('<style>').pop().split('</style>')[0];
 
-		console.log(cssItems)
+		// console.log(cssItems)
 
 		return `
         <script lang="${this.lang}">
@@ -66,14 +67,6 @@ export class CodeMap {
 			${cssItems.trim()}
 		</style>
         `
-	}
-
-	public mapToCanvas(code: string): void {
-		let mainObject: string = code.split('<main>')[0]
-		mainObject = mainObject.split('</main>')[0]
-
-		const components: Array<unknown> = mainObject.split(/\n/)
-		console.log(components)
 	}
 
 	public convertCodeToCanvas(code: string): any {
@@ -104,24 +97,23 @@ export class CodeMap {
 		}
 
 
-		console.log(`👉 ${JSON.stringify(canvas)}`)
+		// console.log(`👉 ${JSON.stringify(canvas, null, 2)}`)
 
 
 		if (canvas?.length > 0 && cssItems?.length > 0) {
-			for (const [index, item] of canvas.entries()) {
+			for (let i = 0; i < canvas.length; i++) {
+				const item = canvas[i]
 				const id = `#${item.widget}${item.id}`
-	
-				for (const style of cssItems) {
-					if (style[id]) {
-						canvas[index].style = style
-						break
-					}
+
+				const styleItem = this.fetchRelevantCSSTag(id, cssItems)
+				if (styleItem) {
+					canvas[i].style = styleItem
 				}
 			}
 		}
-		
 
-		console.log(`👉👉 ${JSON.stringify(canvas)}`)
+
+		// console.log(`👉👉 ${JSON.stringify(canvas, null, 2)}`)
 
 		return canvas
 	}
@@ -131,6 +123,17 @@ export class CodeMap {
 			return `<${CodeMap.capFirstLetter(widget)} id="${widget + id}">${value}</${CodeMap.capFirstLetter(widget)}>`
 		}
 		return `<${CodeMap.capFirstLetter(widget)} ${type}="${value}" id="${widget + id}"/>`
+	}
+
+	private fetchRelevantCSSTag(id, css) {
+		const obj = {}
+		for (const style of css) {
+			if (style[id]) {
+				obj[`${id}`] = style[id]
+				return obj
+			}
+		}
+		return null
 	}
 
 	private transformCodeToCanvas(item) {
@@ -183,7 +186,7 @@ export class CodeMap {
 		return null
 	}
 
-	public convertJSONToCSS(json: Record<string,unknown>): string {
+	public convertJSONToCSS(json: Record<string, unknown>): string {
 		if (json) {
 			const r = Css.of(json)
 

@@ -14,10 +14,7 @@
 	import { bell, refresh, comment, codeFork } from 'svelte-awesome/icons'
 
 	let editorItems = [
-		{
-			id: 1,
-			items: []
-		}
+		
 	]
 
 	let consoleTabs = [
@@ -33,12 +30,16 @@
 
 		const codeCanvas = codeMap.convertCodeToCanvas(currentCode)
 
-		if (codeCanvas.length > 0) {
-			console.log(codeCanvas)
-			editorItems[0].items = codeCanvas
-		} else {
-			editorItems[0].items = []
+		const isSame = JSON.stringify(codeCanvas.sort()) == JSON.stringify(editorItems.sort()) 
+
+		if (!isSame){
+			if (codeCanvas.length > 0) {
+				editorItems = codeCanvas
+			} else {
+				editorItems = []
+			}
 		}
+		
 	}
 
 	let editorTabs = [{ label: 'Start.svelte', value: 1, path: './start.svelte', type: 'file' }]
