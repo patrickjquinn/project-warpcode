@@ -110,7 +110,7 @@
 									{#each items as item (item.id)}
 										<div on:click="{(e) => onItemSelected(e, item)}" class="selector">
 											{#if item.widget === 'container'}
-												<Container id="{`${item.widget}${`${item.widget}${item.id}`}`}"
+												<Container css="{item.style}" id="{`${`${item.widget}${item.id}`}`}"
 													>{item.value ?? ''}</Container
 												>
 											{:else if item.widget === 'label'}
@@ -118,62 +118,25 @@
 													>{item.value ?? ''}</Label
 												>
 											{:else if item.widget === 'scrollContainer'}
-												<ScrollContainer id="{`${item.widget}${item.id}`}"
+												<ScrollContainer css="{item.style}" id="{`${item.widget}${item.id}`}"
 													>{item.value ?? ''}</ScrollContainer
 												>
 											{:else if item.widget === 'button'}
-												<Button id="{`${item.widget}${item.id}`}">{item.value ?? ''}</Button>
+												<Button css="{item.style}" id="{`${item.widget}${item.id}`}">{item.value ?? ''}</Button>
 											{:else if item.widget === 'textInput'}
-												<TextInput value="{item.value ?? ''}" id="{`${item.widget}${item.id}`}" />
+												<TextInput css="{item.style}" value="{item.value ?? ''}" id="{`${item.widget}${item.id}`}" />
 											{:else if item.widget === 'textBox'}
-												<TextBox value="{item.value ?? ''}" id="{`${item.widget}${item.id}`}" />
+												<TextBox css="{item.style}" value="{item.value ?? ''}" id="{`${item.widget}${item.id}`}" />
 											{:else if item.widget === 'videoPlayer'}
-												<VideoPlayer src="{item.value ?? ''}}" id="{`${item.widget}${item.id}`}" />
+												<VideoPlayer css="{item.style}" src="{item.value ?? ''}}" id="{`${item.widget}${item.id}`}" />
 											{:else if item.widget === 'image'}
-												<Image src="{item.value ?? ''}" id="{`${item.widget}${item.id}`}" />
+												<Image css="{item.style}" src="{item.value ?? ''}" id="{`${item.widget}${item.id}`}" />
 											{/if}
 										</div>
 									{/each}
 								</div>
 							</div>
 						</section>
-						<!-- <section
-							class="board device-content"
-							use:dndzone="{{ items: items, flipDurationMs, type: 'columns' }}"
-							on:consider="{handleDndConsiderColumns}"
-							on:finalize="{handleDndFinalizeColumns}"
-						>
-							{#each items as column (column.id)}
-								<div class="column" animate:flip="{{ duration: flipDurationMs }}">
-									<div
-										class="column-content"
-										use:dndzone="{{ items: column.items, flipDurationMs }}"
-										on:consider="{(e) => handleDndConsiderCards(column.id, e)}"
-										on:finalize="{(e) => handleDndFinalizeCards(column.id, e)}"
-									>
-										{#each column.items as item (item.id)}
-											{#if item.widget === 'container'}
-												<Container id="{`${item.widget}${item.id}`}">{item.value ?? ''}</Container>
-											{:else if item.widget === 'label'}
-												<Label css="{item.style}" id="{`${item.widget}${item.id}`}">{item.value ?? ''}</Label>
-											{:else if item.widget === 'scrollContainer'}
-												<ScrollContainer id="{`${item.widget}${item.id}`}">{item.value ?? ''}</ScrollContainer>
-											{:else if item.widget === 'button'}
-												<Button id="{`${item.widget}${item.id}`}">{item.value ?? ''}</Button>
-											{:else if item.widget === 'textInput'}
-												<TextInput value={item.value ?? ''} id="{`${item.widget}${item.id}`}"/>
-											{:else if item.widget === 'textBox'}
-												<TextBox id="{`${item.widget}${item.id}`}" />
-											{:else if item.widget === 'videoPlayer'}
-												<VideoPlayer src="{item.value ?? ''}}" id="{`${item.widget}${item.id}`}" />
-											{:else if item.widget === 'image'}
-												<Image src="{item.value ?? ''}" id="{`${item.widget}${item.id}`}" />
-											{/if}
-										{/each}
-									</div>
-								</div>
-							{/each}
-						</section> -->
 					</div>
 				</div>
 			</div>
@@ -182,8 +145,6 @@
 </div>
 
 <style>
-	.selector {
-	}
 	.board {
 		height: 100%;
 		width: 100%;

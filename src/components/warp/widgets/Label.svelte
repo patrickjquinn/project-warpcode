@@ -7,27 +7,12 @@
 	export let css
 
 	let codeMap = new CodeMap('ts')
-
-	console.log(`🎨 ${JSON.stringify(css)}`)
 	let styled
 	let rendered = false
 
 	$: {
 		if (rendered) {
-			const mapped = codeMap.convertJSONToCSS(css).toString()
-			console.log(mapped)
-			if (mapped) {
-				console.log(`#${id}`)
-				const styleSplit = mapped.split(`#${id}`)
-				console.log(styleSplit[1])
-				if (styleSplit?.length > 0) {
-					const splitValue = styleSplit[1].trim()
-					if (splitValue?.includes('{') && splitValue?.includes('}')) {
-						styled = styleSplit[1].replace('{', '').replace('}', '').trim()
-					}
-				}
-				console.log(styled)
-			}
+			styled = codeMap.convertCSSJSONtoInline(css, id)
 		}
 	}
 

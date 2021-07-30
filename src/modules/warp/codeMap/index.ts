@@ -69,6 +69,27 @@ export class CodeMap {
         `
 	}
 
+	public convertCSSJSONtoInline(css, id) {
+		let styled = ''
+
+		if (!id.includes('placeholder')){
+			const mapped = this.convertJSONToCSS(css)
+			if (mapped) {
+				console.log(`#${id}`)
+				const styleSplit = mapped.split(`#${id}`)
+				console.log(styleSplit[1])
+				if (styleSplit?.length > 0) {
+					const splitValue = styleSplit[1].trim()
+					if (splitValue?.includes('{') && splitValue?.includes('}')) {
+						styled = styleSplit[1].replace('{', '').replace('}', '').trim()
+					}
+				}
+			}
+	
+		}
+		return styled
+	}
+
 	public convertCodeToCanvas(code: string): any {
 		const json = parse(code)
 

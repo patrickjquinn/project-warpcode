@@ -1,9 +1,29 @@
 <script lang="ts">
-	export let id
 	export let src
+
+	import { onMount } from 'svelte'
+	import { CodeMap } from '../../../modules/warp/codeMap/index'
+
+	export let css
+	export let id
+
+
+	let codeMap = new CodeMap('ts')
+	let styled
+	let rendered = false
+
+	$: {
+		if (rendered) {
+			styled = codeMap.convertCSSJSONtoInline(css, id)
+		}
+	}
+
+	onMount(async () => {
+		rendered = true
+	})
 </script>
 
-<iframe
+<iframe style="{styled}"
 	id="{id}"
 	width="auto"
 	height="auto"

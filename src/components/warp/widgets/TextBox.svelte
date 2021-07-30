@@ -1,9 +1,28 @@
 <script lang="ts">
-	export let id
 	export let value
+	import { onMount } from 'svelte'
+	import { CodeMap } from '../../../modules/warp/codeMap/index'
+
+	export let css
+	export let id
+
+
+	let codeMap = new CodeMap('ts')
+	let styled
+	let rendered = false
+
+	$: {
+		if (rendered) {
+			styled = codeMap.convertCSSJSONtoInline(css, id)
+		}
+	}
+
+	onMount(async () => {
+		rendered = true
+	})
 </script>
 
-<textarea id="{id}" value="{value}" name="textbox" rows="4" cols="50"></textarea>
+<textarea id="{id}" value="{value}" style="{styled}" name="textBox" rows="4" cols="50"/>
 
 <style>
 	textarea {

@@ -1,17 +1,29 @@
 <script lang="ts">
+	import { onMount } from 'svelte'
+	import { CodeMap } from '../../../modules/warp/codeMap/index'
+
+	export let css
 	export let id
-	let styles = {
-		'note-bg-color': 'blue',
-		'note-color': '#FF5555',
-		bg: '#AAAAAA'
+
+
+	let codeMap = new CodeMap('ts')
+	let styled
+	let rendered = false
+
+	$: {
+		if (rendered) {
+			styled = codeMap.convertCSSJSONtoInline(css, id)
+		}
 	}
 
-	$: cssVarStyles = Object.entries(styles)
-		.map(([key, value]) => `--${key}:${value}`)
-		.join(';')
+	onMount(async () => {
+		rendered = true
+	})
+
+
 </script>
 
-<button id="{id}" contenteditable="true"><slot></slot></button>
+<button id="{id}" style="{styled}" contenteditable="true"><slot></slot></button>
 
 <style>
 	button {

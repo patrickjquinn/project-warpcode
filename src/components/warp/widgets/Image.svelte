@@ -1,9 +1,28 @@
 <script lang="ts">
+	import { onMount } from 'svelte'
+	import { CodeMap } from '../../../modules/warp/codeMap/index'
+
 	export let id
 	export let src
+
+	export let css
+
+	let codeMap = new CodeMap('ts')
+	let styled
+	let rendered = false
+
+	$: {
+		if (rendered) {
+			styled = codeMap.convertCSSJSONtoInline(css, id)
+		}
+	}
+
+	onMount(async () => {
+		rendered = true
+	})
 </script>
 
-<img
+<img style="{styled}"
 	src="{src}"
 	alt="img"
 	id="{id}"
