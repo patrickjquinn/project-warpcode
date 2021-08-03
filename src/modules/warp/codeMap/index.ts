@@ -2,7 +2,7 @@ import { parse } from 'himalaya'
 
 import cssbeautify from 'cssbeautify'
 import * as Css from 'json-to-css'
-import {validate} from 'csstree-validator'
+import { validate } from 'csstree-validator'
 import css2json from 'css2json'
 export class CodeMap {
 	lang: string
@@ -14,7 +14,7 @@ export class CodeMap {
 		return input.charAt(0).toUpperCase() + input.slice(1)
 	}
 
-	public mapToCode(canvas: Record<string, unknown>, current: string): string {
+	public mapToCode(canvas: Record<string, unknown>): string {
 		const items: Array<Record<string, unknown>> = canvas.items as Array<Record<string, unknown>>
 		let scriptItems = ``
 		let mainItems = ``
@@ -38,11 +38,15 @@ export class CodeMap {
 			scriptItems =
 				scriptItems + `import {${CodeMap.capFirstLetter(widgetType)}} from "@components/warp/"\n`
 
-			const widget = this.transformTemplateToWidget({ type: contentType, widget: widgetType, value: widgetValue, id: widgetID })
+			const widget = this.transformTemplateToWidget({
+				type: contentType,
+				widget: widgetType,
+				value: widgetValue,
+				id: widgetID
+			})
 
 			if (item === items[items.length - 1]) {
-				mainItems =
-					mainItems + `${widget}`
+				mainItems = mainItems + `${widget}`
 			} else {
 				mainItems =
 					mainItems +
@@ -70,15 +74,15 @@ export class CodeMap {
         `
 	}
 
-	public convertCSSJSONtoInline(css, id) {
+	public convertCSSJSONtoInline(css, id): string {
 		let styled = ''
 
-		if (!id.includes('placeholder')){
+		if (!id.includes('placeholder')) {
 			const mapped = this.convertJSONToCSS(css)
-			
+
 			if (mapped) {
 				const validateCSS = validate(mapped)
-				if (validate(mapped).length !== 0){
+				if (validate(mapped).length !== 0) {
 					console.log(`Invalid CSS on widget ${id} : ${validateCSS}`)
 					return ``
 				}
@@ -90,7 +94,6 @@ export class CodeMap {
 					}
 				}
 			}
-	
 		}
 		return styled
 	}
@@ -100,7 +103,6 @@ export class CodeMap {
 
 		const canvas = []
 		const cssItems = []
-
 
 		for (const item of json) {
 			if (item.tagName === 'main') {
@@ -122,9 +124,7 @@ export class CodeMap {
 			}
 		}
 
-
 		// console.log(`👉 ${JSON.stringify(canvas, null, 2)}`)
-
 
 		if (canvas?.length > 0 && cssItems?.length > 0) {
 			for (let i = 0; i < canvas.length; i++) {
@@ -138,7 +138,6 @@ export class CodeMap {
 			}
 		}
 
-
 		// console.log(`👉👉 ${JSON.stringify(canvas, null, 2)}`)
 
 		return canvas
@@ -146,7 +145,9 @@ export class CodeMap {
 
 	private transformTemplateToWidget({ type, widget, value, id }): string {
 		if (type === 'slot') {
-			return `<${CodeMap.capFirstLetter(widget)} id="${widget + id}">${value}</${CodeMap.capFirstLetter(widget)}>`
+			return `<${CodeMap.capFirstLetter(widget)} id="${
+				widget + id
+			}">${value}</${CodeMap.capFirstLetter(widget)}>`
 		}
 		return `<${CodeMap.capFirstLetter(widget)} ${type}="${value}" id="${widget + id}"/>`
 	}
@@ -165,16 +166,16 @@ export class CodeMap {
 	private transformCodeToCanvas(item) {
 		let id
 		const widget = item.tagName
-		let contentsType = ""
-		let value = ""
+		let contentsType = ''
+		let value = ''
 
 		for (const obj of item.attributes) {
-			if (obj.key === "src" || obj.key === "value") {
+			if (obj.key === 'src' || obj.key === 'value') {
 				contentsType = obj.key
 				value = obj.value
 			}
 
-			if (obj.key === "id") {
+			if (obj.key === 'id') {
 				id = parseInt(obj.value.split(item.tagName)[1])
 			}
 		}
@@ -223,6 +224,5 @@ export class CodeMap {
 			return beautified
 		}
 		return ``
-
 	}
 }

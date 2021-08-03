@@ -8,9 +8,9 @@
 		dispatch('message', styleProperties)
 	}
 
-    $: {
-        styleUpdated()
-    }
+	$: {
+		styleUpdated()
+	}
 
 	export let styleProperties = {
 		message: 'Hello World!',

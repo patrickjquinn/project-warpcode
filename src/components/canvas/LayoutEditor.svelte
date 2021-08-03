@@ -8,9 +8,9 @@
 		dispatch('message', layoutProperties)
 	}
 
-    $: {
-        layoutUpdated()
-    }
+	$: {
+		layoutUpdated()
+	}
 
 	export let layoutProperties = {
 		message: 'Hello World!',

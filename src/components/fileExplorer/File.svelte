@@ -1,7 +1,7 @@
 <script lang="ts">
 	import SvelteLogo from '../../assets/svelte.png'
 	export let name: string
-	export const type: string = 'file'
+	export const type = 'file'
 	export let size: number
 	export let path: string
 

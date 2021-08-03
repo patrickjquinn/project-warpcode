@@ -2,8 +2,8 @@
 	import { CodeMap } from '../modules/warp/codeMap'
 	import { HSplitPane, VSplitPane } from 'svelte-split-pane'
 	import Monaco from '../components/Editor.svelte'
-	import UIPallete from '../components/UIPallete.svelte'
-	import UICanvas from '../components/UICanvas.svelte'
+	import UIPallete from '../components/canvas/UIPallete.svelte'
+	import UICanvas from '../components/canvas/UICanvas.svelte'
 	import Explorer from '../components/fileExplorer/Explorer.svelte'
 	import Terminal from '../components/Terminal.svelte'
 	import Warp from '../assets/warpwhite.png'
@@ -13,9 +13,7 @@
 	import Icon from 'svelte-awesome'
 	import { bell, refresh, comment, codeFork } from 'svelte-awesome/icons'
 
-	let editorItems = [
-		
-	]
+	let editorItems = []
 
 	let consoleTabs = [
 		{ label: 'TERMINAL', value: 1 },
@@ -30,16 +28,15 @@
 
 		const codeCanvas = codeMap.convertCodeToCanvas(currentCode)
 
-		const isSame = JSON.stringify(codeCanvas) == JSON.stringify(editorItems) 
+		const isSame = JSON.stringify(codeCanvas) == JSON.stringify(editorItems)
 
-		if (!isSame){
+		if (!isSame) {
 			if (codeCanvas?.length > 0) {
 				editorItems = codeCanvas
 			} else {
 				editorItems = []
 			}
 		}
-		
 	}
 
 	let editorTabs = [{ label: 'Start.svelte', value: 1, path: './start.svelte', type: 'file' }]
@@ -79,7 +76,7 @@
 	const handleCanvasChange = (event) => {
 		const canvas = event.detail
 		const codeMap = new CodeMap('ts')
-		currentCode = codeMap.mapToCode(canvas, currentCode)
+		currentCode = codeMap.mapToCode(canvas)
 	}
 </script>
 
@@ -125,7 +122,7 @@
 							>
 								<top slot="top">
 									<RemovableTabs bind:items="{editorTabs}" add="{true}" />
-									<Monaco bind:code={currentCode} />
+									<Monaco bind:code="{currentCode}" />
 								</top>
 								<down slot="down">
 									<OnlyTabs items="{consoleTabs}" add="{false}" />
@@ -173,7 +170,6 @@
 		background-color: #2f4f4f;
 		-webkit-app-region: drag;
 	}
-
 	.sidenav {
 		height: 95vh;
 		width: 3vw;

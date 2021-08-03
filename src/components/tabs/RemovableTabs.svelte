@@ -5,7 +5,7 @@
 
 	const handleClick = (tabValue) => () => {
 		activeTabValue = tabValue
-		const index = items.findIndex(el => el.value === activeTabValue)
+		const index = items.findIndex((el) => el.value === activeTabValue)
 		const tab = items[index]
 		notifyAppOfFileChange(tab)
 	}
@@ -21,7 +21,7 @@
 	}
 
 	const removeTab = () => {
-		const i = items.findIndex(el => el.value === activeTabValue)
+		const i = items.findIndex((el) => el.value === activeTabValue)
 		items.splice(i, 1)
 		for (let [index] of items.entries()) {
 			items[index].value = index + 1
@@ -37,8 +37,11 @@
 	{#each items as item}
 		<li class="{activeTabValue === item.value ? 'active' : ''}">
 			{#if activeTabValue === item.value}
-				<span>{item.label} <span on:click="{removeTab}" style="display:inline-block; padding:0;">x</span></span>
-			{:else }
+				<span
+					>{item.label}
+					<span on:click="{removeTab}" style="display:inline-block; padding:0;">x</span></span
+				>
+			{:else}
 				<span on:click="{handleClick(item.value)}">{item.label}</span>
 			{/if}
 		</li>
