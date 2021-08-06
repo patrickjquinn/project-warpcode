@@ -91,8 +91,13 @@
 	function removeSelectorHighlights() {
 		selectedItem = null
 		const selectors = document.querySelectorAll('.selector')
+		const handles = document.querySelectorAll('.handle')
 		selectors.forEach((selector) => {
 			selector.style.border = '0px solid transparent'
+		})
+
+		handles.forEach((handle) => {
+			handle.style.display = 'none'
 		})
 	}
 
@@ -100,6 +105,8 @@
 		removeSelectorHighlights()
 		selectedItem = item
 		e.target.parentNode.style.border = '2px solid yellow'
+		e.target.parentNode.querySelector('.handle').style.display = 'flex'
+
 	}
 
 	function startDrag(e) {
@@ -243,6 +250,7 @@
 		width: 1rem;
 		height: 1rem;
 		background-color: darkslategrey;
+		display: none;
 	}
 
 	@media all and (min-width: 480px) {

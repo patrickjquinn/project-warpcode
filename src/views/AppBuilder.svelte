@@ -23,7 +23,7 @@
 
 	let currentCode = '<script lang="ts">\n\n</script' + '>\n\n<main>\n\n</main>\n\n<style></style>'
 
-	$: currentCode && updateCanvas()
+	// $: currentCode && updateCanvas()
 	let editorTabs = [{ label: 'Start.svelte', value: 1, path: './start.svelte', type: 'file' }]
 
 	const upControlTabs = [
@@ -122,7 +122,7 @@
 							>
 								<top slot="top">
 									<RemovableTabs bind:items="{editorTabs}" add="{true}" />
-									<Monaco bind:code="{currentCode}" />
+									<Monaco bind:code="{currentCode}" on:message="{updateCanvas}" />
 								</top>
 								<down slot="down">
 									<OnlyTabs items="{consoleTabs}" add="{false}" />

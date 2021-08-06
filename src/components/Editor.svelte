@@ -7,6 +7,13 @@
 	import htmlWorker from 'monaco-editor/esm/vs/language/html/html.worker?worker'
 	import tsWorker from 'monaco-editor/esm/vs/language/typescript/ts.worker?worker'
 	const { remote, ipcRenderer } = window.require('electron')
+	import { createEventDispatcher } from 'svelte'
+
+	const dispatch = createEventDispatcher()
+
+	function codeSaved() {
+		dispatch('message')
+	}
 
 	let divEl: HTMLDivElement
 	let editor: monaco.editor.IStandaloneCodeEditor
@@ -102,7 +109,10 @@
 			function (e) {
 				if ((window.navigator.platform.match('Mac') ? e.metaKey : e.ctrlKey) && e.keyCode == 83) {
 					e.preventDefault()
-					code = editor.getValue()
+					if (code != editor.getValue()){
+						code = editor.getValue()
+						codeSaved()
+					}
 				}
 			},
 			false
