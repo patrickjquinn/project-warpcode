@@ -20,9 +20,7 @@
 	})
 </script>
 
-<div>
-	<p id="{id}" style="{styled}" contenteditable="true"><slot /></p>
-</div>
+<p id="{id}" style="{styled}" contenteditable="true"><slot /></p>
 
 <style>
 	p {

@@ -36,38 +36,16 @@
 
 	let selectedItem
 	let dragDisabled = true
+	let isFinalCanvas = false
 
 	function canvasChanged() {
-		dispatch('message', {
-			items
-		})
-	}
-
-	function handleDndConsider(e) {
-		const { source } = e.detail.info
-		console.log(e.detail.items)
-		// if (trigger === TRIGGERS.DRAG_STARTED) {
-		// 	console.warn(`copying ${id}`)
-		// 	const idx = items.findIndex((item) => item.id === id)
-		// 	const item = items[idx]
-		// 	const newId = `${id}_copy_${Math.round(Math.random() * 100000)}`
-		// 	const style = {}
-		// 	style[`#${item.widget}${newId}`] = item.style[`#${item.widget}${id}`]
-		// 	e.detail.items = e.detail.items.filter((item) => !item[SHADOW_ITEM_MARKER_PROPERTY_NAME])
-		// 	e.detail.items.splice(idx, 0, { ...items[idx], id: newId, style })
-		// }
-		items = e.detail.items
-		if (source === SOURCES.KEYBOARD && trigger === TRIGGERS.DRAG_STOPPED) {
-			dragDisabled = true;
+		if (isFinalCanvas){
+			isFinalCanvas = false
+			dispatch('message', {
+				items
+			})
 		}
-	}
-	function handleDndFinalize(e) {
-		const { source } = e.detail.info
-		items = e.detail.items
-		if (source === SOURCES.POINTER) {
-			dragDisabled = true;
-		}
-		canvasChanged()
+		
 	}
 
 	function handleConsider(e) {
@@ -80,12 +58,12 @@
 	}
 	function handleFinalize(e) {
 		const {items: newItems, info: {source}} = e.detail;
+		isFinalCanvas = true
 		items = newItems;
 		// Ensure dragging is stopped on drag finish via pointer (mouse, touch)
 		if (source === SOURCES.POINTER) {
 			dragDisabled = true;
 		}
-		canvasChanged()
 	}
 
 	function removeSelectorHighlights() {
@@ -104,9 +82,10 @@
 	function onItemSelected(e, item) {
 		removeSelectorHighlights()
 		selectedItem = item
+		console.log(e.target.parentNode.className)
+		if (!e.target.parentNode.className.includes('selector')) return 
 		e.target.parentNode.style.border = '2px solid yellow'
 		e.target.parentNode.querySelector('.handle').style.display = 'flex'
-
 	}
 
 	function startDrag(e) {
