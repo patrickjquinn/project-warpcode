@@ -23,11 +23,19 @@
 
 	let currentCode = '<script lang="ts">\n\n</script' + '>\n\n<main>\n\n</main>\n\n<style></style>'
 
-	$: {
+	$: updateCanvas()
+	let editorTabs = [{ label: 'Start.svelte', value: 1, path: './start.svelte', type: 'file' }]
+
+	const upControlTabs = [
+		{ label: 'Widgets', value: 1 },
+		{ label: 'Layout', value: 2 },
+		{ label: 'Style', value: 3 }
+	]
+
+	const updateCanvas = () => {
+		console.log('canvas update')
 		const codeMap = new CodeMap('ts')
-
 		const codeCanvas = codeMap.convertCodeToCanvas(currentCode)
-
 		const isSame = JSON.stringify(codeCanvas) == JSON.stringify(editorItems)
 
 		if (!isSame) {
@@ -38,14 +46,6 @@
 			}
 		}
 	}
-
-	let editorTabs = [{ label: 'Start.svelte', value: 1, path: './start.svelte', type: 'file' }]
-
-	const upControlTabs = [
-		{ label: 'Widgets', value: 1 },
-		{ label: 'Layout', value: 2 },
-		{ label: 'Style', value: 3 }
-	]
 
 	window.addEventListener(
 		'fileSelected',

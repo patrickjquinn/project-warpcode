@@ -1,22 +1,20 @@
 <script>
-	import { dndzone, TRIGGERS } from 'svelte-dnd-action'
+	import { dndzone, TRIGGERS, SOURCES } from 'svelte-dnd-action'
 	import { createEventDispatcher } from 'svelte'
-	import MobileFrame from "./MobileFrame.svelte";
+	import MobileFrame from './MobileFrame.svelte'
 
 	import {
 		Container,
 		ScrollContainer,
 		Label,
-		TextBox,
-		TextInput,
 		Button,
 		VideoPlayer,
 		Image
 	} from '../warp/widgets/index'
 
-
 	export let items
-	let selectedItem
+
+	$: items, canvasChanged()
 
 	const flipDurationMs = 100
 	const dispatch = createEventDispatcher()
@@ -29,9 +27,15 @@
 				selectedItem = null
 				items.splice(idx, 1)
 				canvasChanged()
+				items = [...items]
 			}
 		}
 	}
+
+	
+
+	let selectedItem
+	let dragDisabled = true
 
 	function canvasChanged() {
 		dispatch('message', {
@@ -40,31 +44,48 @@
 	}
 
 	function handleDndConsider(e) {
-		const { trigger, id } = e.detail.info
-		// if (trigger === TRIGGERS.DRAGGED_OVER_INDEX){
-		items = e.detail.items
-		// }
-		// if (trigger === TRIGGERS.DRAG_STARTED && trigger === TRIGGERS.DRAGGED_ENTERED_ANOTHER) {
+		const { source } = e.detail.info
+		console.log(e.detail.items)
+		// if (trigger === TRIGGERS.DRAG_STARTED) {
+		// 	console.warn(`copying ${id}`)
 		// 	const idx = items.findIndex((item) => item.id === id)
-		// 	if (idx) {
-		// 		const item = items[idx]
-		// 		const newId = id + Math.round(Math.random() * 100)
-		// 		const style = {}
-		// 		style[`#${item.widget}${newId}`] = item.style[`#${item.widget}${id}`]
-		// 		e.detail.items.splice(idx, 0, { ...items[idx], id: newId, style })
-		// 	}
+		// 	const item = items[idx]
+		// 	const newId = `${id}_copy_${Math.round(Math.random() * 100000)}`
+		// 	const style = {}
+		// 	style[`#${item.widget}${newId}`] = item.style[`#${item.widget}${id}`]
+		// 	e.detail.items = e.detail.items.filter((item) => !item[SHADOW_ITEM_MARKER_PROPERTY_NAME])
+		// 	e.detail.items.splice(idx, 0, { ...items[idx], id: newId, style })
 		// }
+		items = e.detail.items
+		if (source === SOURCES.KEYBOARD && trigger === TRIGGERS.DRAG_STOPPED) {
+			dragDisabled = true;
+		}
 	}
 	function handleDndFinalize(e) {
-		const { trigger } = e.detail.info
-		if (trigger === TRIGGERS.DROPPED_INTO_ZONE) {
-			// items = e.detail.items
-			try {
-				canvasChanged()
-			} catch {
-				console.log('no no, dont do that')
-			}
+		const { source } = e.detail.info
+		items = e.detail.items
+		if (source === SOURCES.POINTER) {
+			dragDisabled = true;
 		}
+		canvasChanged()
+	}
+
+	function handleConsider(e) {
+		const {items: newItems, info: {source, trigger}} = e.detail;
+		items = newItems;
+		// Ensure dragging is stopped on drag finish via keyboard
+		if (source === SOURCES.KEYBOARD && trigger === TRIGGERS.DRAG_STOPPED) {
+			dragDisabled = true;
+		}
+	}
+	function handleFinalize(e) {
+		const {items: newItems, info: {source}} = e.detail;
+		items = newItems;
+		// Ensure dragging is stopped on drag finish via pointer (mouse, touch)
+		if (source === SOURCES.POINTER) {
+			dragDisabled = true;
+		}
+		canvasChanged()
 	}
 
 	function removeSelectorHighlights() {
@@ -80,6 +101,14 @@
 		selectedItem = item
 		e.target.parentNode.style.border = '2px solid yellow'
 	}
+
+	function startDrag(e) {
+		e.preventDefault();
+		dragDisabled = false;
+	}
+	function handleKeyDown(e) {
+		if ((e.key === "Enter" || e.key === " ") && dragDisabled) dragDisabled = false;
+	}
 </script>
 
 <svelte:window on:keydown="{onKeyCombo}" />
@@ -91,47 +120,43 @@
 				<div class="column">
 					<div
 						class="column-content"
-						use:dndzone="{{ items, flipDurationMs }}"
-						on:consider="{(e) => handleDndConsider(e)}"
-						on:finalize="{(e) => handleDndFinalize(e)}"
+						use:dndzone="{{ items, dragDisabled, flipDurationMs }}"
+						on:consider="{handleConsider}"
+						on:finalize="{handleFinalize}"
 					>
 						{#each items as item (item.id)}
 							<div on:click="{(e) => onItemSelected(e, item)}" class="selector">
+								<div tabindex={dragDisabled? 0 : -1} 
+										aria-label="drag-handle"
+										class="handle" 
+										style={dragDisabled ? 'cursor: grab' : 'cursor: grabbing'}
+										on:mousedown={startDrag} 
+										on:touchstart={startDrag}
+										on:keydown={handleKeyDown}
+								/>
 								{#if item.widget === 'container'}
-									<Container css="{item.style}" id="{`${`${item.widget}${item.id}`}`}"
+									<Container css="{item.style}" id="{`${item.widget}${item.id}`}"
 										>{item.value ?? ''}</Container
 									>
-								{:else if item.widget === 'label'}
+								{:else if item.widget == 'label'}
 									<Label css="{item.style}" id="{`${item.widget}${item.id}`}"
 										>{item.value ?? ''}</Label
 									>
-								{:else if item.widget === 'scrollContainer'}
+								{:else if item.widget == 'scrollContainer'}
 									<ScrollContainer css="{item.style}" id="{`${item.widget}${item.id}`}"
 										>{item.value ?? ''}</ScrollContainer
 									>
-								{:else if item.widget === 'button'}
+								{:else if item.widget == 'button'}
 									<Button css="{item.style}" id="{`${item.widget}${item.id}`}"
 										>{item.value ?? ''}</Button
 									>
-								{:else if item.widget === 'textInput'}
-									<TextInput
-										css="{item.style}"
-										value="{item.value ?? ''}"
-										id="{`${item.widget}${item.id}`}"
-									/>
-								{:else if item.widget === 'textBox'}
-									<TextBox
-										css="{item.style}"
-										value="{item.value ?? ''}"
-										id="{`${item.widget}${item.id}`}"
-									/>
-								{:else if item.widget === 'videoPlayer'}
+								{:else if item.widget == 'videoPlayer'}
 									<VideoPlayer
 										css="{item.style}"
 										src="{item.value ?? ''}}"
 										id="{`${item.widget}${item.id}`}"
 									/>
-								{:else if item.widget === 'image'}
+								{:else if item.widget == 'image'}
 									<Image
 										css="{item.style}"
 										src="{item.value ?? ''}"
@@ -164,8 +189,6 @@
 				</div>
 			</div>
 		</div> -->
-
-
 	</div>
 </div>
 
@@ -212,6 +235,14 @@
 		margin: 0px;
 		min-width: 300px;
 		padding: 0;
+	}
+
+	.handle {
+		position: absolute;
+		right: 0;
+		width: 1rem;
+		height: 1rem;
+		background-color: darkslategrey;
 	}
 
 	@media all and (min-width: 480px) {

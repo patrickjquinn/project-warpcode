@@ -1,10 +1,9 @@
 <script lang="ts">
-	export let value
 	import { onMount } from 'svelte'
 	import { CodeMap } from '../../../modules/warp/codeMap/index'
 
-	export let css
 	export let id
+	export let css
 
 	let codeMap = new CodeMap('ts')
 	let styled
@@ -21,12 +20,15 @@
 	})
 </script>
 
-<textarea id="{id}" value="{value}" style="{styled}" name="textBox" rows="4" cols="50"></textarea>
+<div>
+	<p id="{id}" style="{styled}" contenteditable="true"><slot /></p>
+</div>
 
 <style>
-	textarea {
+	p {
+		background-color: white;
+		padding: 10px;
 		color: black;
 		width: 50%;
-		height: 80px;
 	}
 </style>

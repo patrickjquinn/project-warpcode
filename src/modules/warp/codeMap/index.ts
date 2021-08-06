@@ -20,11 +20,11 @@ export class CodeMap {
 		let mainItems = ``
 		let cssItems = ``
 		for (const item of items) {
-			const widgetType: any = item.widget as string
-			const widgetID: any = item.id as string
+			const widgetType: string = item.widget as string
+			const widgetID: string = item.id as string
 			const widgetStyle: Record<string, unknown> = item.style as Record<string, unknown>
-			let widgetValue: any = item.value as string
-			let contentType: any = item.contentsType as string
+			let widgetValue: string = item.value as string
+			let contentType: string = item.contentsType as string
 
 			if (!widgetValue) {
 				widgetValue = ''
