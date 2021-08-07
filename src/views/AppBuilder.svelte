@@ -67,7 +67,7 @@
 	)
 
 	const incrementTabs = (file) => {
-		// editorTabs = editorTabs.filter((el) => { return (el.label != file.name && el.path != file.path) });
+		editorTabs = editorTabs.filter((el) => { return (el.label != file.name && el.path != file.path) });
 		for (let [index] of editorTabs.entries()) {
 			editorTabs[index].value = index + 1
 		}

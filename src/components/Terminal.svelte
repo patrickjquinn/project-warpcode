@@ -4,13 +4,11 @@
 	import '../../node_modules/xterm/css/xterm.css'
 	import * as xterm from 'xterm'
 	import './xterm.css'
-	import WebfontLoader from 'xterm-webfont'
 	import * as fit from 'xterm-addon-fit'
 	import { watchResize } from 'svelte-watch-resize'
-	const { remote, ipcRenderer } = window.require('electron')
+	const { ipcRenderer } = window.require('electron')
 
 	let terminalElement
-	let proc
 
 	const SOLARIZED_DARK: xterm.ITheme = Object.freeze<xterm.ITheme>({
 		foreground: '#fffff',
@@ -37,7 +35,7 @@
 	let termFit
 
 	let theme: xterm.ITheme = SOLARIZED_DARK
-	let bgColor: any = '#1e1e1e'
+	let bgColor: string = '#1e1e1e'
 
 	$: {
 		if (terminalController) {

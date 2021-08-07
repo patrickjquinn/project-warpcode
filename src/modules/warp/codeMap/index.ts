@@ -55,10 +55,6 @@ export class CodeMap {
 			}
 		}
 
-		// cssItems = cssItems + current.split('<style>').pop().split('</style>')[0];
-
-		// console.log(cssItems)
-
 		return `
         <script lang="${this.lang}">
             ${scriptItems.trim()}
@@ -74,7 +70,7 @@ export class CodeMap {
         `
 	}
 
-	public convertCSSJSONtoInline(css, id): string {
+	public convertCSSJSONtoInline(css: Record<string, unknown>, id: string): string {
 		let styled = ''
 
 		if (!id.includes('placeholder')) {
@@ -98,7 +94,7 @@ export class CodeMap {
 		return styled
 	}
 
-	public convertCodeToCanvas(code: string): any {
+	public convertCodeToCanvas(code: string): Array<unknown> {
 		const json = parse(code)
 
 		const canvas = []

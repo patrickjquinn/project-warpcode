@@ -65,12 +65,14 @@
 		}
 	}
 
-	$: {
+	const updatedCode = () => {
 		if (editor?.getValue() && editor.getValue() != code) {
 			editor.setValue(code)
 			editor.trigger('anyString', 'editor.action.formatDocument', null)
 		}
 	}
+
+	$: code && updatedCode()
 
 	onMount(async () => {
 		// @ts-ignore
@@ -109,7 +111,7 @@
 			function (e) {
 				if ((window.navigator.platform.match('Mac') ? e.metaKey : e.ctrlKey) && e.keyCode == 83) {
 					e.preventDefault()
-					if (code != editor.getValue()){
+					if (code != editor.getValue()) {
 						code = editor.getValue()
 						codeSaved()
 					}

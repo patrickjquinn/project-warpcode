@@ -26,43 +26,45 @@
 				const idx = items.findIndex((item) => item.id === selectedItem.id)
 				selectedItem = null
 				items.splice(idx, 1)
-				canvasChanged()
 				items = [...items]
+				canvasChanged()
 			}
 		}
 	}
-
-	
 
 	let selectedItem
 	let dragDisabled = true
 	let isFinalCanvas = false
 
 	function canvasChanged() {
-		if (isFinalCanvas){
-			isFinalCanvas = false
+		if (isFinalCanvas) {
 			dispatch('message', {
 				items
 			})
 		}
-		
 	}
 
 	function handleConsider(e) {
-		const {items: newItems, info: {source, trigger}} = e.detail;
-		items = newItems;
-		// Ensure dragging is stopped on drag finish via keyboard
+		const {
+			items: newItems,
+			info: { source, trigger }
+		} = e.detail
+		isFinalCanvas = false
+		items = newItems
 		if (source === SOURCES.KEYBOARD && trigger === TRIGGERS.DRAG_STOPPED) {
-			dragDisabled = true;
+			dragDisabled = true
 		}
 	}
 	function handleFinalize(e) {
-		const {items: newItems, info: {source}} = e.detail;
+		const {
+			items: newItems,
+			info: { source }
+		} = e.detail
 		isFinalCanvas = true
-		items = newItems;
+		items = newItems
 		// Ensure dragging is stopped on drag finish via pointer (mouse, touch)
 		if (source === SOURCES.POINTER) {
-			dragDisabled = true;
+			dragDisabled = true
 		}
 	}
 
@@ -83,17 +85,17 @@
 		removeSelectorHighlights()
 		selectedItem = item
 		console.log(e.target.parentNode.className)
-		if (!e.target.parentNode.className.includes('selector')) return 
+		if (!e.target.parentNode.className.includes('selector')) return
 		e.target.parentNode.style.border = '2px solid yellow'
 		e.target.parentNode.querySelector('.handle').style.display = 'flex'
 	}
 
 	function startDrag(e) {
-		e.preventDefault();
-		dragDisabled = false;
+		e.preventDefault()
+		dragDisabled = false
 	}
 	function handleKeyDown(e) {
-		if ((e.key === "Enter" || e.key === " ") && dragDisabled) dragDisabled = false;
+		if ((e.key === 'Enter' || e.key === ' ') && dragDisabled) dragDisabled = false
 	}
 </script>
 
@@ -112,14 +114,15 @@
 					>
 						{#each items as item (item.id)}
 							<div on:click="{(e) => onItemSelected(e, item)}" class="selector">
-								<div tabindex={dragDisabled? 0 : -1} 
-										aria-label="drag-handle"
-										class="handle" 
-										style={dragDisabled ? 'cursor: grab' : 'cursor: grabbing'}
-										on:mousedown={startDrag} 
-										on:touchstart={startDrag}
-										on:keydown={handleKeyDown}
-								/>
+								<div
+									tabindex="{dragDisabled ? 0 : -1}"
+									aria-label="drag-handle"
+									class="handle"
+									style="{dragDisabled ? 'cursor: grab' : 'cursor: grabbing'}"
+									on:mousedown="{startDrag}"
+									on:touchstart="{startDrag}"
+									on:keydown="{handleKeyDown}"
+								></div>
 								{#if item.widget === 'container'}
 									<Container css="{item.style}" id="{`${item.widget}${item.id}`}"
 										>{item.value ?? ''}</Container
@@ -155,26 +158,6 @@
 				</div>
 			</section>
 		</MobileFrame>
-		<!-- <div class="px">
-			<div class="px__body">
-				<div class="px__body__cut"></div>
-				<div class="px__body__speaker"></div>
-				<div class="px__body__sensor"></div>
-
-				<div class="px__body__mute"></div>
-				<div class="px__body__up"></div>
-				<div class="px__body__down"></div>
-				<div class="px__body__right"></div>
-			</div>
-
-			<div class="px__screen">
-				<div class="px__screen__">
-					<div class="px__screen__frame">
-						
-					</div>
-				</div>
-			</div>
-		</div> -->
 	</div>
 </div>
 

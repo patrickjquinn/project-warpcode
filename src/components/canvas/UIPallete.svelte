@@ -1,8 +1,8 @@
 <script land="ts">
 	import { flip } from 'svelte/animate'
-	import { dndzone, TRIGGERS, SHADOW_ITEM_MARKER_PROPERTY_NAME, SOURCES } from 'svelte-dnd-action'
+	import { dndzone, TRIGGERS, SHADOW_ITEM_MARKER_PROPERTY_NAME } from 'svelte-dnd-action'
 	import Icon from 'svelte-awesome'
-	import { image, square, camera, videoCamera, textWidth, textHeight } from 'svelte-awesome/icons'
+	import { image, square, videoCamera, textHeight } from 'svelte-awesome/icons'
 
 	let items = [
 		{
@@ -104,12 +104,12 @@
 	// }
 
 	// $: {
-		// for (const [index, item] of items.entries()) {
-		// 	const styleObj = {}
-		// 	styleObj[`#${item.widget}${index+1}`] = item.style[`#${item.widget}${item.id}`]
-		// 	items[index].style = styleObj
-		// 	items[index].id = index + 1
-		// }
+	// for (const [index, item] of items.entries()) {
+	// 	const styleObj = {}
+	// 	styleObj[`#${item.widget}${index+1}`] = item.style[`#${item.widget}${item.id}`]
+	// 	items[index].style = styleObj
+	// 	items[index].id = index + 1
+	// }
 	// }
 	const flipDurationMs = 100
 	let shouldIgnoreDndEvents = true
@@ -131,16 +131,15 @@
 			items = [...items]
 		}
 	}
-	function handleDndFinalize(e) {
-		// console.warn(`got finalize ${JSON.stringify(e.detail, null, 2)}`);
+	function handleDndFinalize() {
 		items = [...items]
 		// if (!shouldIgnoreDndEvents) {
-        //     items = e.detail.items;
-        // }
-        // else {
-        //     items = [...items];
-        //     shouldIgnoreDndEvents = false;
-        // }
+		//     items = e.detail.items;
+		// }
+		// else {
+		//     items = [...items];
+		//     shouldIgnoreDndEvents = false;
+		// }
 	}
 </script>
 

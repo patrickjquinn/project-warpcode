@@ -32,11 +32,9 @@ export default (env = 'production') => {
 				target: 'esnext', // default, or 'es20XX', 'esnext'
 				jsxFactory: 'React.createElement',
 				jsxFragment: 'React.Fragment',
-				// Like @rollup/plugin-replace
 				define: {
 					__VERSION__: '"x.y.z"'
 				},
-				// Add extra loaders
 				loaders: {
 					// Add .json files support
 					// require @rollup/plugin-commonjs
