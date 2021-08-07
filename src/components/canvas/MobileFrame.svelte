@@ -166,5 +166,6 @@
 		border-radius: inherit;
 		background-size: cover;
 		background-position: center center;
+		background-color: white;
 	}
 </style>

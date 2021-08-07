@@ -1,6 +1,6 @@
 <script>
 	import { dndzone, TRIGGERS, SOURCES } from 'svelte-dnd-action'
-	import { createEventDispatcher } from 'svelte'
+	import { createEventDispatcher, onMount } from 'svelte'
 	import MobileFrame from './MobileFrame.svelte'
 
 	import {
@@ -14,25 +14,87 @@
 
 	export let items
 
-	$: items, canvasChanged()
+	$: items && canvasChanged()
 
 	const flipDurationMs = 100
 	const dispatch = createEventDispatcher()
 
 	const onKeyCombo = (e) => {
-		const key = e.keyCode
-		if (key === 8 || key === 46) {
-			if (selectedItem) {
-				const idx = items.findIndex((item) => item.id === selectedItem.id)
-				selectedItem = null
-				items.splice(idx, 1)
-				items = [...items]
-				canvasChanged()
+		if (document.activeElement.className.includes('selector')){
+			const key = e.keyCode
+			if (key === 8 || key === 46) {
+				if (selectedItem) {
+					const idx = items.findIndex((item) => item.id === selectedItem.id)
+					selectedItem = null
+					items.splice(idx, 1)
+					items = [...items]
+					canvasChanged()
+				}
+			} else if (interceptCopyKeys(e)) {
+				console.log('copy')
+				if (selectedItem){
+					copiedItem = selectedItem
+				}
+			} else if (interceptPasteKeys(e)) {
+				console.log('paste')
+
+				if (copiedItem) {
+					pasteInItem(copiedItem)
+				}
 			}
 		}
 	}
 
+	const pasteInItem = (item) => {
+		const newId = item.id + Math.round(Math.random() * 100)
+		let newItem
+		const style = {}
+		style[`#${item.widget}${newId}`] = item.style[`#${item.widget}${item.id}`]
+		newItem = {...item, id: newId, style}
+		items.push(newItem)
+		items = [...items]
+		console.log(items)
+		canvasChanged()
+	}
+
+	function disableCopyPaste(elm) {
+		// elm.onkeydown = onKeyCombo
+		elm.oncontextmenu = function() {
+			return false
+		}
+	}
+
+	function interceptCopyKeys(evt) {
+		evt = evt||window.event
+		const c = evt.keyCode
+		const ctrlDown = evt.ctrlKey||evt.metaKey
+
+		if (ctrlDown && c==67) return true
+
+		else if (ctrlDown && evt.altKey) return false // c
+		else if (ctrlDown && c==86) return false // v
+		else if (ctrlDown && c==88) return false // x
+
+		return false
+	}
+
+	function interceptPasteKeys(evt) {
+		evt = evt||window.event
+		const c = evt.keyCode
+		const ctrlDown = evt.ctrlKey||evt.metaKey
+
+		if (ctrlDown && c==86) return true
+
+		else if (ctrlDown && c==67) return false // c
+		else if (ctrlDown && c==86) return false // v
+		else if (ctrlDown && c==88) return false // x
+
+		return false
+	}
+
 	let selectedItem
+	let copiedItem
+
 	let dragDisabled = true
 	let isFinalCanvas = false
 
@@ -97,6 +159,10 @@
 	function handleKeyDown(e) {
 		if ((e.key === 'Enter' || e.key === ' ') && dragDisabled) dragDisabled = false
 	}
+
+	onMount(async () => {
+		disableCopyPaste(document.querySelector('#canvas_container'))
+	})
 </script>
 
 <svelte:window on:keydown="{onKeyCombo}" />
