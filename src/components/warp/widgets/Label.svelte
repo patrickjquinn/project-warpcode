@@ -4,7 +4,8 @@
 
 	export let id
 	export let css
-
+	export let value
+	
 	let codeMap = new CodeMap('ts')
 	let styled
 	let rendered = false
@@ -20,7 +21,7 @@
 	})
 </script>
 
-<p id="{id}" style="{styled}" contenteditable="true"><slot /></p>
+<p id="{id}" style="{styled}" contenteditable="true" bind:innerHTML="{value}"><slot /></p>
 
 <style>
 	p {

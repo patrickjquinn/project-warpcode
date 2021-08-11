@@ -2,7 +2,8 @@
 	import { dndzone, TRIGGERS, SOURCES } from 'svelte-dnd-action'
 	import { createEventDispatcher, onMount } from 'svelte'
 	import MobileFrame from './MobileFrame.svelte'
-
+	import selected from './stores/selected'
+ 
 	import {
 		Container,
 		ScrollContainer,
@@ -13,8 +14,31 @@
 	} from '../warp/widgets/index'
 
 	export let items
+	let selectedItem
+	let copiedItem
+
+	let dragDisabled = true
+	let isFinalCanvas = false
 
 	$: items && canvasChanged()
+
+	// activeStyle.subscribe(value => {
+	// 	if (selectedItem && selectedItem.style){
+	// 		console.log(value)
+	// 		selectedItem.style[`${selectedItem.widget}${selectedItem.id}`] = value;
+	// 	}
+	// });
+
+	selected.subscribe(data => {
+		// console.log(`Data: ${JSON.stringify(data)}`)
+		if (data && selectedItem){
+			const idx = items.findIndex((item) => item.id === data.id)
+			const style = {}
+			style[`#${data.widget}${data.id}`] = data.style[`#${data.widget}${data.id}`]
+			items[idx].style = style
+		}
+		
+	})
 
 	const flipDurationMs = 100
 	const dispatch = createEventDispatcher()
@@ -58,7 +82,6 @@
 	}
 
 	function disableCopyPaste(elm) {
-		// elm.onkeydown = onKeyCombo
 		elm.oncontextmenu = function() {
 			return false
 		}
@@ -91,12 +114,6 @@
 
 		return false
 	}
-
-	let selectedItem
-	let copiedItem
-
-	let dragDisabled = true
-	let isFinalCanvas = false
 
 	function canvasChanged() {
 		if (isFinalCanvas) {
@@ -146,6 +163,9 @@
 	function onItemSelected(e, item) {
 		removeSelectorHighlights()
 		selectedItem = item
+		selected.update(select => {
+			return selectedItem
+		})
 		console.log(e.target.parentNode.className)
 		if (!e.target.parentNode.className.includes('selector')) return
 		e.target.parentNode.style.border = '2px solid yellow'
@@ -194,7 +214,7 @@
 										>{item.value ?? ''}</Container
 									>
 								{:else if item.widget == 'label'}
-									<Label css="{item.style}" id="{`${item.widget}${item.id}`}"
+									<Label css="{item.style}" id="{`${item.widget}${item.id}`}" bind:value="{item.value}"
 										>{item.value ?? ''}</Label
 									>
 								{:else if item.widget == 'scrollContainer'}

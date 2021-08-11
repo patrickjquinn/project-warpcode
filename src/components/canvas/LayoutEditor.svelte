@@ -1,46 +1,66 @@
-<script>
-	import * as knobby from 'svelte-knobby'
-	import { createEventDispatcher } from 'svelte'
+<script lang="ts">
+	import selected from './stores/selected'
+	import EditorInput from './EditorInput.svelte'
+	import { onMount } from 'svelte'
+	import { CodeMap } from '../../modules/warp/codeMap/index'
 
-	const dispatch = createEventDispatcher()
+	const allowedStyleProps: Array<string> = [
+		'color',
+		'font-size',
+		'font',
+		'border',
+		'background-color',
+		'text-align',
+		'cursor',
+		'line-height',
+		'text-shadow',
+		'background-image'
+	]
 
-	function layoutUpdated() {
-		dispatch('message', layoutProperties)
-	}
+	let style
 
 	$: {
-		layoutUpdated()
-	}
-
-	export let layoutProperties = {
-		message: 'Hello World!',
-		color: '#ff3e00',
-		clicks: 0,
-		checked: false,
-
-		increment: (value) => ({
-			...value,
-			clicks: value.clicks + 1
-		}),
-
-		constrained: {
-			$label: 'labelled input',
-			value: 50,
-			min: 0,
-			max: 100,
-			step: 1
-		},
-
-		folder: {
-			$label: 'labelled folder',
-			a: 1,
-			b: 2,
-			nested: {
-				c: 3,
-				d: 4
-			}
+		let codeMap = new CodeMap('ts')
+		const localSelect: any = $selected
+		const localStyle: any = localSelect.style
+		if (style && codeMap.validateCssString(codeMap.convertJSONToCSS(localStyle))) {
+			localSelect.style[`#${localSelect.widget}${localSelect.id}`] = style
+			selected.update((select) => {
+				return localSelect
+			})
 		}
 	}
 
-	const controls = knobby.panel(layoutProperties)
+	onMount(async () => {
+		const localSelect: any = $selected
+
+		if (localSelect && localSelect.style) {
+			style = localSelect.style[`#${localSelect.widget}${localSelect.id}`]
+		}
+	})
+
+	const checkIsStyle = (key: string) => {
+		if (allowedStyleProps.includes(key.toLowerCase())) return true
+		return false
+	}
 </script>
+
+<main>
+	{#if style}
+		<form class="content" on:submit="{(e) => e.preventDefault()}">
+			<EditorInput type="text" label="Left" bind:value="{style['margin-left']}" />
+			<EditorInput type="text" label="Right" bind:value="{style['margin-right']}" />
+			<EditorInput type="text" label="Bottom" bind:value="{style['marin-bottom']}" />
+			<EditorInput type="text" label="Top" bind:value="{style['margin-top']}" />
+			<EditorInput type="text" label="Width" bind:value="{style['width']}" />
+			<EditorInput type="text" label="Height" bind:value="{style['height']}" />
+		</form>
+	{/if}
+</main>
+
+<style>
+	.content {
+		display: block;
+		color: white;
+	}
+</style>

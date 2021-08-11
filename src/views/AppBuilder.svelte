@@ -4,6 +4,8 @@
 	import Monaco from '../components/Editor.svelte'
 	import UIPallete from '../components/canvas/UIPallete.svelte'
 	import UICanvas from '../components/canvas/UICanvas.svelte'
+	import LayoutEditor from '../components/canvas/LayoutEditor.svelte'
+	import StyleEditor from '../components/canvas/StyleEditor.svelte'
 	import Explorer from '../components/fileExplorer/Explorer.svelte'
 	import Terminal from '../components/Terminal.svelte'
 	import Warp from '../assets/warpwhite.png'
@@ -20,6 +22,12 @@
 		{ label: 'PROBLEMS', value: 2 },
 		{ label: 'OUTPUT', value: 3 }
 	]
+
+	let activeEditorTab = 1
+
+	const onEditorTabUpdate = (event) => {
+		activeEditorTab = event.detail
+	}
 
 	let currentCode = '<script lang="ts">\n\n</script' + '>\n\n<main>\n\n</main>\n\n<style></style>'
 
@@ -144,8 +152,14 @@
 							<UICanvas items="{editorItems}" on:message="{handleCanvasChange}" />
 						</left>
 						<right slot="right">
-							<OnlyTabs items="{upControlTabs}" add="{false}" />
-							<UIPallete />
+							<OnlyTabs on:message="{onEditorTabUpdate}" items="{upControlTabs}" add="{false}" />
+							{#if activeEditorTab === 1}
+								<UIPallete />
+							{:else if activeEditorTab === 2}
+								<LayoutEditor/>
+							{:else}
+								<StyleEditor/>
+							{/if}
 						</right>
 					</HSplitPane>
 				</right>

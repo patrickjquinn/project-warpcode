@@ -14,6 +14,14 @@ export class CodeMap {
 		return input.charAt(0).toUpperCase() + input.slice(1)
 	}
 
+	public validateCssString(cssString: string): boolean {
+		const validateCSS = validate(cssString)
+		if (validateCSS.length !== 0) {
+			return false
+		}
+		return true
+	}
+
 	public mapToCode(canvas: Record<string, unknown>): string {
 		const items: Array<Record<string, unknown>> = canvas.items as Array<Record<string, unknown>>
 		let scriptItems = ``
@@ -141,9 +149,8 @@ export class CodeMap {
 
 	private transformTemplateToWidget({ type, widget, value, id }): string {
 		if (type === 'slot') {
-			return `<${CodeMap.capFirstLetter(widget)} id="${
-				widget + id
-			}">${value}</${CodeMap.capFirstLetter(widget)}>`
+			return `<${CodeMap.capFirstLetter(widget)} id="${widget + id
+				}">${value}</${CodeMap.capFirstLetter(widget)}>`
 		}
 		return `<${CodeMap.capFirstLetter(widget)} ${type}="${value}" id="${widget + id}"/>`
 	}
