@@ -134,7 +134,6 @@
 		} = e.detail
 		isFinalCanvas = true
 		items = newItems
-		// Ensure dragging is stopped on drag finish via pointer (mouse, touch)
 		if (source === SOURCES.POINTER) {
 			dragDisabled = true
 		}
