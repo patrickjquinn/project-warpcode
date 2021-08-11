@@ -4,19 +4,6 @@
 	import { onMount } from 'svelte'
 	import { CodeMap } from '../../modules/warp/codeMap/index'
 
-	const allowedStyleProps: Array<string> = [
-		'color',
-		'font-size',
-		'font',
-		'border',
-		'background-color',
-		'text-align',
-		'cursor',
-		'line-height',
-		'text-shadow',
-		'background-image'
-	]
-
 	let style
 
 	$: {
@@ -38,11 +25,6 @@
 			style = localSelect.style[`#${localSelect.widget}${localSelect.id}`]
 		}
 	})
-
-	const checkIsStyle = (key: string) => {
-		if (allowedStyleProps.includes(key.toLowerCase())) return true
-		return false
-	}
 </script>
 
 <main>

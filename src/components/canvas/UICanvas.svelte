@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import { dndzone, TRIGGERS, SOURCES } from 'svelte-dnd-action'
 	import { createEventDispatcher, onMount } from 'svelte'
 	import MobileFrame from './MobileFrame.svelte'
@@ -13,8 +13,7 @@
 		Image
 	} from '../warp/widgets/index'
 
-	export let items
-	let selectedItem
+	export let items: Array<any>
 	let copiedItem
 
 	let dragDisabled = true
@@ -22,12 +21,14 @@
 
 	$: items && canvasChanged()
 
-	selected.subscribe((data) => {
-		if (data && selectedItem) {
+	selected.subscribe((data: Record<string, unknown>) => {
+		if (data && data.style && data.id) {
 			const idx = items.findIndex((item) => item.id === data.id)
 			const style = {}
 			style[`#${data.widget}${data.id}`] = data.style[`#${data.widget}${data.id}`]
-			items[idx].style = style
+			if (items[idx]){
+				items[idx].style = style
+			}
 		}
 	})
 
@@ -40,20 +41,23 @@
 			document.activeElement.parentElement.className.includes('selector')
 		) {
 			const key = e.keyCode
-			console.log(key)
 			if (key === 8 || key === 46) {
 				console.log('delete')
-				if (selectedItem) {
-					const idx = items.findIndex((item) => item.id === selectedItem.id)
-					selectedItem = null
+				if ($selected) {
+					const localSelect: Record<string, unknown> = $selected as any
+					const idx = items.findIndex((item) => item.id === localSelect.id)
+					selected.update((select) => {
+						return null
+					})
 					items.splice(idx, 1)
 					items = [...items]
 					canvasChanged()
 				}
 			} else if (interceptCopyKeys(e)) {
 				console.log('copy')
-				if (selectedItem) {
-					copiedItem = selectedItem
+				if ($selected) {
+					const localSelect: Record<string, unknown> = $selected as any
+					copiedItem = localSelect
 				}
 			} else if (interceptPasteKeys(e)) {
 				console.log('paste')
@@ -140,26 +144,26 @@
 	}
 
 	function removeSelectorHighlights() {
-		selectedItem = null
 		selected.update((select) => {
 			return null
 		})
 		const selectors = document.querySelector('.column-content').querySelectorAll('.selector')
 		const handles = document.querySelector('.column-content').querySelectorAll('.handle')
 		selectors.forEach((selector) => {
-			selector.style.border = '0px solid transparent'
+			const tmpSelector: HTMLElement = selector as HTMLElement
+			tmpSelector.style.border = '0px solid transparent'
 		})
 
 		handles.forEach((handle) => {
-			handle.style.display = 'none'
+			const tmpHandle: HTMLElement = handle as HTMLElement
+			tmpHandle.style.display = 'none'
 		})
 	}
 
 	function onItemSelected(e, item) {
 		removeSelectorHighlights()
-		selectedItem = item
 		selected.update((select) => {
-			return selectedItem
+			return item
 		})
 		console.log(e.target.parentNode.className)
 		if (!e.target.parentNode.className.includes('selector')) return
@@ -171,7 +175,7 @@
 		e.preventDefault()
 		dragDisabled = false
 	}
-	function handleKeyDown(e) {
+	function handleKeyDown(e: KeyboardEvent) {
 		if ((e.key === 'Enter' || e.key === ' ') && dragDisabled) dragDisabled = false
 	}
 
