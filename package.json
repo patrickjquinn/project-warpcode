@@ -44,6 +44,7 @@
 		"json-to-css": "^0.1.0",
 		"minimist": "^1.2.5",
 		"monaco-editor": "^0.25.2",
+		"moveable": "^0.26.0",
 		"ora": "^5.4.1",
 		"prettier": "~2.3.2",
 		"prettier-plugin-svelte": "^2.3.1",

@@ -25,9 +25,6 @@
 
 <style>
 	p {
-		background-color: white;
-		padding: 10px;
-		color: black;
-		width: 50%;
+		display: block
 	}
 </style>

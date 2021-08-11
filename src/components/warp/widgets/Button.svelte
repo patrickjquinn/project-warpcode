@@ -4,7 +4,7 @@
 
 	export let css
 	export let id
-
+	export let value
 	let codeMap = new CodeMap('ts')
 	let styled
 	let rendered = false
@@ -20,14 +20,10 @@
 	})
 </script>
 
-<button id="{id}" style="{styled}" contenteditable="true"><slot /></button>
+<button id="{id}" style="{styled}" bind:innerHTML="{value}" contenteditable="true"><slot /></button>
 
 <style>
 	button {
-		width: 85%;
-		border-radius: 4;
-		background-color: white;
-		height: 40px;
-		color: black;
+		display: block
 	}
 </style>

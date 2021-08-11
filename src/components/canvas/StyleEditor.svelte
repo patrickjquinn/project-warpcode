@@ -56,7 +56,6 @@
 			<EditorInput type="text" label="Font Weight" bind:value="{style['font-weight']}" />
 			<EditorInput type="text" label="Text Align" bind:value="{style['text-align']}" />
 			<EditorInput type="text" label="Line Height" bind:value="{style['line-height']}" />
-
 		</form>
 	{/if}
 </main>

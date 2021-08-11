@@ -15,29 +15,29 @@
 	import Icon from 'svelte-awesome'
 	import { bell, refresh, comment, codeFork } from 'svelte-awesome/icons'
 
-	let editorItems = []
+	let editorItems: Array<any> = []
 
-	let consoleTabs = [
+	let consoleTabs: Array<Record<string, unknown>> = [
 		{ label: 'TERMINAL', value: 1 },
 		{ label: 'PROBLEMS', value: 2 },
 		{ label: 'OUTPUT', value: 3 }
 	]
 
-	let activeEditorTab = 1
+	let activeEditorTab: number = 1
 
 	const onEditorTabUpdate = (event) => {
 		activeEditorTab = event.detail
 	}
 
-	let currentCode = '<script lang="ts">\n\n</script' + '>\n\n<main>\n\n</main>\n\n<style></style>'
+	let currentCode: string = '<script lang="ts">\n\n</script' + '>\n\n<main>\n\n</main>\n\n<style></style>'
 
 	// $: currentCode && updateCanvas()
-	let editorTabs = [{ label: 'Start.svelte', value: 1, path: './start.svelte', type: 'file' }]
+	let editorTabs: Array<Record<string, unknown>> = [{ label: 'Start.svelte', value: 1, path: './start.svelte', type: 'file' }]
 
-	const upControlTabs = [
+	const upControlTabs: Array<Record<string, unknown>> = [
 		{ label: 'Widgets', value: 1 },
 		{ label: 'Layout', value: 2 },
-		{ label: 'Style', value: 3 }
+		{ label: 'Style', value: 3 } 
 	]
 
 	const updateCanvas = () => {
@@ -75,16 +75,20 @@
 	)
 
 	const incrementTabs = (file) => {
-		editorTabs = editorTabs.filter((el) => { return (el.label != file.name && el.path != file.path) });
+		editorTabs = editorTabs.filter((el) => {
+			return el.label != file.name && el.path != file.path
+		})
 		for (let [index] of editorTabs.entries()) {
 			editorTabs[index].value = index + 1
 		}
 	}
 
 	const handleCanvasChange = (event) => {
-		const canvas = event.detail
-		const codeMap = new CodeMap('ts')
-		currentCode = codeMap.mapToCode(canvas)
+		const canvas: Record<string, unknown> = event.detail
+		if (canvas){
+			const codeMap: CodeMap = new CodeMap('ts')
+			currentCode = codeMap.mapToCode(canvas)
+		}
 	}
 </script>
 
@@ -156,9 +160,9 @@
 							{#if activeEditorTab === 1}
 								<UIPallete />
 							{:else if activeEditorTab === 2}
-								<LayoutEditor/>
+								<LayoutEditor />
 							{:else}
-								<StyleEditor/>
+								<StyleEditor />
 							{/if}
 						</right>
 					</HSplitPane>

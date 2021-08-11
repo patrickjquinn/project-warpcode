@@ -1,5 +1,5 @@
 import { join } from 'path'
-import { app, BrowserWindow, ipcMain, dialog } from 'electron'
+import { app, BrowserWindow, ipcMain, dialog, nativeTheme } from 'electron'
 import is_dev from 'electron-is-dev'
 import dotenv from 'dotenv'
 import Store from 'electron-store'
@@ -18,6 +18,9 @@ import degit from 'degit'
 const readFile = util.promisify(fs.readFile)
 const store = new Store()
 let projectDir = `${os.homedir()}/warpspace/Demo`
+const darkBackgroundColor = 'black';
+const lightBackgroundColor = 'white';
+
 let launcherWindow
 
 const userData = app.getPath('userData')
@@ -58,17 +61,30 @@ class createWin {
 				enableRemoteModule: true,
 				contextIsolation: false
 			},
-			show: false
+			show: false,
+			backgroundColor: nativeTheme.shouldUseDarkColors
+				? darkBackgroundColor
+				: lightBackgroundColor
 		})
 
 		win.maximize()
-		win.show()
+		win.once('ready-to-show', () => {
+			win.show()
+		});
 
 		const URL = is_dev
 			? 'http://localhost:3000'
 			: `file://${join(__dirname, '../../dist/index.html')}`
 
 		win.loadURL(URL)
+
+		win.on('focus', () => {
+			win.webContents.send('focus');
+		})
+		
+		win.on('blur', () => {
+			win.webContents.send('blur');
+		})
 
 		const ptyProcess = pty.spawn(defaultShell, [], {
 			name: 'xterm-color',
@@ -93,16 +109,23 @@ function launch() {
 		width: 800,
 		height: 600,
 		minWidth: 600,
-		backgroundColor: 'white',
 		titleBarStyle: 'hidden',
 		webPreferences: {
 			nodeIntegration: true,
 			enableRemoteModule: true,
 			contextIsolation: false
-		}
+		},
+		show: false,
+		backgroundColor: nativeTheme.shouldUseDarkColors
+			? darkBackgroundColor
+			: lightBackgroundColor
 	})
 
 	launcherWindow.loadURL('http://localhost:3000/#/launch')
+
+	launcherWindow.once('ready-to-show', () => {
+		launcherWindow.show();
+	});
 }
 
 async function readFileAt(path) {

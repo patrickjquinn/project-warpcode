@@ -75,9 +75,14 @@
 			contentsType: 'slot',
 			style: {
 				'#button5': {
-					width: '100%',
-					height: '5rem',
-					color: 'white'
+					width: '80%',
+					'margin-left': 'auto',
+					'margin-right': 'auto',
+					height: '2rem',
+					color: 'black',
+					border: 'none',
+					'border-radius': '4px',
+					'background-color': 'lightgray'
 				}
 			}
 		},

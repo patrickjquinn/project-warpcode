@@ -3,7 +3,7 @@
 	import { createEventDispatcher, onMount } from 'svelte'
 	import MobileFrame from './MobileFrame.svelte'
 	import selected from './stores/selected'
- 
+
 	import {
 		Container,
 		ScrollContainer,
@@ -22,31 +22,27 @@
 
 	$: items && canvasChanged()
 
-	// activeStyle.subscribe(value => {
-	// 	if (selectedItem && selectedItem.style){
-	// 		console.log(value)
-	// 		selectedItem.style[`${selectedItem.widget}${selectedItem.id}`] = value;
-	// 	}
-	// });
-
-	selected.subscribe(data => {
-		// console.log(`Data: ${JSON.stringify(data)}`)
-		if (data && selectedItem){
+	selected.subscribe((data) => {
+		if (data && selectedItem) {
 			const idx = items.findIndex((item) => item.id === data.id)
 			const style = {}
 			style[`#${data.widget}${data.id}`] = data.style[`#${data.widget}${data.id}`]
 			items[idx].style = style
 		}
-		
 	})
 
 	const flipDurationMs = 100
 	const dispatch = createEventDispatcher()
 
 	const onKeyCombo = (e) => {
-		if (document.activeElement.className.includes('selector')){
+		if (
+			document.activeElement.className.includes('selector') ||
+			document.activeElement.parentElement.className.includes('selector')
+		) {
 			const key = e.keyCode
+			console.log(key)
 			if (key === 8 || key === 46) {
+				console.log('delete')
 				if (selectedItem) {
 					const idx = items.findIndex((item) => item.id === selectedItem.id)
 					selectedItem = null
@@ -56,12 +52,11 @@
 				}
 			} else if (interceptCopyKeys(e)) {
 				console.log('copy')
-				if (selectedItem){
+				if (selectedItem) {
 					copiedItem = selectedItem
 				}
 			} else if (interceptPasteKeys(e)) {
 				console.log('paste')
-
 				if (copiedItem) {
 					pasteInItem(copiedItem)
 				}
@@ -74,7 +69,7 @@
 		let newItem
 		const style = {}
 		style[`#${item.widget}${newId}`] = item.style[`#${item.widget}${item.id}`]
-		newItem = {...item, id: newId, style}
+		newItem = { ...item, id: newId, style }
 		items.push(newItem)
 		items = [...items]
 		console.log(items)
@@ -82,35 +77,33 @@
 	}
 
 	function disableCopyPaste(elm) {
-		elm.oncontextmenu = function() {
+		elm.oncontextmenu = function () {
 			return false
 		}
 	}
 
 	function interceptCopyKeys(evt) {
-		evt = evt||window.event
+		evt = evt || window.event
 		const c = evt.keyCode
-		const ctrlDown = evt.ctrlKey||evt.metaKey
+		const ctrlDown = evt.ctrlKey || evt.metaKey
 
-		if (ctrlDown && c==67) return true
-
-		else if (ctrlDown && evt.altKey) return false // c
-		else if (ctrlDown && c==86) return false // v
-		else if (ctrlDown && c==88) return false // x
+		if (ctrlDown && c == 67) return true
+		else if (ctrlDown && evt.altKey) return false
+		else if (ctrlDown && c == 86) return false
+		else if (ctrlDown && c == 88) return false
 
 		return false
 	}
 
 	function interceptPasteKeys(evt) {
-		evt = evt||window.event
+		evt = evt || window.event
 		const c = evt.keyCode
-		const ctrlDown = evt.ctrlKey||evt.metaKey
+		const ctrlDown = evt.ctrlKey || evt.metaKey
 
-		if (ctrlDown && c==86) return true
-
-		else if (ctrlDown && c==67) return false // c
-		else if (ctrlDown && c==86) return false // v
-		else if (ctrlDown && c==88) return false // x
+		if (ctrlDown && c == 86) return true
+		else if (ctrlDown && c == 67) return false
+		else if (ctrlDown && c == 86) return false
+		else if (ctrlDown && c == 88) return false
 
 		return false
 	}
@@ -149,8 +142,11 @@
 
 	function removeSelectorHighlights() {
 		selectedItem = null
-		const selectors = document.querySelectorAll('.selector')
-		const handles = document.querySelectorAll('.handle')
+		selected.update((select) => {
+			return null
+		})
+		const selectors = document.querySelector('.column-content').querySelectorAll('.selector')
+		const handles = document.querySelector('.column-content').querySelectorAll('.handle')
 		selectors.forEach((selector) => {
 			selector.style.border = '0px solid transparent'
 		})
@@ -163,7 +159,7 @@
 	function onItemSelected(e, item) {
 		removeSelectorHighlights()
 		selectedItem = item
-		selected.update(select => {
+		selected.update((select) => {
 			return selectedItem
 		})
 		console.log(e.target.parentNode.className)
@@ -214,16 +210,20 @@
 										>{item.value ?? ''}</Container
 									>
 								{:else if item.widget == 'label'}
-									<Label css="{item.style}" id="{`${item.widget}${item.id}`}" bind:value="{item.value}"
-										>{item.value ?? ''}</Label
+									<Label
+										css="{item.style}"
+										id="{`${item.widget}${item.id}`}"
+										bind:value="{item.value}">{item.value ?? ''}</Label
 									>
 								{:else if item.widget == 'scrollContainer'}
 									<ScrollContainer css="{item.style}" id="{`${item.widget}${item.id}`}"
 										>{item.value ?? ''}</ScrollContainer
 									>
 								{:else if item.widget == 'button'}
-									<Button css="{item.style}" id="{`${item.widget}${item.id}`}"
-										>{item.value ?? ''}</Button
+									<Button
+										css="{item.style}"
+										bind:value="{item.value}"
+										id="{`${item.widget}${item.id}`}">{item.value ?? ''}</Button
 									>
 								{:else if item.widget == 'videoPlayer'}
 									<VideoPlayer
