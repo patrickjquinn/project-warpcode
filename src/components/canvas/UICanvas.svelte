@@ -285,11 +285,11 @@
 		justify-content: center;
 	}
 	.column {
-		height: 100%;
+		height: calc(100% - 40px);
 		width: 100%;
 		padding: 0;
 		margin: 0em;
-		margin-top: 40px;
+		margin-top: 0px;
 		float: left;
 		overflow-y: hidden;
 	}
