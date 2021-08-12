@@ -32,7 +32,6 @@
 			style: {
 				'#container2': {
 					width: '100%',
-					height: '5rem',
 					color: 'white',
 					'background-color': 'lightgray',
 					border: 'none'
@@ -40,7 +39,8 @@
 			},
 			meta: {
 				container: true
-			}
+			},
+			items: []
 		},
 		{
 			id: 3,
@@ -57,7 +57,8 @@
 			},
 			meta: {
 				container: true
-			}
+			},
+			items: []
 		},
 		{
 			id: 4,

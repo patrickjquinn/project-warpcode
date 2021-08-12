@@ -25,9 +25,8 @@
 <style>
 	div {
 		background-color: lightgray;
-		width: 100%;
 		min-width: 50px;
-		height: 10rem;
+		min-height: 5rem;
 		overflow: hidden;
 		resize: both;
 	}

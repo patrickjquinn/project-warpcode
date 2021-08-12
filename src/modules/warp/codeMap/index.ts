@@ -43,8 +43,11 @@ export class CodeMap {
 
 			cssItems = cssItems + this.convertJSONToCSS(widgetStyle)
 
-			scriptItems =
-				scriptItems + `import {${CodeMap.capFirstLetter(widgetType)}} from "@components/warp/"\n`
+			if (!scriptItems.includes(`{ ${CodeMap.capFirstLetter(widgetType)} }`)) {
+				scriptItems =
+				scriptItems + `import { ${CodeMap.capFirstLetter(widgetType)} } from "@components/warp/"
+	`
+			}
 
 			const widget = this.transformTemplateToWidget({
 				type: contentType,

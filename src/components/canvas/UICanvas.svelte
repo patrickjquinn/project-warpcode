@@ -1,9 +1,10 @@
 <script lang="ts">
-	import { dndzone, TRIGGERS, SOURCES } from 'svelte-dnd-action'
+	import { dndzone, TRIGGERS, SOURCES, SHADOW_PLACEHOLDER_ITEM_ID } from 'svelte-dnd-action'
 	import { createEventDispatcher, onMount } from 'svelte'
 	import MobileFrame from './MobileFrame.svelte'
 	import selected from './stores/selected'
 	import CanvasActions from '../../modules/warp/canvasActions'
+	import NestedContent from './NestedContent.svelte'
 
 	import {
 		Container,
@@ -37,6 +38,8 @@
 	const dispatch = createEventDispatcher()
 
 	const onKeyCombo = (e) => {
+		e.preventDefault()
+		e.stopPropagation()
 		if (
 			document.activeElement.className.includes('selector') ||
 			document.activeElement.parentElement.className.includes('selector')
@@ -46,13 +49,7 @@
 				console.log('delete')
 				if ($selected) {
 					const localSelect: Record<string, unknown> = $selected as any
-					const idx = items.findIndex((item) => item.id === localSelect.id)
-					selected.update((select) => {
-						return null
-					})
-					items.splice(idx, 1)
-					items = [...items]
-					canvasChanged()
+					deleteItem(localSelect)
 				}
 			} else if (interceptCopyKeys(e)) {
 				console.log('copy')
@@ -69,8 +66,18 @@
 		}
 	}
 
+	const generateUniqueID = (id): number => {
+		const newID = id + Math.round(Math.random() * 100)
+		const idExists = items.some( item => item.id === newID )
+		if (idExists) {
+			return generateUniqueID(id)
+		} else {
+			return newID
+		}
+	}
+
 	const pasteInItem = (item) => {
-		const newId = item.id + Math.round(Math.random() * 100)
+		const newId = generateUniqueID(item.id)
 		let newItem
 		const style = {}
 		style[`#${item.widget}${newId}`] = item.style[`#${item.widget}${item.id}`]
@@ -141,7 +148,19 @@
 		}
 	}
 
+	const deleteItem = (selectItem) => {
+		const idx = items.findIndex((item) => item.id === selectItem.id)
+		selected.update((select) => {
+			return null
+		})
+		items.splice(idx, 1)
+		items = [...items]
+		canvasChanged()
+	}
+
 	function handleConsider(e) {
+		e.stopPropagation()
+
 		const {
 			items: newItems,
 			info: { source, trigger }
@@ -153,6 +172,7 @@
 		}
 	}
 	function handleFinalize(e) {
+		e.stopPropagation()
 		const {
 			items: newItems,
 			info: { source }
@@ -162,6 +182,29 @@
 		if (source === SOURCES.POINTER) {
 			dragDisabled = true
 		}
+	}
+
+	function handleChildAction(e) {
+		const detail = e.detail
+		if (detail) {
+			const item = detail.item
+			const type = detail.type
+			switch (type) {
+				case 0:
+					deleteItem(item)
+					break
+				case 1:
+					pasteInItem(item)
+					break
+				default:
+					console.log(type)
+			}
+		}
+	}
+
+	function canvasInFocus(e) {
+		e.stopPropagation()
+		removeSelectorHighlights()
 	}
 
 	function removeSelectorHighlights() {
@@ -183,13 +226,16 @@
 	}
 
 	function onItemSelected(e, item) {
-		removeSelectorHighlights()
-		selected.update((select) => {
-			return item
-		})
-		if (!e.target.parentElement.className.includes('selector')) return
-		e.target.parentElement.style.border = '2px solid yellow'
-		e.target.parentElement.querySelector('.handle').style.display = 'flex'
+		e.stopPropagation()
+		if (e.target.parentElement.className.includes('selector')) {
+			removeSelectorHighlights()
+			selected.update((select) => {
+				return item
+			})
+			console.log(e.target.parentNode.parentElement.className)
+			e.target.parentElement.style.border = '2px solid yellow'
+			e.target.parentElement.querySelector('.handle').style.display = 'flex'
+		}
 	}
 
 	function startDrag(e) {
@@ -205,7 +251,7 @@
 	})
 </script>
 
-<svelte:window on:keydown="{onKeyCombo}" />
+<!-- <svelte:window on:keydown="{onKeyCombo}" /> -->
 
 <div id="canvas_container">
 	<div class="temp-wrapper">
@@ -217,8 +263,10 @@
 						use:dndzone="{{ items, dragDisabled, flipDurationMs }}"
 						on:consider="{handleConsider}"
 						on:finalize="{handleFinalize}"
+						on:click="{canvasInFocus}"
+						on:keydown="{onKeyCombo}"
 					>
-						{#each items as item (item.id)}
+						{#each items.filter((item) => item.id !== SHADOW_PLACEHOLDER_ITEM_ID) as item (item.id)}
 							<div on:click="{(e) => onItemSelected(e, item)}" class="selector">
 								<div
 									tabindex="{dragDisabled ? 0 : -1}"
@@ -230,9 +278,19 @@
 									on:keydown="{handleKeyDown}"
 								></div>
 								{#if item.widget === 'container'}
-									<Container css="{item.style}" id="{`${item.widget}${item.id}`}"
-										>{item.value ?? ''}</Container
-									>
+									{#if item.hasOwnProperty('items')}
+										<Container css="{item.style}" id="{`${item.widget}${item.id}`}"
+											><NestedContent
+												bind:items="{item.items}"
+												parent="{item}"
+												on:message="{handleChildAction}"
+											/></Container
+										>
+									{:else}
+										<Container css="{item.style}" id="{`${item.widget}${item.id}`}"
+											>{item.value ?? ''}</Container
+										>
+									{/if}
 								{:else if item.widget == 'label'}
 									<Label
 										css="{item.style}"

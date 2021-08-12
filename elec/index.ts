@@ -68,9 +68,8 @@ class createWin {
 		})
 
 		win.maximize()
-		win.once('ready-to-show', () => {
-			win.show()
-		});
+		win.show()
+
 
 		const URL = is_dev
 			? 'http://localhost:3000'
