@@ -3,6 +3,7 @@
 	import { createEventDispatcher, onMount } from 'svelte'
 	import MobileFrame from './MobileFrame.svelte'
 	import selected from './stores/selected'
+	import CanvasActions from '../../modules/warp/canvasActions'
 
 	import {
 		Container,
@@ -26,7 +27,7 @@
 			const idx = items.findIndex((item) => item.id === data.id)
 			const style = {}
 			style[`#${data.widget}${data.id}`] = data.style[`#${data.widget}${data.id}`]
-			if (items[idx]){
+			if (items[idx]) {
 				items[idx].style = style
 			}
 		}
@@ -120,6 +121,26 @@
 		}
 	}
 
+	const makeMovable = () => {
+		const canvas: HTMLElement = document.querySelector('.column-content') as HTMLElement
+
+		if (canvas) {
+			const canvasActions = new CanvasActions(canvas)
+			const canvasSelectors = Array.from(canvas.querySelectorAll('.selector')) as HTMLElement[]
+			canvasActions.makeItemResizable(canvasSelectors)
+		}
+	}
+
+	const makeItemMovable = (item: HTMLElement) => {
+		const canvas: HTMLElement = document.querySelector('.column-content') as HTMLElement
+
+		if (canvas) {
+			const canvasActions = new CanvasActions(canvas)
+
+			canvasActions.makeItemResizable(item)
+		}
+	}
+
 	function handleConsider(e) {
 		const {
 			items: newItems,
@@ -147,8 +168,9 @@
 		selected.update((select) => {
 			return null
 		})
-		const selectors = document.querySelector('.column-content').querySelectorAll('.selector')
-		const handles = document.querySelector('.column-content').querySelectorAll('.handle')
+		const columnContent = document.querySelector('.column-content')
+		const selectors = columnContent.querySelectorAll('.selector')
+		const handles = columnContent.querySelectorAll('.handle')
 		selectors.forEach((selector) => {
 			const tmpSelector: HTMLElement = selector as HTMLElement
 			tmpSelector.style.border = '0px solid transparent'
@@ -165,10 +187,9 @@
 		selected.update((select) => {
 			return item
 		})
-		console.log(e.target.parentNode.className)
-		if (!e.target.parentNode.className.includes('selector')) return
-		e.target.parentNode.style.border = '2px solid yellow'
-		e.target.parentNode.querySelector('.handle').style.display = 'flex'
+		if (!e.target.parentElement.className.includes('selector')) return
+		e.target.parentElement.style.border = '2px solid yellow'
+		e.target.parentElement.querySelector('.handle').style.display = 'flex'
 	}
 
 	function startDrag(e) {
@@ -180,7 +201,7 @@
 	}
 
 	onMount(async () => {
-		disableCopyPaste(document.querySelector('#canvas_container'))
+		disableCopyPaste(document.querySelector('.column-content'))
 	})
 </script>
 

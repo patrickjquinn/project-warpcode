@@ -7,9 +7,9 @@ class CanvasActions {
 		this.canvas = canvas
 	}
 
-	makeItemResizable(items: Array<HTMLElement>) {
+	public makeItemResizable(items: Array<HTMLElement> | HTMLElement): void {
 		const moveable = new Moveable(this.canvas, {
-			target: this.canvas,
+			target: items,
 			resizable: true,
 			keepRatio: false,
 			throttleResize: 1,
