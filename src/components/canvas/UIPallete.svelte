@@ -18,6 +18,9 @@
 					color: 'black',
 					'line-height': '0.2rem'
 				}
+			},
+			meta: {
+				container: false
 			}
 		},
 		{
@@ -34,6 +37,9 @@
 					'background-color': 'lightgray',
 					border: 'none'
 				}
+			},
+			meta: {
+				container: true
 			}
 		},
 		{
@@ -48,6 +54,9 @@
 					height: '5rem',
 					color: 'white'
 				}
+			},
+			meta: {
+				container: true
 			}
 		},
 		{
@@ -64,6 +73,9 @@
 					height: '5rem',
 					color: 'white'
 				}
+			},
+			meta: {
+				container: false
 			}
 		},
 		{
@@ -84,6 +96,9 @@
 					'border-radius': '4px',
 					'background-color': 'lightgray'
 				}
+			},
+			meta: {
+				container: false
 			}
 		},
 		{
@@ -99,6 +114,9 @@
 					height: '5rem',
 					color: 'white'
 				}
+			},
+			meta: {
+				container: false
 			}
 		}
 	]
