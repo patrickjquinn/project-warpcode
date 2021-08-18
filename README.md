@@ -8,7 +8,9 @@ An electron based Svelte app builder using Vite for the UI (Svelte based) and Ro
 
 ## Setting up Warp on your machine
 
-```npn i -g pnpm
+```
+npn i -g pnpm
 pnpm i
 mkdir ~/warpspace
-pnpm dev:all```
+pnpm dev:all
+```
