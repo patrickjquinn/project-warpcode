@@ -29,15 +29,18 @@
 		activeEditorTab = event.detail
 	}
 
-	let currentCode: string = '<script lang="ts">\n\n</script' + '>\n\n<main>\n\n</main>\n\n<style></style>'
+	let currentCode: string =
+		'<script lang="ts">\n\n</script' + '>\n\n<main>\n\n</main>\n\n<style></style>'
 
 	// $: currentCode && updateCanvas()
-	let editorTabs: Array<Record<string, unknown>> = [{ label: 'Start.svelte', value: 1, path: './start.svelte', type: 'file' }]
+	let editorTabs: Array<Record<string, unknown>> = [
+		{ label: 'Start.svelte', value: 1, path: './start.svelte', type: 'file' }
+	]
 
 	const upControlTabs: Array<Record<string, unknown>> = [
 		{ label: 'Widgets', value: 1 },
 		{ label: 'Layout', value: 2 },
-		{ label: 'Style', value: 3 } 
+		{ label: 'Style', value: 3 }
 	]
 
 	const updateCanvas = () => {
@@ -85,7 +88,7 @@
 
 	const handleCanvasChange = (event) => {
 		const canvas: Record<string, unknown> = event.detail
-		if (canvas){
+		if (canvas) {
 			const codeMap: CodeMap = new CodeMap('ts')
 			currentCode = codeMap.mapToCode(canvas)
 		}
@@ -114,6 +117,7 @@
 					console.log('HSplitPane Updated!')
 				}}"
 			>
+				<!-- Files explorer and editor -->
 				<left slot="left">
 					<HSplitPane
 						leftPaneSize="22%"
@@ -133,10 +137,12 @@
 								minDownPaneSize="0px"
 							>
 								<top slot="top">
+									<!-- Code editor, open files -->
 									<RemovableTabs bind:items="{editorTabs}" add="{true}" />
 									<Monaco bind:code="{currentCode}" on:message="{updateCanvas}" />
 								</top>
 								<down slot="down">
+									<!-- Terminal, console,  output -->
 									<OnlyTabs items="{consoleTabs}" add="{false}" />
 									<Terminal />
 								</down>
@@ -144,6 +150,7 @@
 						</right>
 					</HSplitPane>
 				</left>
+				<!-- Canvas and palette -->
 				<right slot="right">
 					<HSplitPane
 						leftPaneSize="60%"
@@ -153,9 +160,11 @@
 						}}"
 					>
 						<left slot="left">
+							<!-- UI canvas -->
 							<UICanvas items="{editorItems}" on:message="{handleCanvasChange}" />
 						</left>
 						<right slot="right">
+							<!-- Widget, style, layout tabs for the active item -->
 							<OnlyTabs on:message="{onEditorTabUpdate}" items="{upControlTabs}" add="{false}" />
 							{#if activeEditorTab === 1}
 								<UIPallete />

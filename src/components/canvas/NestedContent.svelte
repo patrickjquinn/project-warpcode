@@ -255,7 +255,7 @@
 
 <!-- <svelte:window on:keydown="{onKeyCombo}" /> -->
 
-<main
+<div
 	on:keydown="{onKeyCombo}"
 	id="{`main${parent.id}`}"
 	class="column"
@@ -312,10 +312,10 @@
 			{/if}
 		</div>
 	{/each}
-</main>
+	</div>
 
 <style>
-	main {
+	.column {
 		height: 100%;
 		width: 100%;
 		padding: 0;
