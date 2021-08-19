@@ -3,6 +3,10 @@
 	export let add
 	export let activeTabValue = 1
 
+	$: {
+		// alert(JSON.stringify(items,null, 2))
+	}
+
 	const handleClick = (tabValue) => () => {
 		activeTabValue = tabValue
 		const index = items.findIndex((el) => el.value === activeTabValue)

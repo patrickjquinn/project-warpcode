@@ -14,6 +14,8 @@
 
 	import Icon from 'svelte-awesome'
 	import { bell, refresh, comment, codeFork } from 'svelte-awesome/icons'
+	
+	const { remote, ipcRenderer } = window.require('electron')
 
 	let editorItems: Array<any> = []
 
@@ -25,6 +27,8 @@
 
 	let activeEditorTab: number = 1
 
+	let lang: string = 'html'
+
 	const onEditorTabUpdate = (event) => {
 		activeEditorTab = event.detail
 	}
@@ -34,7 +38,7 @@
 
 	// $: currentCode && updateCanvas()
 	let editorTabs: Array<Record<string, unknown>> = [
-		{ label: 'Start.svelte', value: 1, path: './start.svelte', type: 'file' }
+		{ label: 'Start.svelte', value: 1, path: './Start.svelte', type: 'file' }
 	]
 
 	const upControlTabs: Array<Record<string, unknown>> = [
@@ -59,7 +63,7 @@
 	}
 
 	window.addEventListener(
-		'fileSelected',
+		'fileSelectedDirect',
 		(event: CustomEvent) => {
 			for (let [index] of editorTabs.entries()) {
 				if (editorTabs[index].path === event.detail.path) {
@@ -73,17 +77,66 @@
 				type: event.detail.type
 			})
 			incrementTabs(event.detail)
+
+			ipcRenderer.send('open-file', event.detail.path)
+			lang = fileExtension(event.detail.name)
 		},
 		false
 	)
 
+	window.addEventListener(
+		'fileSelected',
+		(event: CustomEvent) => {
+			for (let [index] of editorTabs.entries()) {
+				if (editorTabs[index].path === event.detail.path) {
+					editorTabs.splice(index, 1)
+				}
+			}
+			editorTabs.unshift({
+				label: event.detail.name,
+				value: 1,
+				path: event.detail.path,
+				type: event.detail.type
+			})
+
+			incrementTabs(event.detail)
+			// alert(JSON.stringify(editorTabs, null, 2))
+
+			ipcRenderer.send('open-file', event.detail.path)
+			lang = fileExtension(event.detail.name)
+		},
+		false
+	)
+
+	const fileExtension = (name) => {
+		const extension = name.slice(name.lastIndexOf('.') + 1)
+
+		switch (extension) {
+			case 'svelte':
+				return 'svelte'
+			case 'js':
+				return 'javascript'
+			case 'ts':
+				return 'typescript'
+			case 'json':
+				return 'json'
+			case 'xml':
+				return 'html'
+			case 'html':
+				return 'svelte'
+			default:
+				return 'html'
+		}
+	}
+
 	const incrementTabs = (file) => {
-		editorTabs = editorTabs.filter((el) => {
-			return el.label != file.name && el.path != file.path
-		})
+		// editorTabs = editorTabs.filter((el) => {
+		// 	return el.label != file.name && el.path != file.path
+		// })
 		for (let [index] of editorTabs.entries()) {
 			editorTabs[index].value = index + 1
 		}
+		editorTabs = [...editorTabs]
 	}
 
 	const handleCanvasChange = (event) => {
@@ -139,7 +192,7 @@
 								<top slot="top">
 									<!-- Code editor, open files -->
 									<RemovableTabs bind:items="{editorTabs}" add="{true}" />
-									<Monaco bind:code="{currentCode}" on:message="{updateCanvas}" />
+									<Monaco bind:lang="{lang}" bind:code="{currentCode}" on:message="{updateCanvas}" />
 								</top>
 								<down slot="down">
 									<!-- Terminal, console,  output -->

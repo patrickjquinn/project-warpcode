@@ -6,9 +6,9 @@
 	import cssWorker from 'monaco-editor/esm/vs/language/css/css.worker?worker'
 	import htmlWorker from 'monaco-editor/esm/vs/language/html/html.worker?worker'
 	import tsWorker from 'monaco-editor/esm/vs/language/typescript/ts.worker?worker'
-	const { remote, ipcRenderer } = window.require('electron')
 	import { createEventDispatcher } from 'svelte'
 
+	const { ipcRenderer } = window.require('electron')
 	const dispatch = createEventDispatcher()
 
 	function codeSaved() {
@@ -20,50 +20,12 @@
 	let Monaco: any
 
 	export let code
-	let lang = 'html'
-
-	window.addEventListener(
-		'fileSelected',
-		(event: CustomEvent) => {
-			ipcRenderer.send('open-file', event.detail.path)
-			lang = fileExtension(event.detail.name)
-		},
-		false
-	)
-
-	window.addEventListener(
-		'fileSelectedDirect',
-		(event: CustomEvent) => {
-			ipcRenderer.send('open-file', event.detail.path)
-			lang = fileExtension(event.detail.name)
-		},
-		false
-	)
+	export let lang = 'html'
 
 	ipcRenderer.on('file-sent', (event, file) => {
+		console.log(event)
 		code = file
 	})
-
-	const fileExtension = (name) => {
-		const extension = name.slice(name.lastIndexOf('.') + 1)
-
-		switch (extension) {
-			case 'svelte':
-				return 'svelte'
-			case 'js':
-				return 'javascript'
-			case 'ts':
-				return 'typescript'
-			case 'json':
-				return 'json'
-			case 'xml':
-				return 'html'
-			case 'html':
-				return 'svelte'
-			default:
-				return 'html'
-		}
-	}
 
 	const updatedCode = () => {
 		if (editor?.getValue() && editor.getValue() != code) {
