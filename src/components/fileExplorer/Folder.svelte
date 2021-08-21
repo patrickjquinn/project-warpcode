@@ -3,6 +3,7 @@
 	import { slide } from 'svelte/transition'
 
 	export let expanded = false
+	export let root = false
 	export let name: string
 	export let children: Array<any>
 
@@ -14,6 +15,18 @@
 <span class:expanded on:click="{toggle}">{name}</span>
 
 {#if expanded}
+	<ul transition:slide="{{ duration: 300 }}">
+		{#each children as file}
+			<li>
+				{#if file.type === 'directory'}
+					<svelte:self {...file} />
+				{:else}
+					<File {...file} />
+				{/if}
+			</li>
+		{/each}
+	</ul>
+{:else if root && children?.length > 0}
 	<ul transition:slide="{{ duration: 300 }}">
 		{#each children as file}
 			<li>

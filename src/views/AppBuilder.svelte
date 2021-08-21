@@ -196,8 +196,10 @@
 								</top>
 								<down slot="down">
 									<!-- Terminal, console,  output -->
-									<OnlyTabs items="{consoleTabs}" add="{false}" />
-									<Terminal />
+									<div style="max-height=25%">
+										<OnlyTabs items="{consoleTabs}" add="{false}" />
+										<Terminal />
+									</div>
 								</down>
 							</VSplitPane>
 						</right>
