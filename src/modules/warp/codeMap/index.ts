@@ -45,7 +45,7 @@ export class CodeMap {
 
 			if (!scriptItems.includes(`{ ${CodeMap.capFirstLetter(widgetType)} }`)) {
 				scriptItems =
-				scriptItems + `import { ${CodeMap.capFirstLetter(widgetType)} } from "@components/warp/"
+					scriptItems + `import { ${CodeMap.capFirstLetter(widgetType)} } from "@components/warp/"
 	`
 			}
 
@@ -53,7 +53,8 @@ export class CodeMap {
 				type: contentType,
 				widget: widgetType,
 				value: widgetValue,
-				id: widgetID
+				id: widgetID,
+				item
 			})
 
 			if (item === items[items.length - 1]) {
@@ -150,8 +151,34 @@ export class CodeMap {
 		return canvas
 	}
 
-	private transformTemplateToWidget({ type, widget, value, id }): string {
+	private transformTemplateToWidget({ type, widget, value, id, item }): string {
 		if (type === 'slot') {
+			if (item.items?.length > 0) {
+				let innerItem = '\n'
+				for (const inner of item.items) {
+					const widgetType: string = inner.widget as string
+					const widgetID: string = inner.id as string
+					let widgetValue: string = inner.value as string
+					let contentType: string = inner.contentsType as string
+
+					if (!widgetValue) {
+						widgetValue = ''
+					}
+					if (!contentType) {
+						contentType = 'slot'
+					}
+					const transformedInner = this.transformTemplateToWidget({
+						type: contentType,
+						widget: widgetType,
+						value: widgetValue,
+						id: widgetID,
+						item: inner
+					})
+					innerItem += `${transformedInner}\n`
+				}
+				return `<${CodeMap.capFirstLetter(widget)} id="${widget + id
+					}">${innerItem}</${CodeMap.capFirstLetter(widget)}>`
+			}
 			return `<${CodeMap.capFirstLetter(widget)} id="${widget + id
 				}">${value}</${CodeMap.capFirstLetter(widget)}>`
 		}
@@ -174,6 +201,9 @@ export class CodeMap {
 		const widget = item.tagName
 		let contentsType = ''
 		let value = ''
+
+		// Come back to this, this is a blind stab of a fix.
+		if (!item.attributes) return {}
 
 		for (const obj of item.attributes) {
 			if (obj.key === 'src' || obj.key === 'value') {

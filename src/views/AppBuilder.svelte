@@ -1,6 +1,8 @@
 <script lang="ts">
-	import { CodeMap } from '../modules/warp/codeMap'
 	import { HSplitPane, VSplitPane } from 'svelte-split-pane'
+	import Icon from 'svelte-awesome'
+	import { bell, refresh, comment, codeFork } from 'svelte-awesome/icons'
+	import { CodeMap } from '../modules/warp/codeMap'
 	import Monaco from '../components/Editor.svelte'
 	import UIPallete from '../components/canvas/UIPallete.svelte'
 	import UICanvas from '../components/canvas/UICanvas.svelte'
@@ -12,10 +14,7 @@
 	import OnlyTabs from '../components/tabs/OnlyTabs.svelte'
 	import RemovableTabs from '../components/tabs/RemovableTabs.svelte'
 
-	import Icon from 'svelte-awesome'
-	import { bell, refresh, comment, codeFork } from 'svelte-awesome/icons'
-	
-	const { remote, ipcRenderer } = window.require('electron')
+	const { ipcRenderer } = window.require('electron')
 
 	let editorItems: Array<any> = []
 
@@ -192,7 +191,7 @@
 								<top slot="top">
 									<!-- Code editor, open files -->
 									<RemovableTabs bind:items="{editorTabs}" add="{true}" />
-									<Monaco bind:lang="{lang}" bind:code="{currentCode}" on:message="{updateCanvas}" />
+									<Monaco bind:lang bind:code="{currentCode}" on:message="{updateCanvas}" />
 								</top>
 								<down slot="down">
 									<!-- Terminal, console,  output -->
