@@ -116,6 +116,7 @@ export class CodeMap {
 			if (item.tagName === 'main') {
 				for (const inner of item.children) {
 					if (inner.type === 'element') {
+						console.log(inner)
 						canvas.push(this.transformCodeToCanvas(inner))
 					}
 				}
@@ -226,12 +227,30 @@ export class CodeMap {
 			}
 		}
 
+		if (item.tagName.toLowerCase() === 'container' && item.children?.length > 0){
+			const items = []
+			for (const child of item.children) {
+				if (child.type === 'element'){
+					items.push(this.transformCodeToCanvas(child))
+				}
+			}
+			console.log("HELLO")
+			return {
+				id,
+				name: widget,
+				widget,
+				value,
+				contentsType,
+				items
+			}
+		}
+
 		return {
 			id,
 			name: widget,
 			widget,
 			value,
-			contentsType: 'slot'
+			contentsType
 		}
 	}
 
