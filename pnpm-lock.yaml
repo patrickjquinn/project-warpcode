@@ -21,7 +21,7 @@ specifiers:
   degit: ^2.8.4
   directory-tree: ^2.3.1
   dotenv: ^10.0.0
-  electron: ^13.2.1
+  electron: ^13.2.2
   electron-builder: ^22.11.7
   electron-connect: ^0.6.3
   electron-is-dev: ^2.0.0
@@ -46,7 +46,7 @@ specifiers:
   svelte: ^3.42.2
   svelte-agnostic-draggable: ^0.1.11
   svelte-awesome: ^2.3.2
-  svelte-check: ^2.2.4
+  svelte-check: ^2.2.5
   svelte-dnd-action: ^0.9.9
   svelte-preprocess: ^4.8.0
   svelte-spa-router: ^3.2.0
@@ -93,7 +93,7 @@ devDependencies:
   default-shell: 1.0.1
   degit: 2.8.4
   dotenv: 10.0.0
-  electron: 13.2.1
+  electron: 13.2.2
   electron-builder: 22.11.7
   electron-connect: 0.6.3
   electron-rebuild: 2.3.5
@@ -115,7 +115,7 @@ devDependencies:
   svelte: 3.42.2
   svelte-agnostic-draggable: 0.1.11
   svelte-awesome: 2.3.2
-  svelte-check: 2.2.4_svelte@3.42.2
+  svelte-check: 2.2.5_svelte@3.42.2
   svelte-dnd-action: 0.9.9
   svelte-preprocess: 4.8.0_svelte@3.42.2+typescript@4.3.5
   svelte-spa-router: 3.2.0
@@ -1787,8 +1787,8 @@ packages:
       type-fest: 1.4.0
     dev: false
 
-  /electron/13.2.1:
-    resolution: {integrity: sha512-/K0Uw+o3+phbHtrVL6qDFVJqmeRF6EIPwVeUHEH5R8JNy13f4X3RouKjQzVyY/Os8fEqYHGFONWhD6q6g750HQ==}
+  /electron/13.2.2:
+    resolution: {integrity: sha512-thGq2YaZqQWK1HexRghxdb26a8hA7ZSebukUSHlnHrY9+Sx9rW7e3uEHbibk/seRXVoXO76HndjKdHyObP9/Kw==}
     engines: {node: '>= 8.6'}
     hasBin: true
     requiresBuild: true
@@ -4170,8 +4170,8 @@ packages:
       svelte: 3.42.2
     dev: true
 
-  /svelte-check/2.2.4_svelte@3.42.2:
-    resolution: {integrity: sha512-eGEuZ3UEanOhlpQhICLjKejDxcZ9uYJlGnBGKAPW7uugolaBE6HpEBIiKFZN/TMRFFHQUURgGvsVn8/HJUBfeQ==}
+  /svelte-check/2.2.5_svelte@3.42.2:
+    resolution: {integrity: sha512-EstDoqxjqWStWELh7Z0qytqUDl/ikdNEr21dveNc4fUDnhnqO2F2jHEufqoNnC3GfBji3GIUHvoXsp/I5lMbCg==}
     hasBin: true
     peerDependencies:
       svelte: ^3.24.0

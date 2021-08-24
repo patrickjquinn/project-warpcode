@@ -30,7 +30,6 @@ export class CodeMap {
 		for (const item of items) {
 			const widgetType: string = item.widget as string
 			const widgetID: string = item.id as string
-			const widgetStyle: Record<string, unknown> = item.style as Record<string, unknown>
 			let widgetValue: string = item.value as string
 			let contentType: string = item.contentsType as string
 
@@ -41,7 +40,7 @@ export class CodeMap {
 				contentType = 'slot'
 			}
 
-			cssItems = cssItems + this.convertJSONToCSS(widgetStyle)
+			cssItems = cssItems + this.extractStyleAndCodeify(item)
 
 			if (!scriptItems.includes(`{ ${CodeMap.capFirstLetter(widgetType)} }`)) {
 				scriptItems =
@@ -116,7 +115,6 @@ export class CodeMap {
 			if (item.tagName === 'main') {
 				for (const inner of item.children) {
 					if (inner.type === 'element') {
-						console.log(inner)
 						canvas.push(this.transformCodeToCanvas(inner))
 					}
 				}
@@ -133,8 +131,6 @@ export class CodeMap {
 			}
 		}
 
-		// console.log(`👉 ${JSON.stringify(canvas, null, 2)}`)
-
 		if (canvas?.length > 0 && cssItems?.length > 0) {
 			for (let i = 0; i < canvas.length; i++) {
 				const item = canvas[i]
@@ -147,9 +143,31 @@ export class CodeMap {
 			}
 		}
 
-		// console.log(`👉👉 ${JSON.stringify(canvas, null, 2)}`)
-
 		return canvas
+	}
+
+	private extractStyleAndCodeify(item) {
+		const widgetStyle: Record<string, unknown> = item.style as Record<string, unknown>
+		let contentType: string = item.contentsType as string
+		let cssItems = ``
+
+
+		if (!contentType) {
+			contentType = 'slot'
+		}
+
+		cssItems = cssItems + this.convertJSONToCSS(widgetStyle)
+
+		if (contentType === 'slot') {
+			const subItems: Array<Record<string, unknown>> = item.items as Array<Record<string, unknown>> | null
+			if (subItems?.length > 0) {
+				for (const subStyle of subItems) {
+					cssItems = cssItems + this.extractStyleAndCodeify(subStyle)
+				}
+			}
+		}
+
+		return cssItems
 	}
 
 	private transformTemplateToWidget({ type, widget, value, id, item }): string {
@@ -227,10 +245,10 @@ export class CodeMap {
 			}
 		}
 
-		if (item.tagName.toLowerCase() === 'container' && item.children?.length > 0){
+		if (item.tagName.toLowerCase() === 'container' && item.children?.length > 0) {
 			const items = []
 			for (const child of item.children) {
-				if (child.type === 'element'){
+				if (child.type === 'element') {
 					items.push(this.transformCodeToCanvas(child))
 				}
 			}
