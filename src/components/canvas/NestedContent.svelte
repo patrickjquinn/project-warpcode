@@ -85,7 +85,7 @@
 
 	const generateUniqueID = (id): number => {
 		const newID = id + Math.round(Math.random() * 100)
-		const idExists = items.some( item => item.id === newID )
+		const idExists = items.some((item) => item.id === newID)
 		if (idExists) {
 			return generateUniqueID(id)
 		} else {
@@ -312,7 +312,7 @@
 			{/if}
 		</div>
 	{/each}
-	</div>
+</div>
 
 <style>
 	.column {

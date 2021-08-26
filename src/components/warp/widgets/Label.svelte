@@ -5,7 +5,7 @@
 	export let id
 	export let css
 	export let value
-	
+
 	let codeMap = new CodeMap('ts')
 	let styled
 	let rendered = false
@@ -25,6 +25,6 @@
 
 <style>
 	p {
-		display: block
+		display: block;
 	}
 </style>

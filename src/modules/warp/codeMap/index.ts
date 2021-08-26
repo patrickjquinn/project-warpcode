@@ -108,7 +108,7 @@ export class CodeMap {
 	public convertCodeToCanvas(code: string): Array<unknown> {
 		const json = parse(code)
 
-		const canvas = []
+		let canvas = []
 		const cssItems = []
 
 		for (const item of json) {
@@ -131,6 +131,12 @@ export class CodeMap {
 			}
 		}
 
+		canvas = this.mapStylesToAllCanvasItems(canvas, cssItems)
+
+		return canvas
+	}
+
+	private mapStylesToAllCanvasItems(canvas, cssItems) {
 		if (canvas?.length > 0 && cssItems?.length > 0) {
 			for (let i = 0; i < canvas.length; i++) {
 				const item = canvas[i]
@@ -140,9 +146,14 @@ export class CodeMap {
 				if (styleItem) {
 					canvas[i].style = styleItem
 				}
+
+				const subCanvasItems: Array<Record<string, unknown>> = item.items
+
+				if (subCanvasItems?.length > 0) {
+					canvas[i].items = this.mapStylesToAllCanvasItems(subCanvasItems, cssItems)
+				}
 			}
 		}
-
 		return canvas
 	}
 

@@ -7,7 +7,7 @@
 	let style
 	let localSelect: any
 
-	$: style => {
+	$: (style) => {
 		let codeMap = new CodeMap('ts')
 		localSelect = $selected
 		const localStyle: any = localSelect.style
@@ -36,10 +36,9 @@
 			<EditorInput type="text" label="Top" bind:value="{style['margin-top']}" />
 			<EditorInput type="text" label="Width" bind:value="{style['width']}" />
 			<EditorInput type="text" label="Height" bind:value="{style['height']}" />
-			{#if localSelect?.meta?.container} 
+			{#if localSelect?.meta?.container}
 				<EditorInput type="text" label="Display" bind:value="{style.display}" />
 			{/if}
-
 		</form>
 	{/if}
 </main>
