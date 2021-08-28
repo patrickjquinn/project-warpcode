@@ -10,10 +10,6 @@ export class CodeMap {
 		this.lang = lang
 	}
 
-	private static capFirstLetter(input: string): string {
-		return input.charAt(0).toUpperCase() + input.slice(1)
-	}
-
 	public validateCssString(cssString: string): boolean {
 		const validateCSS = validate(cssString)
 		if (validateCSS.length !== 0) {
@@ -155,6 +151,10 @@ export class CodeMap {
 			}
 		}
 		return canvas
+	}
+
+	private static capFirstLetter(input: string): string {
+		return input.charAt(0).toUpperCase() + input.slice(1)
 	}
 
 	private extractStyleAndCodeify(item) {
