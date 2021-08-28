@@ -6,3 +6,5 @@ export { default as TextInput } from './TextInput.svelte'
 export { default as TextBox } from './TextBox.svelte'
 export { default as VideoPlayer } from './VideoPlayer.svelte'
 export { default as Image } from './Image.svelte'
+export { default as Generic } from './Generic.svelte'
+

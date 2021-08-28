@@ -182,6 +182,8 @@ export class CodeMap {
 	}
 
 	private transformTemplateToWidget({ type, widget, value, id, item }): string {
+		const defaultWidgets = ['Label', 'Container', 'ScrollContainer', 'TextBox', 'VideoPlayer', 'TextInput', 'Image', 'Button']
+
 		if (type === 'slot') {
 			if (item.items?.length > 0) {
 				let innerItem = '\n'
@@ -206,13 +208,26 @@ export class CodeMap {
 					})
 					innerItem += `${transformedInner}\n`
 				}
-				return `<${CodeMap.capFirstLetter(widget)} id="${widget + id
-					}">${innerItem}</${CodeMap.capFirstLetter(widget)}>`
+				if (defaultWidgets.includes(CodeMap.capFirstLetter(widget))) {
+					return `<${CodeMap.capFirstLetter(widget)} id="${widget + id
+						}">${innerItem}</${CodeMap.capFirstLetter(widget)}>`
+				}
+				return `<${widget} id="${widget + id
+					}">${innerItem}</${widget}>`
+
 			}
-			return `<${CodeMap.capFirstLetter(widget)} id="${widget + id
-				}">${value}</${CodeMap.capFirstLetter(widget)}>`
+			if (defaultWidgets.includes(CodeMap.capFirstLetter(widget))) {
+				return `<${CodeMap.capFirstLetter(widget)} id="${widget + id
+					}">${value}</${CodeMap.capFirstLetter(widget)}>`
+			}
+			return `<${widget} id="${widget + id
+				}">${value}</${widget}>`
+
 		}
-		return `<${CodeMap.capFirstLetter(widget)} ${type}="${value}" id="${widget + id}"/>`
+		if (defaultWidgets.includes(CodeMap.capFirstLetter(widget))) {
+			return `<${CodeMap.capFirstLetter(widget)} ${type}="${value}" id="${widget + id}"/>`
+		}
+		return `<${widget} ${type}="${value}" id="${widget + id}"/>`
 	}
 
 	private fetchRelevantCSSTag(id: string, css: Array<Record<string, unknown>>) {

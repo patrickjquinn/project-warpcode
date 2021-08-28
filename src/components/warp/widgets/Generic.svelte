@@ -3,15 +3,19 @@
 	import { CodeMap } from '../../../modules/warp/codeMap/index'
 
 	export let css
-	export let id
-	export let value
+	export let id: string
+    export let tag: string
+    export let value: string
+
 	let codeMap = new CodeMap('ts')
-	let styled
+	let styled: string
+    let formatted = ``
 	let rendered = false
 
 	$: {
 		if (rendered) {
 			styled = codeMap.convertCSSJSONtoInline(css, id)
+            formatted = `<${tag.toLowerCase()} id="${id}" style="${styled}">${value}</${tag.toLowerCase()}>`
 		}
 	}
 
@@ -20,10 +24,4 @@
 	})
 </script>
 
-<button id="{id}" style="{styled}" bind:innerHTML="{value}" contenteditable="true"><slot /></button>
-
-<style>
-	button {
-		display: block;
-	}
-</style>
+{@html formatted}

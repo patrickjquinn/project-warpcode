@@ -12,7 +12,8 @@
 		Label,
 		Button,
 		VideoPlayer,
-		Image
+		Image,
+		Generic
 	} from '../warp/widgets/index'
 
 	export let items: Array<any>
@@ -34,10 +35,14 @@
 		}
 	})
 
-	const flipDurationMs = 100
+	const flipDurationMs = 0
 	const dispatch = createEventDispatcher()
 
-	const onKeyCombo = (e) => {
+	const onKeyCombo = (e: {
+		preventDefault: () => void
+		stopPropagation: () => void
+		keyCode: any
+	}) => {
 		e.preventDefault()
 		e.stopPropagation()
 		if (
@@ -319,6 +324,10 @@
 										src="{item.value ?? ''}"
 										id="{`${item.widget}${item.id}`}"
 									/>
+								{:else}
+									<Generic tag="{item.widget}" css="${item.style}" id="{`${item.widget}${item.id}`}" bind:value="{item.value}"
+										></Generic
+									>
 								{/if}
 							</div>
 						{/each}
