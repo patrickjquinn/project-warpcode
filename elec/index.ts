@@ -104,6 +104,11 @@ class createWin {
 }
 
 function launch() {
+	const warpspace = `${os.homedir()}/warpspace`
+	if (!fs.existsSync(warpspace)){
+		fs.mkdirSync(warpspace)
+	}
+	
 	launcherWindow = new BrowserWindow({
 		width: 800,
 		height: 600,
