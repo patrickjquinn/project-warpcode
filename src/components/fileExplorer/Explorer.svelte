@@ -17,7 +17,12 @@
 
 <main>
 	<div>
-		<Folder name="{files['name']}" children="{files['children']}" expanded="{false}" root={true} />
+		<Folder
+			name="{files['name']}"
+			children="{files['children']}"
+			expanded="{false}"
+			root="{true}"
+		/>
 	</div>
 </main>
 

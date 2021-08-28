@@ -215,8 +215,8 @@ export class CodeMap {
 		return `<${CodeMap.capFirstLetter(widget)} ${type}="${value}" id="${widget + id}"/>`
 	}
 
-	private fetchRelevantCSSTag(id, css) {
-		const obj = {}
+	private fetchRelevantCSSTag(id: string, css: Array<Record<string, unknown>>) {
+		const obj = { }
 		for (const style of css) {
 			if (style[id]) {
 				obj[`${id}`] = style[id]
@@ -227,13 +227,13 @@ export class CodeMap {
 	}
 
 	private transformCodeToCanvas(item) {
-		let id
+		let id: number
 		const widget = item.tagName
 		let contentsType = ''
 		let value = ''
 
 		// Come back to this, this is a blind stab of a fix.
-		if (!item.attributes) return {}
+		if (!item.attributes) return { }
 
 		for (const obj of item.attributes) {
 			if (obj.key === 'src' || obj.key === 'value') {
