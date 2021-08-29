@@ -1,5 +1,5 @@
 import { join } from 'path'
-import { app, BrowserWindow, ipcMain, dialog, nativeTheme } from 'electron'
+import { app, BrowserWindow, ipcMain, dialog, nativeTheme, Menu } from 'electron'
 import is_dev from 'electron-is-dev'
 import dotenv from 'dotenv'
 import Store from 'electron-store'
@@ -9,7 +9,6 @@ import os from 'os'
 import fs from 'fs'
 import util from 'util'
 import directoryTree from 'directory-tree'
-import createApplicationMenu from './appbar'
 import exec from './shared/exec'
 import readJSON from './shared/readJSON'
 import * as path from 'path'
@@ -21,7 +20,9 @@ let projectDir = ``
 const darkBackgroundColor = 'black';
 const lightBackgroundColor = 'white';
 
-let launcherWindow
+let launcherWindow: BrowserWindow
+let win: BrowserWindow
+
 
 const userData = app.getPath('userData')
 const recent = readJSON(path.join(userData, 'recent.json')) || []
@@ -47,7 +48,6 @@ function buildTree(rootPath: string) {
 
 dotenv.config({ path: join(__dirname, '../../.env') })
 
-let win = null
 
 class createWin {
 	constructor() {
@@ -198,17 +198,7 @@ function existingProjectDialog(dir) {
 	}
 }
 
-// Quit when all windows are closed.
-app.on('window-all-closed', function () {
-	// On OS X it is common for applications and their menu bar
-	// to stay active until the user quits explicitly with Cmd + Q
-	if (process.platform !== 'darwin') {
-		app.quit()
-	}
-})
-
-ipcMain.on('create-new-project', (event) => {
-	// dialog.showSaveDialog(launcherWindow, {
+function createProjectDialog(event) {
 	dialog
 		.showOpenDialog(launcherWindow, {
 			title: 'Create project',
@@ -220,12 +210,14 @@ ipcMain.on('create-new-project', (event) => {
 
 			const [filename] = results.filePaths
 
-			event.sender.send('status', `cloning repo to ${path.basename(filename)}...`)
+			if (event) event.sender.send('status', `cloning repo to ${path.basename(filename)}...`)
+
+			
 
 			const emitter = degit('patrickjquinn/warp-project-template')
 			await emitter.clone(filename)
 
-			event.sender.send('status', `installing dependencies...`)
+			if (event) event.sender.send('status', `installing dependencies...`)
 
 			// install dependencies
 			await exec(`npm i -g pnpm`, { cwd: filename })
@@ -233,6 +225,19 @@ ipcMain.on('create-new-project', (event) => {
 
 			openProject(filename)
 		})
+}
+
+// Quit when all windows are closed.
+app.on('window-all-closed', function () {
+	// On OS X it is common for applications and their menu bar
+	// to stay active until the user quits explicitly with Cmd + Q
+	if (process.platform !== 'darwin') {
+		app.quit()
+	}
+})
+
+ipcMain.on('create-new-project', (event) => {
+	createProjectDialog(event)
 })
 
 ipcMain.on('open-existing-project', (event, dir) => {
@@ -250,48 +255,261 @@ ipcMain.on('open-file', async (e, filePath) => {
 	}
 })
 
-ipcMain.handle('saveCurrentFile', () => {
-	console.log('file saved')
-})
+const saveCurrentFile = async () => {
+	console.log('not yet done.')
+}
 
-ipcMain.handle('openProject', () => {
-	console.log('')
-})
+const openMenuProject = async () => {
+	existingProjectDialog(null)
+}
 
-ipcMain.handle('createMenuProject', () => {
-	console.log('')
-})
+const createMenuProject = async () => {
+	createProjectDialog(null)
+}
 
-ipcMain.handle('openMenuProject', () => {
-	console.log('')
-})
+const quitMenuProject = async () => {
+	win.close()
+	launch()
+}
 
-ipcMain.handle('quitMenuProject', () => {
-	console.log('')
-})
+const runMenuWeb = async () => {
+	console.log('running web...')
+}
 
-ipcMain.handle('quitMenuWarp', () => {
-	console.log('')
-})
+const runMenuAndroid = async () => {
+	console.log('running android...')
+}
 
-ipcMain.handle('openMenuWebsite', () => {
-	console.log('')
-})
+const runMenuIOS = async () => {
+	console.log('running iOS...')
+}
 
-ipcMain.handle('runMenuWeb', () => {
-	console.log('')
-})
+const buildMenuProject = async () => {
+	console.log('building project...')
+}
 
-ipcMain.handle('runMenuAndroid', () => {
-	console.log('')
-})
+const createApplicationMenu = () => {
+	const hasOneOrMoreWindows = !!BrowserWindow.getAllWindows().length
+	const focusedWindow = BrowserWindow.getFocusedWindow()
+	const hasFilePath = !!(focusedWindow && focusedWindow.getRepresentedFilename())
 
-ipcMain.handle('runMenuIOS', () => {
-	console.log('')
-})
+	const template: Array<Record<any, unknown>> = [
+		{
+			label: 'File',
+			submenu: [
+				{
+					label: 'Create Project',
+					accelerator: 'CommandOrControl+P',
+					click(item, focusedWindow) {
+						createMenuProject()
+					}
+				},
+				{
+					label: 'New File',
+					accelerator: 'CommandOrControl+N',
+					click() {
+						
+					}
+				},
+				{
+					label: 'Open File',
+					accelerator: 'CommandOrControl+O',
+					click(item, focusedWindow) {
+						console.log('not yet done.')
+					}
+				},
+				{
+					label: 'Save File',
+					accelerator: 'CommandOrControl+S',
+					enabled: true,
+					click(item, focusedWindow) {
+						saveCurrentFile()
+					}
+				},
+				{
+					label: 'Open Project',
+					accelerator: 'CommandOrControl+O',
+					click(item, focusedWindow) {
+						openMenuProject()
+					}
+				},
+				{
+					label: 'Close Project',
+					accelerator: 'CommandOrControl+Q+P',
+					enabled: true,
+					click(item, focusedWindow) {
+						quitMenuProject()
+					}
+				}
+			]
+		},
+		{
+			label: 'Edit',
+			submenu: [
+				{
+					label: 'Undo',
+					accelerator: 'CommandOrControl+Z',
+					role: 'undo'
+				},
+				{
+					label: 'Redo',
+					accelerator: 'Shift+CommandOrControl+Z',
+					role: 'redo'
+				},
+				{ type: 'separator' },
+				{
+					label: 'Cut',
+					accelerator: 'CommandOrControl+X',
+					role: 'cut'
+				},
+				{
+					label: 'Copy',
+					accelerator: 'CommandOrControl+C',
+					role: 'copy'
+				},
+				{
+					label: 'Paste',
+					accelerator: 'CommandOrControl+V',
+					role: 'paste'
+				},
+				{
+					label: 'Select All',
+					accelerator: 'CommandOrControl+A',
+					role: 'selectall'
+				}
+			]
+		},
+		{
+		label: 'Run + Build',
+		submenu: [
+				{
+					label: 'Run Web',
+					accelerator: 'CommandOrControl+R+W',
+					click() {
+						runMenuWeb()
+					}
+				},
+				{
+					label: 'Run Android',
+					accelerator: 'CommandOrControl+R+A',
+					click() {
+						runMenuAndroid()
+					}
+				},
+				{
+					label: 'Run IOS',
+					accelerator: 'CommandOrControl+R+I',
+					click() {
+						runMenuIOS()
+					}
+				},
+				{
+					label: 'Build',
+					accelerator: 'CommandOrControl+B',
+					click() {
+						buildMenuProject()
+					}
+				}
+			]
+		},
+		{
+			label: 'Editor',
+			submenu: [
+				{
+					label: 'Increase Font Size',
+					accelerator: 'CommandOrControl+]',
+					click() {
+						// ipcMain.increaseFontSize();
+					}
+				},
+				{
+					label: 'Decrease Font Size',
+					accelerator: 'CommandOrControl+[',
+					click() {
+						// ipcMain.decreaseFontSize();
+					}
+				}
+			]
+		},
+		{
+			label: 'Window',
+			submenu: [
+				{
+					label: 'Minimize',
+					accelerator: 'CommandOrControl+M',
+					role: 'minimize'
+				},
+				{
+					label: 'Close',
+					accelerator: 'CommandOrControl+W',
+					role: 'close'
+				}
+			]
+		},
+		{
+			label: 'Help',
+			role: 'help',
+			submenu: [
+				{
+					label: 'Visit Warp Website',
+					click: async () => {
+						const { shell } = require('electron')
+						await shell.openExternal('https://warpcode.io/')
+					}
+				},
+				{
+					label: 'Toggle Debug Tools',
+					click(item, focusedWindow) {
+						if (focusedWindow) focusedWindow.webContents.toggleDevTools()
+					}
+				}
+			]
+		}
+	]
 
-ipcMain.handle('buildMenuProject', () => {
-	console.log('')
-})
+	if (process.platform === 'darwin') {
+		const name = 'Warp'
+		template.unshift({
+			label: name,
+			submenu: [
+				{
+					label: `About ${name}`,
+					role: 'about'
+				},
+				{ type: 'separator' },
+				{
+					label: 'Services',
+					role: 'services',
+					submenu: []
+				},
+				{ type: 'separator' },
+				{
+					label: `Hide ${name}`,
+					accelerator: 'Command+H',
+					role: 'hide'
+				},
+				{
+					label: 'Hide Others',
+					accelerator: 'Command+Alt+H',
+					role: 'hideothers'
+				},
+				{
+					label: 'Show All',
+					role: 'unhide'
+				},
+				{ type: 'separator' },
+				{
+					label: `Quit ${name}`,
+					accelerator: 'Command+Q',
+					click() {
+						app.quit()
+					}
+				}
+			]
+		})
 
-export default ipcMain
+		const windowMenu = template.find((item) => item.label === 'Window')
+		windowMenu.role = 'window'
+	}
+	return Menu.setApplicationMenu(Menu.buildFromTemplate(template))
+}
