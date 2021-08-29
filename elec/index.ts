@@ -6,7 +6,7 @@ import Store from 'electron-store'
 import pty from 'node-pty'
 import defaultShell from 'default-shell'
 import os from 'os'
-import fs, { watch } from 'fs'
+import fs from 'fs'
 import util from 'util'
 import directoryTree from 'directory-tree'
 import createApplicationMenu from './appbar'
@@ -17,7 +17,7 @@ import degit from 'degit'
 
 const readFile = util.promisify(fs.readFile)
 const store = new Store()
-let projectDir = `${os.homedir()}/warpspace/Demo`
+let projectDir = `${os.homedir()}/warpspace`
 const darkBackgroundColor = 'black';
 const lightBackgroundColor = 'white';
 
@@ -80,7 +80,7 @@ class createWin {
 		win.on('focus', () => {
 			win.webContents.send('focus');
 		})
-		
+
 		win.on('blur', () => {
 			win.webContents.send('blur');
 		})
@@ -105,10 +105,10 @@ class createWin {
 
 function launch() {
 	const warpspace = `${os.homedir()}/warpspace`
-	if (!fs.existsSync(warpspace)){
+	if (!fs.existsSync(warpspace)) {
 		fs.mkdirSync(warpspace)
 	}
-	
+
 	launcherWindow = new BrowserWindow({
 		width: 800,
 		height: 600,
@@ -188,7 +188,7 @@ ipcMain.on('create-new-project', (event) => {
 			properties: ['openDirectory', 'createDirectory']
 		})
 		.then(async (results) => {
-			if (!results.filePaths) return
+			if (results.canceled || !results.filePaths || results.filePaths.length === 0) return
 
 			const [filename] = results.filePaths
 
@@ -200,7 +200,8 @@ ipcMain.on('create-new-project', (event) => {
 			event.sender.send('status', `installing dependencies...`)
 
 			// install dependencies
-			await exec(`npm install`, { cwd: filename })
+			await exec(`npm i -g pnpm`, { cwd: filename })
+			await exec(`pnpm install`, { cwd: filename })
 
 			openProject(filename)
 		})
@@ -217,11 +218,13 @@ ipcMain.on('open-existing-project', (event, dir) => {
 				properties: ['openDirectory']
 			})
 			.then((result) => {
-				if (!result.filePaths) return
-
+				if (result.canceled || !result.filePaths || result.filePaths.length === 0) return
 				setTimeout(() => {
 					openProject(result.filePaths[0])
 				}, 0)
+			})
+			.catch((err) => {
+				console.log(err)
 			})
 	}
 })
