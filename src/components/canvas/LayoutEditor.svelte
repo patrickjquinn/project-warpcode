@@ -10,13 +10,16 @@
 	$: (style) => {
 		let codeMap = new CodeMap('ts')
 		localSelect = $selected
-		const localStyle: any = localSelect.style
-		if (style && codeMap.validateCssString(codeMap.convertJSONToCSS(localStyle))) {
-			localSelect.style[`#${localSelect.widget}${localSelect.id}`] = style
-			selected.update((select) => {
-				return localSelect
-			})
+		if (localSelect){
+			const localStyle: any = localSelect.style
+			if (style && codeMap.validateCssString(codeMap.convertJSONToCSS(localStyle))) {
+				localSelect.style[`#${localSelect.widget}${localSelect.id}`] = style
+				selected.update((select) => {
+					return localSelect
+				})
+			}
 		}
+		
 	}
 
 	onMount(async () => {

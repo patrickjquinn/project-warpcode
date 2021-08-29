@@ -22,14 +22,17 @@
 	$: {
 		let codeMap = new CodeMap('ts')
 		const localSelect: any = $selected
-		const localStyle: any = localSelect.style
-		if (style && codeMap.validateCssString(codeMap.convertJSONToCSS(localStyle))) {
-			const localSelect: any = $selected
-			localSelect.style[`#${localSelect.widget}${localSelect.id}`] = style
-			selected.update((select) => {
-				return localSelect
-			})
+		if (localSelect){
+			const localStyle: any = localSelect.style
+			if (style && codeMap.validateCssString(codeMap.convertJSONToCSS(localStyle))) {
+				const localSelect: any = $selected
+				localSelect.style[`#${localSelect.widget}${localSelect.id}`] = style
+				selected.update((select) => {
+					return localSelect
+				})
+			}
 		}
+		
 	}
 
 	onMount(async () => {
