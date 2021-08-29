@@ -1,25 +1,21 @@
 <script>
-	import readJSON from '../../elec/shared/readJSON'
+	import {onMount} from "svelte"
+	
 	const path = window.require('path')
-	const os = window.require('os')
+	const fs = window.require('fs')
+	
 	const { remote, ipcRenderer } = window.require('electron')
 
 	let status
 
 	const userData = remote.app.getPath('userData')
-	const recent = ['Demo', 'Demo 2']
+	let recent = []
 
 	ipcRenderer.on('status', (event, stat) => {
 		status = stat
 	})
 
 	ipcRenderer.on('project-open', (event, stat) => {})
-
-	const data = () => {
-		return {
-			recent
-		}
-	}
 
 	const openExistingProject = (dir) => {
 		ipcRenderer.send('open-existing-project', dir)
@@ -28,6 +24,11 @@
 	const createNewProject = () => {
 		ipcRenderer.send('create-new-project')
 	}
+
+	onMount(async () => {
+		const file = path.join(userData, 'recent.json')
+		recent = fs.existsSync(file) ? JSON.parse(fs.readFileSync(file, 'utf-8')) : null
+	})
 </script>
 
 <main>
@@ -40,11 +41,11 @@
 			{#each recent as dir}
 				<button
 					class="small"
-					on:click="{() => openExistingProject(`${os.homedir()}/warpcode/${dir}`)}"
+					on:click="{() => openExistingProject(dir)}"
 					>{path.basename(dir)}</button
 				>
 			{:else}
-				<p>recent projects will appear here</p>
+				<p>recent projects appear here</p>
 			{/each}
 		</div>
 

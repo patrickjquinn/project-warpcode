@@ -17,7 +17,7 @@ import degit from 'degit'
 
 const readFile = util.promisify(fs.readFile)
 const store = new Store()
-let projectDir = `${os.homedir()}/warpspace`
+let projectDir = ``
 const darkBackgroundColor = 'black';
 const lightBackgroundColor = 'white';
 
@@ -152,13 +152,19 @@ app.on('activate', () => {
 	}
 })
 
-function openProject(dir) {
+function pushToRecents (dir) {
+	if (!fs.existsSync(dir)) return
 	const index = recent.indexOf(dir)
 	if (index !== -1) recent.splice(index, 1)
 	recent.unshift(dir)
 	while (recent.length > 5) recent.pop()
 	fs.writeFileSync(path.join(userData, 'recent.json'), JSON.stringify(recent))
+}
+
+function openProject(dir) {
+	pushToRecents(dir)
 	projectDir = dir
+	console.log(`Project Dir = ${projectDir}`)
 	launcherWindow.close()
 	createApplicationMenu()
 	new createWin()
