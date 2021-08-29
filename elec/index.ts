@@ -176,6 +176,28 @@ function openProject(dir) {
 	})
 }
 
+function existingProjectDialog(dir) {
+	if (dir) {
+		openProject(dir)
+	} else {
+		dialog
+			.showOpenDialog(launcherWindow, {
+				title: 'Open project',
+				buttonLabel: 'Open project',
+				properties: ['openDirectory']
+			})
+			.then((result) => {
+				if (result.canceled || !result.filePaths || result.filePaths.length === 0) return
+				setTimeout(() => {
+					openProject(result.filePaths[0])
+				}, 0)
+			})
+			.catch((err) => {
+				console.log(err)
+			})
+	}
+}
+
 // Quit when all windows are closed.
 app.on('window-all-closed', function () {
 	// On OS X it is common for applications and their menu bar
@@ -214,25 +236,7 @@ ipcMain.on('create-new-project', (event) => {
 })
 
 ipcMain.on('open-existing-project', (event, dir) => {
-	if (dir) {
-		openProject(dir)
-	} else {
-		dialog
-			.showOpenDialog(launcherWindow, {
-				title: 'Open project',
-				buttonLabel: 'Open project',
-				properties: ['openDirectory']
-			})
-			.then((result) => {
-				if (result.canceled || !result.filePaths || result.filePaths.length === 0) return
-				setTimeout(() => {
-					openProject(result.filePaths[0])
-				}, 0)
-			})
-			.catch((err) => {
-				console.log(err)
-			})
-	}
+	existingProjectDialog(dir)
 })
 
 ipcMain.on('open-file', async (e, filePath) => {

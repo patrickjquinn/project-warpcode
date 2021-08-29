@@ -1,6 +1,7 @@
-import { app, BrowserWindow, dialog, Menu } from 'electron'
+import { app, BrowserWindow, dialog, ipcMain, Menu } from 'electron'
 // import { ipcMain } from 'electron'
 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 const createApplicationMenu = () => {
 	const hasOneOrMoreWindows = !!BrowserWindow.getAllWindows().length
 	const focusedWindow = BrowserWindow.getFocusedWindow()
@@ -48,21 +49,6 @@ const createApplicationMenu = () => {
 					}
 				},
 				{
-					label: 'Open Folder',
-					accelerator: 'CommandOrControl+O',
-					click(item, focusedWindow) {
-						if (focusedWindow) {
-							// return ipcMain.getFolderFromUser(focusedWindow);
-						}
-
-						//   const newWindow = ipcMain.createWindow();
-
-						//   newWindow.on('show', () => {
-						//     ipcMain.getFolderFromUser(newWindow);
-						//   });
-					}
-				},
-				{
 					label: 'Save File',
 					accelerator: 'CommandOrControl+S',
 					enabled: hasOneOrMoreWindows,
@@ -78,31 +64,50 @@ const createApplicationMenu = () => {
 						}
 					}
 				},
-				{ type: 'separator' },
 				{
-					label: 'Show File',
-					enabled: hasFilePath,
+					label: 'Open Project',
+					accelerator: 'CommandOrControl+O',
 					click(item, focusedWindow) {
-						if (!focusedWindow) {
-							return dialog.showErrorBox(
-								"Cannot Show File's Location",
-								'There is currently no active document show.'
-							)
+						if (focusedWindow) {
+							// return ipcMain.getFolderFromUser(focusedWindow);
 						}
-						// focusedWindow.webContents.send('show-file');
+
+						//   const newWindow = ipcMain.createWindow();
+
+						//   newWindow.on('show', () => {
+						//     ipcMain.getFolderFromUser(newWindow);
+						//   });
 					}
 				},
 				{
-					label: 'Open in Default Application',
-					enabled: hasFilePath,
+					label: 'Close Project',
+					accelerator: 'CommandOrControl+Q+P',
+					enabled: hasOneOrMoreWindows,
 					click(item, focusedWindow) {
 						if (!focusedWindow) {
 							return dialog.showErrorBox(
-								'Cannot Open File in Default Application',
-								'There is currently no active document to open.'
+								'Cannot Save or Export',
+								'There is currently no active document to save or export.'
 							)
+						} else {
+							//   focusedWindow.webContents.send('save-markdown');
+							//   ipcMain.saveFile(focusedWindow);
 						}
-						// focusedWindow.webContents.send('open-in-default');
+					}
+				},
+				{
+					label: 'Close Warp',
+					accelerator: 'CommandOrControl+Q',
+					enabled: hasOneOrMoreWindows,
+					click(item, focusedWindow) {
+						if (!focusedWindow) {
+							return dialog.showErrorBox(
+								'Cannot Save or Export',
+								'There is currently no active document to save or export.'
+							)
+						} else {
+							//   focusedWindow.webContents.send('save-markdown');
+						}
 					}
 				}
 			]
