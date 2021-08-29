@@ -194,7 +194,7 @@ ipcMain.on('create-new-project', (event) => {
 
 			event.sender.send('status', `cloning repo to ${path.basename(filename)}...`)
 
-			const emitter = degit('lukem121/svelte-vite-tailwind-template')
+			const emitter = degit('patrickjquinn/warp-project-template')
 			await emitter.clone(filename)
 
 			event.sender.send('status', `installing dependencies...`)
