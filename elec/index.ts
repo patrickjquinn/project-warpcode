@@ -249,3 +249,49 @@ ipcMain.on('open-file', async (e, filePath) => {
 		}
 	}
 })
+
+ipcMain.handle('saveCurrentFile', () => {
+	console.log('file saved')
+})
+
+ipcMain.handle('openProject', () => {
+	console.log('')
+})
+
+ipcMain.handle('createMenuProject', () => {
+	console.log('')
+})
+
+ipcMain.handle('openMenuProject', () => {
+	console.log('')
+})
+
+ipcMain.handle('quitMenuProject', () => {
+	console.log('')
+})
+
+ipcMain.handle('quitMenuWarp', () => {
+	console.log('')
+})
+
+ipcMain.handle('openMenuWebsite', () => {
+	console.log('')
+})
+
+ipcMain.handle('runMenuWeb', () => {
+	console.log('')
+})
+
+ipcMain.handle('runMenuAndroid', () => {
+	console.log('')
+})
+
+ipcMain.handle('runMenuIOS', () => {
+	console.log('')
+})
+
+ipcMain.handle('buildMenuProject', () => {
+	console.log('')
+})
+
+export default ipcMain

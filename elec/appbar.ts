@@ -1,4 +1,6 @@
 import { app, BrowserWindow, dialog, ipcMain, Menu } from 'electron'
+import * as mainProcess from './index';
+
 // import { ipcMain } from 'electron'
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -145,6 +147,39 @@ const createApplicationMenu = () => {
 					label: 'Select All',
 					accelerator: 'CommandOrControl+A',
 					role: 'selectall'
+				}
+			]
+		},
+		{
+		label: 'Run & Build',
+		submenu: [
+				{
+					label: 'Run Web',
+					accelerator: 'CommandOrControl+R+W]',
+					click() {
+						// mainProcess.default.runWeb
+					}
+				},
+				{
+					label: 'Run Android',
+					accelerator: 'CommandOrControl+R+A]',
+					click() {
+						// ipcMain.runAndroid()
+					}
+				},
+				{
+					label: 'Run IOS',
+					accelerator: 'CommandOrControl+R+I]',
+					click() {
+						// ipcMain.runIOS()
+					}
+				},
+				{
+					label: 'Build',
+					accelerator: 'CommandOrControl+B]',
+					click() {
+						// ipcMain.runIOS()
+					}
 				}
 			]
 		},
