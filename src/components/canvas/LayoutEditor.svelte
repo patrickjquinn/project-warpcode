@@ -4,7 +4,7 @@
 	import { onMount } from 'svelte'
 	import { CodeMap } from '../../modules/warp/codeMap/index'
 
-	let style
+	let style: { [x: string]: any; display: any }
 	let localSelect: any
 
 	$: (style) => {

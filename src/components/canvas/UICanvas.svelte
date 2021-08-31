@@ -325,9 +325,12 @@
 										id="{`${item.widget}${item.id}`}"
 									/>
 								{:else}
-									<Generic tag="{item.widget}" css="${item.style}" id="{`${item.widget}${item.id}`}" bind:value="{item.value}"
-										></Generic
-									>
+									<Generic
+										tag="{item.widget}"
+										css="${item.style}"
+										id="{`${item.widget}${item.id}`}"
+										bind:value="{item.value}"
+									/>
 								{/if}
 							</div>
 						{/each}

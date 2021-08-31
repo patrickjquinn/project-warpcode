@@ -27,5 +27,6 @@
 	input {
 		color: black;
 		width: 100%;
+		min-height: 0.625rem;
 	}
 </style>

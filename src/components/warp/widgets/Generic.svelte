@@ -4,18 +4,18 @@
 
 	export let css
 	export let id: string
-    export let tag: string
-    export let value: string
+	export let tag: string
+	export let value: string
 
 	let codeMap = new CodeMap('ts')
 	let styled: string
-    let formatted = ``
+	let formatted = ``
 	let rendered = false
 
 	$: {
 		if (rendered) {
 			styled = codeMap.convertCSSJSONtoInline(css, id)
-            formatted = `<${tag.toLowerCase()} id="${id}" style="${styled}">${value}</${tag.toLowerCase()}>`
+			formatted = `<${tag.toLowerCase()} id="${id}" style="${styled}">${value}</${tag.toLowerCase()}>`
 		}
 	}
 

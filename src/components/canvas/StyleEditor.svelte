@@ -17,7 +17,7 @@
 		'background-image'
 	]
 
-	let style
+	let style: { [x: string]: any; color: any; border: any }
 
 	$: {
 		let codeMap = new CodeMap('ts')

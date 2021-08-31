@@ -14,8 +14,8 @@
 	} from '../warp/widgets/index'
 
 	export let items: Array<any>
-	export let parent
-	let copiedItem
+	export let parent: { id?: any; }
+	let copiedItem: Record<string,unknown>
 
 	let dragDisabled = true
 	let isFinalCanvas = false
@@ -36,7 +36,7 @@
 	const flipDurationMs = 50
 	const dispatch = createEventDispatcher()
 
-	const onKeyCombo = (e) => {
+	const onKeyCombo = (e: { preventDefault: () => void; stopPropagation: () => void; keyCode: any; }) => {
 		e.preventDefault()
 		e.stopPropagation()
 		if (
@@ -74,7 +74,7 @@
 		}
 	}
 
-	const deleteItem = (selectItem) => {
+	const deleteItem = (selectItem: Record<string,unknown>) => {
 		const idx = items.findIndex((item) => item.id === selectItem.id)
 		selected.update((select) => {
 			return null
@@ -83,7 +83,7 @@
 		items = [...items]
 	}
 
-	const generateUniqueID = (id): number => {
+	const generateUniqueID = (id: number): number => {
 		const newID = id + Math.round(Math.random() * 100)
 		const idExists = items.some((item) => item.id === newID)
 		if (idExists) {
@@ -93,11 +93,12 @@
 		}
 	}
 
-	const pasteInItem = (item) => {
-		const newId = generateUniqueID(item.id)
+	const pasteInItem = (item: Record<string,unknown>) => {
+		const id: number = item.id as number
+		const newId = generateUniqueID(id)
 		let newItem
 		const style = {}
-		style[`#${item.widget}${newId}`] = item.style[`#${item.widget}${item.id}`]
+		style[`#${item.widget}${newId}`] = item.style[`#${item.widget}${id}`]
 		newItem = { ...item, id: newId, style }
 		items.push(newItem)
 		items = [...items]
