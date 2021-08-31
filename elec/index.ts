@@ -1,5 +1,5 @@
 import { join } from 'path'
-import { app, BrowserWindow, ipcMain, dialog, nativeTheme, Menu } from 'electron'
+import { app, BrowserWindow, ipcMain, dialog, nativeTheme, Menu, shell } from 'electron'
 import is_dev from 'electron-is-dev'
 import dotenv from 'dotenv'
 import Store from 'electron-store'
@@ -152,7 +152,7 @@ app.on('activate', () => {
 	}
 })
 
-function pushToRecents (dir) {
+function pushToRecents(dir) {
 	if (!fs.existsSync(dir)) return
 	const index = recent.indexOf(dir)
 	if (index !== -1) recent.splice(index, 1)
@@ -212,7 +212,7 @@ function createProjectDialog(event) {
 
 			if (event) event.sender.send('status', `cloning repo to ${path.basename(filename)}...`)
 
-			
+
 
 			const emitter = degit('patrickjquinn/warp-project-template')
 			await emitter.clone(filename)
@@ -289,18 +289,14 @@ const buildMenuProject = async () => {
 }
 
 const createApplicationMenu = () => {
-	const hasOneOrMoreWindows = !!BrowserWindow.getAllWindows().length
-	const focusedWindow = BrowserWindow.getFocusedWindow()
-	const hasFilePath = !!(focusedWindow && focusedWindow.getRepresentedFilename())
-
-	const template: Array<Record<any, unknown>> = [
+	const template: Array<Record<string, unknown>> = [
 		{
 			label: 'File',
 			submenu: [
 				{
 					label: 'Create Project',
 					accelerator: 'CommandOrControl+P',
-					click(item, focusedWindow) {
+					click() {
 						createMenuProject()
 					}
 				},
@@ -308,13 +304,13 @@ const createApplicationMenu = () => {
 					label: 'New File',
 					accelerator: 'CommandOrControl+N',
 					click() {
-						
+						console.log('new file')
 					}
 				},
 				{
 					label: 'Open File',
 					accelerator: 'CommandOrControl+O',
-					click(item, focusedWindow) {
+					click() {
 						console.log('not yet done.')
 					}
 				},
@@ -322,14 +318,14 @@ const createApplicationMenu = () => {
 					label: 'Save File',
 					accelerator: 'CommandOrControl+S',
 					enabled: true,
-					click(item, focusedWindow) {
+					click() {
 						saveCurrentFile()
 					}
 				},
 				{
 					label: 'Open Project',
 					accelerator: 'CommandOrControl+O',
-					click(item, focusedWindow) {
+					click() {
 						openMenuProject()
 					}
 				},
@@ -337,7 +333,7 @@ const createApplicationMenu = () => {
 					label: 'Close Project',
 					accelerator: 'CommandOrControl+Q+P',
 					enabled: true,
-					click(item, focusedWindow) {
+					click() {
 						quitMenuProject()
 					}
 				}
@@ -380,8 +376,8 @@ const createApplicationMenu = () => {
 			]
 		},
 		{
-		label: 'Run + Build',
-		submenu: [
+			label: 'Run + Build',
+			submenu: [
 				{
 					label: 'Run Web',
 					accelerator: 'CommandOrControl+R+W',
@@ -453,7 +449,6 @@ const createApplicationMenu = () => {
 				{
 					label: 'Visit Warp Website',
 					click: async () => {
-						const { shell } = require('electron')
 						await shell.openExternal('https://warpcode.io/')
 					}
 				},
