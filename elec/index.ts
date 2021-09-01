@@ -58,7 +58,6 @@ class createWin {
 			titleBarStyle: 'hidden',
 			webPreferences: {
 				nodeIntegration: true,
-				enableRemoteModule: true,
 				contextIsolation: false
 			},
 			show: false,
@@ -116,7 +115,6 @@ function launch() {
 		titleBarStyle: 'hidden',
 		webPreferences: {
 			nodeIntegration: true,
-			enableRemoteModule: true,
 			contextIsolation: false
 		},
 		show: false,
