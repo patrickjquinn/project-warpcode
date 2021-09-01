@@ -4,7 +4,7 @@
 
 	const { ipcRenderer } = window.require('electron')
 
-	let files = []
+	let files
 
 	ipcRenderer.on('send-proj-struct', (event, arg) => {
 		files = arg
@@ -17,13 +17,15 @@
 
 <main>
 	<div>
-		<Folder
-			name="{files['name']}"
-			children="{files['children']}"
-			expanded="{false}"
-			root="{true}"
-			path="{files['path']}"
-		/>
+		{#if files}
+			<Folder
+				name="{files['name']}"
+				children="{files['children']}"
+				expanded="{false}"
+				root="{true}"
+				path="{files['path']}"
+			/>
+		{/if}
 	</div>
 </main>
 

@@ -1,6 +1,7 @@
 <script lang="ts">
 	import File from './File.svelte'
 	import { slide } from 'svelte/transition'
+	import activeDirectory from '../../stores/activeDirectory'
 
 	export let expanded = false
 	export let root = false
@@ -10,7 +11,7 @@
 
 	const folderSelected = () => {
 		toggle()
-		console.log(`Path = ${path}`)
+		activeDirectory.update((dir) => path)
 	}
 
 	function toggle() {
@@ -49,7 +50,7 @@
 <style>
 	span {
 		padding: 0 0 0 1.5em;
-		background: url(https://svelte.dev/tutorial/icons/folder.svg) 0 0.1em no-repeat;
+		background: url(/static/assets/folder.svg) 0 0.1em no-repeat;
 		background-size: 1em 1em;
 		font-weight: bold;
 		cursor: pointer;
@@ -57,7 +58,7 @@
 	}
 
 	.expanded {
-		background-image: url(https://svelte.dev/tutorial/icons/folder-open.svg);
+		background-image: url(/static/assets/folder-open.svg);
 	}
 
 	ul {
