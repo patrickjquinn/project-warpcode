@@ -21,6 +21,12 @@ If the 'dev:all' command failed to execute because of node-pty.
 Run:
 
 ```
+pnpm rebuild
+```
+
+And then:
+
+```
 $(npm bin)/electron-rebuild
 ```
 
@@ -33,11 +39,5 @@ And:
 ```
 
 On NT machines (Windows, ReactOS, Wine).
-
-And then run:
-
-```
-pnpm rebuild
-```
 
 
