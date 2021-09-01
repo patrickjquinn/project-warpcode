@@ -25,6 +25,8 @@
 		{ label: 'OUTPUT', value: 3 }
 	]
 
+	let shouldShowCanvas = false
+
 	let activeEditorTab: number = 1
 
 	let lang: string = 'html'
@@ -33,7 +35,8 @@
 		activeEditorTab = event.detail
 	}
 
-	let currentCode: string = '<script lang="ts">\n\n</script' + '>\n\n<main>\n\n</main>\n\n<style></style>'
+	let currentCode: string = '/** Code Will Appear Here **/'
+		// '<script lang="ts">\n\n</script' + '>\n\n<main>\n\n</main>\n\n<style></style>'
 
 	// $: currentCode && updateCanvas()
 	let editorTabs: Array<Record<string, unknown>> = [
@@ -47,6 +50,7 @@
 	]
 
 	const updateCanvas = () => {
+		if (!shouldShowCanvas) return
 		console.log('canvas update')
 		const codeMap = new CodeMap('ts')
 		const codeCanvas = codeMap.convertCodeToCanvas(currentCode)
@@ -59,6 +63,15 @@
 				editorItems = []
 			}
 		}
+	}
+
+	const shouldCanvasShowByFile = (file) => {
+		if ((file?.path.includes('components') || file?.path.includes('pages')) && 
+			file.name.toLowerCase().includes('.svelte')) {
+			shouldShowCanvas = true
+			return
+		}
+		shouldShowCanvas = false
 	}
 
 	window.addEventListener(
@@ -78,6 +91,7 @@
 			incrementTabs(event.detail)
 
 			activeFile.update((file) => event.detail)
+			shouldCanvasShowByFile(event.detail)
 
 			ipcRenderer.send('open-file', event.detail.path)
 			lang = fileExtension(event.detail.name)
@@ -103,6 +117,7 @@
 			incrementTabs(event.detail)
 
 			activeFile.update((file) => event.detail)
+			shouldCanvasShowByFile(event.detail)
 
 			// alert(JSON.stringify(editorTabs, null, 2))
 
@@ -166,10 +181,10 @@
 		</div>
 		<div class="wrapper">
 			<HSplitPane
-				leftPaneSize="60%"
-				rightPaneSize="40%"
-				minLeftPaneSize="250px"
-				minRightPaneSize="250px"
+				leftPaneSize="{shouldShowCanvas ? '60%' : '100%'}"
+				rightPaneSize="{shouldShowCanvas ? '40%' : '0%'}"
+				minLeftPaneSize="{shouldShowCanvas ? '250px' : ''}"
+				minRightPaneSize=""
 				updateCallback="{() => {
 					console.log('HSplitPane Updated!')
 				}}"
@@ -211,29 +226,32 @@
 				</left>
 				<!-- Canvas and palette -->
 				<right slot="right">
-					<HSplitPane
-						leftPaneSize="60%"
-						rightPaneSize="40%"
-						updateCallback="{() => {
-							console.log('HSplitPane Updated!')
-						}}"
-					>
-						<left slot="left">
-							<!-- UI canvas -->
-							<UICanvas items="{editorItems}" on:message="{handleCanvasChange}" />
-						</left>
-						<right slot="right">
-							<!-- Widget, style, layout tabs for the active item -->
-							<OnlyTabs on:message="{onEditorTabUpdate}" items="{upControlTabs}" add="{false}" />
-							{#if activeEditorTab === 1}
-								<UIPallete />
-							{:else if activeEditorTab === 2}
-								<LayoutEditor />
-							{:else}
-								<StyleEditor />
-							{/if}
-						</right>
-					</HSplitPane>
+					{#if shouldShowCanvas}
+						<HSplitPane
+							leftPaneSize="60%"
+							rightPaneSize="40%"
+							updateCallback="{() => {
+								console.log('HSplitPane Updated!')
+							}}"
+						>
+							<left slot="left">
+								<!-- UI canvas -->
+								<UICanvas items="{editorItems}" on:message="{handleCanvasChange}" />
+							</left>
+							<right slot="right">
+								<!-- Widget, style, layout tabs for the active item -->
+								<OnlyTabs on:message="{onEditorTabUpdate}" items="{upControlTabs}" add="{false}" />
+								{#if activeEditorTab === 1}
+									<UIPallete />
+								{:else if activeEditorTab === 2}
+									<LayoutEditor />
+								{:else}
+									<StyleEditor />
+								{/if}
+							</right>
+						</HSplitPane>
+					{/if}
+					
 				</right>
 			</HSplitPane>
 		</div>
