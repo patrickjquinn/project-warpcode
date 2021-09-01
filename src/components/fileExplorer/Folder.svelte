@@ -6,13 +6,19 @@
 	export let root = false
 	export let name: string
 	export let children: Array<any>
+	export let path: string
+
+	const folderSelected = () => {
+		toggle()
+		console.log(`Path = ${path}`)
+	}
 
 	function toggle() {
 		expanded = !expanded
 	}
 </script>
 
-<span class:expanded on:click="{toggle}">{name}</span>
+<span class:expanded on:click="{folderSelected}">{name}</span>
 
 {#if expanded}
 	<ul transition:slide="{{ duration: 300 }}">

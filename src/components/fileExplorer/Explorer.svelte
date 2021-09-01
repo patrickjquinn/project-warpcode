@@ -22,6 +22,7 @@
 			children="{files['children']}"
 			expanded="{false}"
 			root="{true}"
+			path="{files['path']}"
 		/>
 	</div>
 </main>

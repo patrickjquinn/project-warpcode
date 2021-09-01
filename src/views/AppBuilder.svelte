@@ -13,6 +13,7 @@
 	import Warp from '../assets/warpwhite.png'
 	import OnlyTabs from '../components/tabs/OnlyTabs.svelte'
 	import RemovableTabs from '../components/tabs/RemovableTabs.svelte'
+	import activeFile from '../stores/activeFile'
 
 	const { ipcRenderer } = window.require('electron')
 
@@ -32,12 +33,11 @@
 		activeEditorTab = event.detail
 	}
 
-	let currentCode: string =
-		'<script lang="ts">\n\n</script' + '>\n\n<main>\n\n</main>\n\n<style></style>'
+	let currentCode: string = '<script lang="ts">\n\n</script' + '>\n\n<main>\n\n</main>\n\n<style></style>'
 
 	// $: currentCode && updateCanvas()
 	let editorTabs: Array<Record<string, unknown>> = [
-		{ label: 'Start.svelte', value: 1, path: './Start.svelte', type: 'file' }
+		// { label: 'Start.svelte', value: 1, path: './Start.svelte', type: 'file' }
 	]
 
 	const upControlTabs: Array<Record<string, unknown>> = [
@@ -77,6 +77,8 @@
 			})
 			incrementTabs(event.detail)
 
+			activeFile.update((file) => event.detail)
+
 			ipcRenderer.send('open-file', event.detail.path)
 			lang = fileExtension(event.detail.name)
 		},
@@ -99,6 +101,9 @@
 			})
 
 			incrementTabs(event.detail)
+
+			activeFile.update((file) => event.detail)
+
 			// alert(JSON.stringify(editorTabs, null, 2))
 
 			ipcRenderer.send('open-file', event.detail.path)

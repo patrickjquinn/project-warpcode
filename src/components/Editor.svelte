@@ -7,11 +7,21 @@
 	import htmlWorker from 'monaco-editor/esm/vs/language/html/html.worker?worker'
 	import tsWorker from 'monaco-editor/esm/vs/language/typescript/ts.worker?worker'
 	import { createEventDispatcher } from 'svelte'
+	import activeFile from '../stores/activeFile'
 
 	const { ipcRenderer } = window.require('electron')
 	const dispatch = createEventDispatcher()
 
+	ipcRenderer.on('file-saved', (event, arg) => {
+		console.log('file saved.')
+	})
+
 	function codeSaved() {
+		const assocFile = $activeFile as Record <string, unknown>
+		ipcRenderer.send('save-file', {
+			path: assocFile.path,
+			contents: code
+		})
 		dispatch('message')
 	}
 

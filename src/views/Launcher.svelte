@@ -8,7 +8,12 @@
 
 	let status
 
-	const userData = remote.app.getPath('userData')
+	let userData
+
+	if (remote?.app?.getPath) {
+		remote.app.getPath('userData')
+	}
+	
 	let recent = []
 
 	ipcRenderer.on('status', (event, stat) => {
@@ -26,8 +31,11 @@
 	}
 
 	onMount(async () => {
-		const file = path.join(userData, 'recent.json')
-		recent = fs.existsSync(file) ? JSON.parse(fs.readFileSync(file, 'utf-8')) : null
+		if (userData){
+			const file = path.join(userData, 'recent.json')
+			recent = fs.existsSync(file) ? JSON.parse(fs.readFileSync(file, 'utf-8')) : null
+		}
+
 	})
 </script>
 

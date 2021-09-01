@@ -236,6 +236,14 @@ app.on('window-all-closed', function () {
 	}
 })
 
+ipcMain.on('save-file', (event, fileDetails) => {
+	try {
+		fs.writeFileSync(fileDetails.path, fileDetails.contents)
+	} catch (err) {
+		event.sender.send('file-saved')
+	}
+})
+
 ipcMain.on('create-new-project', (event) => {
 	createProjectDialog(event)
 })
