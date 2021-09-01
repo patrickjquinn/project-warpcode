@@ -5,7 +5,7 @@ specifiers:
   '@rollup/plugin-commonjs': ^19.0.2
   '@rollup/plugin-json': ^4.1.0
   '@rollup/plugin-node-resolve': ^13.0.4
-  '@sveltejs/vite-plugin-svelte': ^1.0.0-next.19
+  '@sveltejs/vite-plugin-svelte': ^1.0.0-next.20
   '@tsconfig/svelte': ^2.0.1
   '@types/node': ^16.7.10
   '@typescript-eslint/eslint-plugin': ^4.30.0
@@ -44,7 +44,6 @@ specifiers:
   rollup: ^2.56.3
   rollup-plugin-esbuild: ^4.5.0
   svelte: ^3.42.4
-  svelte-agnostic-draggable: ^0.1.11
   svelte-awesome: ^2.3.2
   svelte-check: ^2.2.5
   svelte-dnd-action: ^0.9.11
@@ -57,7 +56,7 @@ specifiers:
   tiny-glob: ^0.2.9
   tslib: ^2.3.1
   typescript: ^4.4.2
-  vite: ^2.5.2
+  vite: ^2.5.3
   vite-plugin-commonjs-externals: ^0.1.1
   wait-on: ^6.0.0
   xterm: ^4.13.0
@@ -79,7 +78,7 @@ devDependencies:
   '@rollup/plugin-commonjs': 19.0.2_rollup@2.56.3
   '@rollup/plugin-json': 4.1.0_rollup@2.56.3
   '@rollup/plugin-node-resolve': 13.0.4_rollup@2.56.3
-  '@sveltejs/vite-plugin-svelte': 1.0.0-next.19_svelte@3.42.4+vite@2.5.2
+  '@sveltejs/vite-plugin-svelte': 1.0.0-next.20_svelte@3.42.4+vite@2.5.3
   '@tsconfig/svelte': 2.0.1
   '@types/node': 16.7.10
   '@typescript-eslint/eslint-plugin': 4.30.0_8a8a2d3eaa9257455a03c16dce5f55b3
@@ -113,7 +112,6 @@ devDependencies:
   rollup: 2.56.3
   rollup-plugin-esbuild: 4.5.0_rollup@2.56.3
   svelte: 3.42.4
-  svelte-agnostic-draggable: 0.1.11
   svelte-awesome: 2.3.2
   svelte-check: 2.2.5_svelte@3.42.4
   svelte-dnd-action: 0.9.11
@@ -126,7 +124,7 @@ devDependencies:
   tiny-glob: 0.2.9
   tslib: 2.3.1
   typescript: 4.4.2
-  vite: 2.5.2
+  vite: 2.5.3
   vite-plugin-commonjs-externals: 0.1.1
   wait-on: 6.0.0
 
@@ -161,13 +159,6 @@ packages:
       '@babel/helper-validator-identifier': 7.14.9
       chalk: 2.4.2
       js-tokens: 4.0.0
-    dev: true
-
-  /@babel/runtime/7.15.3:
-    resolution: {integrity: sha512-OvwMLqNXkCXSz1kSm58sEsNuhqOx/fKpnUnKnFB5v8uDda5bLNEHNgKPvhDN6IU0LDcnHQ90LlJ0Q6jnyBSIBA==}
-    engines: {node: '>=6.9.0'}
-    dependencies:
-      regenerator-runtime: 0.13.9
     dev: true
 
   /@daybrush/utils/1.6.0:
@@ -421,13 +412,13 @@ packages:
     engines: {node: '>=10'}
     dev: true
 
-  /@sveltejs/vite-plugin-svelte/1.0.0-next.19_svelte@3.42.4+vite@2.5.2:
-    resolution: {integrity: sha512-q9hHkMzodScwDq64pNaWhekpj97vWg3wO9T0rqd8bC2EsrBQs2uD1qMJvDqlNd63AbO2uSJMGo+TQ0Xt2xgyYg==}
+  /@sveltejs/vite-plugin-svelte/1.0.0-next.20_svelte@3.42.4+vite@2.5.3:
+    resolution: {integrity: sha512-7IbHNr5okZqYVL7WGStNatL8IzpqMLbgKvLY9uobMBQrzVhlc/9qsQwvWn8uLBndZ9kB8Wr+m4/XEiUoeBLijg==}
     engines: {node: ^12.20 || ^14.13.1 || >= 16}
     peerDependencies:
       diff-match-patch: ^1.0.5
       svelte: ^3.34.0
-      vite: ^2.3.7
+      vite: ^2.5.3
     peerDependenciesMeta:
       diff-match-patch:
         optional: true
@@ -439,7 +430,7 @@ packages:
       require-relative: 0.8.7
       svelte: 3.42.4
       svelte-hmr: 0.14.7_svelte@3.42.4
-      vite: 2.5.2
+      vite: 2.5.3
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -708,16 +699,6 @@ packages:
     hasBin: true
     dev: true
 
-  /agnostic-draggable-bug-fixed/1.0.13:
-    resolution: {integrity: sha512-0dceuksxPX4BWWmryO1fppTJh/Bt0IYfcovvc36O69cy9HrpRnxvrUR8QEBK+dTbF94xDbKzcP9qU2DcHEK4nA==}
-    engines: {node: '>=10.16.0', npm: '>=6.9.0'}
-    dependencies:
-      animejs: 3.2.1
-      dom-helpers: 5.2.1
-      events: 3.3.0
-      lodash: 4.17.21
-    dev: true
-
   /ajv-formats/2.1.1:
     resolution: {integrity: sha512-Wx0Kx52hxE7C18hkMEggYlEifqWZtYaRgouJor+WMdPnQyEK13vgEWyVNup7SoeeoLMsr4kf5h6dOW11I15MUA==}
     peerDependenciesMeta:
@@ -751,10 +732,6 @@ packages:
       json-schema-traverse: 1.0.0
       require-from-string: 2.0.2
       uri-js: 4.4.1
-
-  /animejs/3.2.1:
-    resolution: {integrity: sha512-sWno3ugFryK5nhiDm/2BKeFCpZv7vzerWUcUPyAZLDhMek3+S/p418ldZJbJXo5ZUOpfm2kP2XRO4NJcULMy9A==}
-    dev: true
 
   /ansi-align/3.0.0:
     resolution: {integrity: sha512-ZpClVKqXN3RGBmKibdfWzqCY4lnjEuoNzU5T0oEFpfd/z5qJHVarukridD4juLO2FXMiwUQxr9WqQtaYa8XRYw==}
@@ -1465,10 +1442,6 @@ packages:
       css-tree: 1.1.3
     dev: true
 
-  /csstype/3.0.8:
-    resolution: {integrity: sha512-jXKhWqXPmlUeoQnF/EhTtTl4C9SnrxSH/jZUih3jmO6lBKr99rP3/+FmrMj4EFpOXzMtXHAZkd3x0E6h6Fgflw==}
-    dev: true
-
   /dashdash/1.14.1:
     resolution: {integrity: sha1-hTz6D3y+L+1d4gMmuN1YEDX24vA=}
     engines: {node: '>=0.10'}
@@ -1659,13 +1632,6 @@ packages:
     engines: {node: '>=6.0.0'}
     dependencies:
       esutils: 2.0.3
-    dev: true
-
-  /dom-helpers/5.2.1:
-    resolution: {integrity: sha512-nRCa7CK3VTrM2NmGkIy4cbK7IZlgBE/PYMn55rrXefr5xXDP0LdtfPnblFDoVdcAfslJ7or6iqAUnx0CCGIWQA==}
-    dependencies:
-      '@babel/runtime': 7.15.3
-      csstype: 3.0.8
     dev: true
 
   /dot-prop/5.3.0:
@@ -2036,11 +2002,6 @@ packages:
   /esutils/2.0.3:
     resolution: {integrity: sha512-kVscqXk4OCp68SZ0dkgEKVi6/8ij300KBWTJq32P/dYeWTSwK41WyTxalN1eRmA5Z9UU/LX9D7FWSmV9SAYx6g==}
     engines: {node: '>=0.10.0'}
-    dev: true
-
-  /events/3.3.0:
-    resolution: {integrity: sha512-mQw+2fkQbALzQ7V0MY0IqdnXNOeTtP4r0lN9z7AAawCXgqea7bDii20AYrIBrFd/Hx0M2Ocz6S111CaFkUcb0Q==}
-    engines: {node: '>=0.8.x'}
     dev: true
 
   /extend/3.0.2:
@@ -3644,10 +3605,6 @@ packages:
     dependencies:
       picomatch: 2.3.0
 
-  /regenerator-runtime/0.13.9:
-    resolution: {integrity: sha512-p3VT+cOEgxFsRRA9X4lkI1E+k2/CtnKtU4gcxyaCUreilL/vqI6CdZ3wxVUx3UOUg+gnUOQQcRI7BmSI656MYA==}
-    dev: true
-
   /regexparam/2.0.0:
     resolution: {integrity: sha512-gJKwd2MVPWHAIFLsaYDZfyKzHNS4o7E/v8YmNf44vmeV2e4YfVoDToTOKTvE7ab68cRJ++kLuEXJBaEeJVt5ow==}
     engines: {node: '>=8'}
@@ -4161,12 +4118,6 @@ packages:
       has-flag: 4.0.0
     dev: true
 
-  /svelte-agnostic-draggable/0.1.11:
-    resolution: {integrity: sha512-X/ZJIeMnywA9z0cl4Kd2P8IbJyjq85F3j6CyiAn+iavFejbqILL4BcV55H5A2bDdnSIcRo23S/WGHSY17/+Otg==}
-    dependencies:
-      agnostic-draggable-bug-fixed: 1.0.13
-    dev: true
-
   /svelte-awesome/2.3.2:
     resolution: {integrity: sha512-odkwkVSYEARI/4CskjwoI7KIhds1Ui74H1VFAifWuDoczY+JpPeJuBwDqgo8imM7Bd76U+ns7Yf1iQqveHnx5Q==}
     dependencies:
@@ -4567,8 +4518,8 @@ packages:
       magic-string: 0.25.7
     dev: true
 
-  /vite/2.5.2:
-    resolution: {integrity: sha512-JK5uhiVyMqHiAJbgBa8rCvpP8bEhAE9dKDv1gCmP+EUP2FSPmEeW3WXlCXauPB3MDa8behPW+ntyNXqnGaxslg==}
+  /vite/2.5.3:
+    resolution: {integrity: sha512-1wMDnjflvtTTkMov8O/Xb5+w1/VW/Gw8oCf8f6dqgHn8lMOEqq0SaPtFEQeikFcOKCfSbiU0nEi0LDIx6DNsaQ==}
     engines: {node: '>=12.2.0'}
     hasBin: true
     dependencies:
