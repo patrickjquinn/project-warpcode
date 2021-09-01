@@ -4,20 +4,18 @@
 	const path = window.require('path')
 	const fs = window.require('fs')
 	
-	const { remote, ipcRenderer } = window.require('electron')
+	const { ipcRenderer } = window.require('electron')
 
 	let status
 
-	let userData
-
-	if (remote?.app?.getPath) {
-		remote.app.getPath('userData')
-	}
-	
 	let recent = []
 
 	ipcRenderer.on('status', (event, stat) => {
 		status = stat
+	})
+
+	ipcRenderer.on('recents-sent', (event, recents) => {
+		recent = recents
 	})
 
 	ipcRenderer.on('project-open', (event, stat) => {})
@@ -31,11 +29,11 @@
 	}
 
 	onMount(async () => {
-		if (userData){
-			const file = path.join(userData, 'recent.json')
-			recent = fs.existsSync(file) ? JSON.parse(fs.readFileSync(file, 'utf-8')) : null
-		}
-
+		await ipcRenderer.send('read-recents')
+		// if (userData){
+		// 	const file = path.join(userData, 'recent.json')
+		// 	recent = fs.existsSync(file) ? JSON.parse(fs.readFileSync(file, 'utf-8')) : null
+		// }
 	})
 </script>
 

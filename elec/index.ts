@@ -236,9 +236,10 @@ app.on('window-all-closed', function () {
 	}
 })
 
-ipcMain.on('save-file', (event, fileDetails) => {
+ipcMain.on('save-file', async (event, fileDetails) => {
 	try {
-		fs.writeFileSync(fileDetails.path, fileDetails.contents)
+		await fs.promises.writeFile(fileDetails.path, fileDetails.contents)
+		event.sender.send('file-saved')
 	} catch (err) {
 		event.sender.send('file-saved')
 	}
@@ -262,6 +263,22 @@ ipcMain.on('open-file', async (e, filePath) => {
 		}
 	}
 })
+
+ipcMain.on('read-recents', async (event) => {
+	try {
+		const recents  = await getRecents()	
+		event.sender.send('recents-sent', recents)
+	} catch (err) {
+		console.log(err)
+		event.sender.send('recents-sent', null)
+	}
+})
+
+const getRecents = async () => {
+	const userData = app.getPath('userData');
+	const file = path.join(userData, 'recent.json')
+	return fs.existsSync(file) ? JSON.parse(await fs.promises.readFile(file, 'utf-8')) : null
+}
 
 const saveCurrentFile = async () => {
 	console.log('not yet done.')
