@@ -4,7 +4,7 @@
 
 	const { ipcRenderer } = window.require('electron')
 
-	let files
+	let files: Array<Record<string, unknown>>
 
 	ipcRenderer.on('send-proj-struct', (event, arg) => {
 		files = arg
