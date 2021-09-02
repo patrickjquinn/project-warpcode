@@ -179,7 +179,7 @@ function existingProjectDialog(dir) {
 		openProject(dir)
 	} else {
 		dialog
-			.showOpenDialog(launcherWindow, {
+			.showOpenDialog(BrowserWindow.getFocusedWindow(), {
 				title: 'Open project',
 				buttonLabel: 'Open project',
 				properties: ['openDirectory'],
@@ -199,7 +199,7 @@ function existingProjectDialog(dir) {
 
 function createProjectDialog(event) {
 	dialog
-		.showOpenDialog(launcherWindow, {
+		.showOpenDialog(BrowserWindow.getFocusedWindow(), {
 			title: 'Create project',
 			buttonLabel: 'Create project',
 			properties: ['openDirectory', 'createDirectory'],
@@ -237,6 +237,17 @@ app.on('window-all-closed', function () {
 	// to stay active until the user quits explicitly with Cmd + Q
 	if (process.platform !== 'darwin') {
 		app.quit()
+	}
+})
+
+ipcMain.on('term-resize', async (event, size, term) => {
+	try {
+		ptyProcess.resize(
+			Math.max(size ? size.cols : term.cols, 1),
+			Math.max(size ? size.rows : term.rows, 1)
+		);
+	} catch (err) {
+		
 	}
 })
 
