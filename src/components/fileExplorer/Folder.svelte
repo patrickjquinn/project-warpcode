@@ -19,10 +19,10 @@
 	}
 </script>
 
-<span class:expanded on:click="{folderSelected}">{name}</span>
+<span class:expanded on:click="{root ? null : folderSelected}">{name}</span>
 
 {#if expanded}
-	<ul transition:slide="{{ duration: 300 }}">
+	<ul transition:slide="{{ duration: 150 }}">
 		{#each children as file}
 			<li>
 				{#if file.type === 'directory'}

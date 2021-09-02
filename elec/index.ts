@@ -62,9 +62,7 @@ class createWin {
 				contextIsolation: false
 			},
 			show: false,
-			backgroundColor: nativeTheme.shouldUseDarkColors
-				? darkBackgroundColor
-				: lightBackgroundColor
+			backgroundColor: '#2f4f4f'
 		})
 
 		win.maximize()
@@ -119,9 +117,7 @@ function launch() {
 			contextIsolation: false
 		},
 		show: false,
-		backgroundColor: nativeTheme.shouldUseDarkColors
-			? darkBackgroundColor
-			: lightBackgroundColor
+		backgroundColor: darkBackgroundColor
 	})
 
 	launcherWindow.loadURL('http://localhost:3000/#/launch')

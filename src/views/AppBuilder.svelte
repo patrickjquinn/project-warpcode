@@ -201,8 +201,8 @@
 				<!-- Files explorer and editor -->
 				<left slot="left">
 					<HSplitPane
-						leftPaneSize="22%"
-						rightPaneSize="78%"
+						leftPaneSize="{shouldShowCanvas ? '20%' : '15%'}"
+						rightPaneSize="{shouldShowCanvas ? '80%' : '90%'}"
 						updateCallback="{() => {
 							console.log('HSplitPane Updated!')
 						}}"
