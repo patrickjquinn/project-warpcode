@@ -5,7 +5,7 @@ specifiers:
   '@rollup/plugin-commonjs': ^19.0.2
   '@rollup/plugin-json': ^4.1.0
   '@rollup/plugin-node-resolve': ^13.0.4
-  '@sveltejs/vite-plugin-svelte': ^1.0.0-next.20
+  '@sveltejs/vite-plugin-svelte': ^1.0.0-next.21
   '@tsconfig/svelte': ^2.0.1
   '@types/node': ^16.7.10
   '@typescript-eslint/eslint-plugin': ^4.30.0
@@ -78,7 +78,7 @@ devDependencies:
   '@rollup/plugin-commonjs': 19.0.2_rollup@2.56.3
   '@rollup/plugin-json': 4.1.0_rollup@2.56.3
   '@rollup/plugin-node-resolve': 13.0.4_rollup@2.56.3
-  '@sveltejs/vite-plugin-svelte': 1.0.0-next.20_svelte@3.42.4+vite@2.5.3
+  '@sveltejs/vite-plugin-svelte': 1.0.0-next.21_svelte@3.42.4+vite@2.5.3
   '@tsconfig/svelte': 2.0.1
   '@types/node': 16.7.10
   '@typescript-eslint/eslint-plugin': 4.30.0_8a8a2d3eaa9257455a03c16dce5f55b3
@@ -412,8 +412,8 @@ packages:
     engines: {node: '>=10'}
     dev: true
 
-  /@sveltejs/vite-plugin-svelte/1.0.0-next.20_svelte@3.42.4+vite@2.5.3:
-    resolution: {integrity: sha512-7IbHNr5okZqYVL7WGStNatL8IzpqMLbgKvLY9uobMBQrzVhlc/9qsQwvWn8uLBndZ9kB8Wr+m4/XEiUoeBLijg==}
+  /@sveltejs/vite-plugin-svelte/1.0.0-next.21_svelte@3.42.4+vite@2.5.3:
+    resolution: {integrity: sha512-JjPnoQoI1+VXHjguE1bWyFYdZvPN6VTZ5RsFRpju45zICas1N5jAuOqKTbhQ1G+eEMCbhhB6zjZgQQRtaXPhNQ==}
     engines: {node: ^12.20 || ^14.13.1 || >= 16}
     peerDependencies:
       diff-match-patch: ^1.0.5
@@ -830,11 +830,12 @@ packages:
     resolution: {integrity: sha512-Y9J6ZjXtoYh8RnXVCMOU/ttDmk1aBjunq9vO0ta5x85WDQiQfUF9sIPBITdbiiIVcBo03Hi3jMxigBtsddlXRw==}
     dev: true
 
-  /are-we-there-yet/1.1.5:
-    resolution: {integrity: sha512-5hYdAkZlcG8tOLujVDTgCT+uPX0VnpAH28gWsLfzpXYm7wP6mp5Q/gYyR7YQ0cKVJcXJnl3j2kpBan13PtQf6w==}
+  /are-we-there-yet/1.1.6:
+    resolution: {integrity: sha512-+1byPnimWdGcKFRS48zG73nxM08kamPFReUYvEmRXI3E8E4YhF4voMRDaGlfGD1UeRHEgs4NhQCE28KI8JVj1A==}
+    engines: {node: '>=10'}
     dependencies:
       delegates: 1.0.0
-      readable-stream: 2.3.7
+      readable-stream: 3.6.0
     dev: true
 
   /argparse/1.0.10:
@@ -1355,8 +1356,8 @@ packages:
     resolution: {integrity: sha1-PXz0Rk22RG6mRL9LOVB/mFEAjo4=}
     dev: true
 
-  /core-js/3.16.4:
-    resolution: {integrity: sha512-Tq4GVE6XCjE+hcyW6hPy0ofN3hwtLudz5ZRdrlCnsnD/xkm/PWQRudzYHiKgZKUcefV6Q57fhDHjZHJP5dpfSg==}
+  /core-js/3.17.1:
+    resolution: {integrity: sha512-C8i/FNpVN2Ti89QIJcFn9ZQmnM+HaAQr2OpE+ja3TRM9Q34FigsGlAVuwPGkIgydSVClo/1l1D1grP8LVt9IYA==}
     requiresBuild: true
     dev: true
     optional: true
@@ -2261,7 +2262,7 @@ packages:
     engines: {node: '>=10.0'}
     dependencies:
       boolean: 3.1.4
-      core-js: 3.16.4
+      core-js: 3.17.1
       es6-error: 4.1.1
       matcher: 3.0.0
       roarr: 2.15.4
@@ -3065,8 +3066,8 @@ packages:
     resolution: {integrity: sha1-Sr6/7tdUHywnrPspvbvRXI1bpPc=}
     dev: true
 
-  /needle/2.9.0:
-    resolution: {integrity: sha512-UBLC4P8w9to3rAhWOQYXIXzTUio9yVnDzIeKxfGbF+Hngy+2bXTqqFK+6nF42EAQKfJdezXK6vzMsefUa1Y3ag==}
+  /needle/2.9.1:
+    resolution: {integrity: sha512-6R9fqJ5Zcmf+uYaFgdIHmLwNldn5HbK8L5ybn7Uz+ylX/rnOsSp1AHcvQSrCaFN+qNM1wpymHqD7mVasEOlHGQ==}
     engines: {node: '>= 4.4.x'}
     hasBin: true
     dependencies:
@@ -3109,7 +3110,7 @@ packages:
     dependencies:
       detect-libc: 1.0.3
       mkdirp: 0.5.5
-      needle: 2.9.0
+      needle: 2.9.1
       nopt: 4.0.3
       npm-packlist: 1.4.8
       npmlog: 4.1.2
@@ -3195,7 +3196,7 @@ packages:
   /npmlog/4.1.2:
     resolution: {integrity: sha512-2uUqazuKlTaSI/dC8AzicUck7+IrEaOnN/e0jd3Xtt1KcGpwx30v50mL7oPyr/h9bL3E4aZccVwpwP+5W9Vjkg==}
     dependencies:
-      are-we-there-yet: 1.1.5
+      are-we-there-yet: 1.1.6
       console-control-strings: 1.1.0
       gauge: 2.7.4
       set-blocking: 2.0.0

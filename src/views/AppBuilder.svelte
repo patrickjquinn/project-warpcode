@@ -14,8 +14,11 @@
 	import OnlyTabs from '../components/tabs/OnlyTabs.svelte'
 	import RemovableTabs from '../components/tabs/RemovableTabs.svelte'
 	import activeFile from '../stores/activeFile'
-
+	
+	const { promisify } = window.require('util')
 	const { ipcRenderer } = window.require('electron')
+
+	const delay = promisify(setTimeout);
 
 	let editorItems: Array<any> = []
 
@@ -66,17 +69,26 @@
 	}
 
 	const shouldCanvasShowByFile = (file) => {
-		if ((file?.path.includes('components') || file?.path.includes('pages')) && 
+		if ((file?.path?.includes('components') || file?.path?.includes('pages')) && 
 			file.name.toLowerCase().includes('.svelte')) {
 			shouldShowCanvas = true
+			setTimeout(() => { 
+				updateCanvas()
+			}, 500)
 			return
 		}
 		shouldShowCanvas = false
 	}
 
+	ipcRenderer.on('file-sent', async () => {
+		// Come back to this, pass stuff down from a single call.
+		shouldCanvasShowByFile($activeFile)
+	})
+
 	window.addEventListener(
 		'fileSelectedDirect',
 		(event: CustomEvent) => {
+			activeFile.update((file) => event.detail)
 			for (let [index] of editorTabs.entries()) {
 				if (editorTabs[index].path === event.detail.path) {
 					editorTabs.splice(index, 1)
@@ -90,11 +102,8 @@
 			})
 			incrementTabs(event.detail)
 
-			activeFile.update((file) => event.detail)
-			shouldCanvasShowByFile(event.detail)
-
-			ipcRenderer.send('open-file', event.detail.path)
 			lang = fileExtension(event.detail.name)
+			ipcRenderer.send('open-file', event.detail.path)
 		},
 		false
 	)
@@ -102,11 +111,14 @@
 	window.addEventListener(
 		'fileSelected',
 		(event: CustomEvent) => {
+			activeFile.update((file) => event.detail)
+
 			for (let [index] of editorTabs.entries()) {
 				if (editorTabs[index].path === event.detail.path) {
 					editorTabs.splice(index, 1)
 				}
 			}
+
 			editorTabs.unshift({
 				label: event.detail.name,
 				value: 1,
@@ -116,13 +128,10 @@
 
 			incrementTabs(event.detail)
 
-			activeFile.update((file) => event.detail)
-			shouldCanvasShowByFile(event.detail)
-
 			// alert(JSON.stringify(editorTabs, null, 2))
 
-			ipcRenderer.send('open-file', event.detail.path)
 			lang = fileExtension(event.detail.name)
+			ipcRenderer.send('open-file', event.detail.path)
 		},
 		false
 	)

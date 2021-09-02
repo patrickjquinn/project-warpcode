@@ -19,6 +19,7 @@ const store = new Store()
 let projectDir = ``
 const darkBackgroundColor = 'black';
 const lightBackgroundColor = 'white';
+let ptyProcess
 
 let launcherWindow: BrowserWindow
 let win: BrowserWindow
@@ -84,7 +85,7 @@ class createWin {
 			win.webContents.send('blur');
 		})
 
-		const ptyProcess = pty.spawn(defaultShell, [], {
+		ptyProcess = pty.spawn(defaultShell, [], {
 			name: 'xterm-color',
 			cols: 80,
 			rows: 24,
@@ -168,9 +169,12 @@ function openProject(dir) {
 	new createWin()
 	// watchProjectForChanges()
 	fs.watch(projectDir, { recursive: true }, (eventType, filename) => {
-		console.log(eventType)
-		win.webContents.send('send-proj-struct', buildTree(projectDir))
-		console.log(filename)
+		if (!filename.includes('node_modules') && !filename.includes('_tmp_')
+		 && !filename.includes('pnpm-lock') && !filename.includes('.routify')) {
+			console.log(eventType)
+			win.webContents.send('send-proj-struct', buildTree(projectDir))
+			console.log(filename)
+		}	
 	})
 }
 
@@ -182,7 +186,8 @@ function existingProjectDialog(dir) {
 			.showOpenDialog(launcherWindow, {
 				title: 'Open project',
 				buttonLabel: 'Open project',
-				properties: ['openDirectory']
+				properties: ['openDirectory'],
+				defaultPath: `${os.homedir()}/warpspace`
 			})
 			.then((result) => {
 				if (result.canceled || !result.filePaths || result.filePaths.length === 0) return
@@ -201,7 +206,8 @@ function createProjectDialog(event) {
 		.showOpenDialog(launcherWindow, {
 			title: 'Create project',
 			buttonLabel: 'Create project',
-			properties: ['openDirectory', 'createDirectory']
+			properties: ['openDirectory', 'createDirectory'],
+			defaultPath: `${os.homedir()}/warpspace`
 		})
 		.then(async (results) => {
 			if (results.canceled || !results.filePaths || results.filePaths.length === 0) return
@@ -211,17 +217,21 @@ function createProjectDialog(event) {
 			if (event) event.sender.send('status', `cloning repo to ${path.basename(filename)}...`)
 
 
-
-			const emitter = degit('patrickjquinn/warp-project-template')
-			await emitter.clone(filename)
-
-			if (event) event.sender.send('status', `installing dependencies...`)
-
-			// install dependencies
-			await exec(`npm i -g pnpm`, { cwd: filename })
-			await exec(`pnpm install`, { cwd: filename })
-
-			openProject(filename)
+			try {
+				const emitter = degit('patrickjquinn/warp-project-template')
+				await emitter.clone(filename)
+	
+				if (event) event.sender.send('status', `installing dependencies...`)
+	
+				// install dependencies
+				await exec(`npm i -g pnpm`, { cwd: filename })
+				await exec(`pnpm install`, { cwd: filename })
+	
+				if (event) event.sender.send('status', `opening project...`)
+				openProject(filename)
+			} catch (err) {
+				if (event) event.sender.send('status', `an error occured: ${err}`)
+			}
 		})
 }
 
@@ -291,12 +301,16 @@ const createMenuProject = async () => {
 }
 
 const quitMenuProject = async () => {
+	ptyProcess.kill('9')
 	win.close()
 	launch()
 }
 
 const runMenuWeb = async () => {
 	console.log('running web...')
+	shell.openExternal("http://localhost:5001")
+	await exec('pnpm dev:start', {cwd: projectDir})
+	return
 }
 
 const runMenuAndroid = async () => {
@@ -404,8 +418,8 @@ const createApplicationMenu = () => {
 				{
 					label: 'Run Web',
 					accelerator: 'CommandOrControl+R+W',
-					click() {
-						runMenuWeb()
+					click: async () => {
+						await runMenuWeb()
 					}
 				},
 				{
