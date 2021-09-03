@@ -1,5 +1,5 @@
 import { join } from 'path'
-import { app, BrowserWindow, ipcMain, dialog, nativeTheme, Menu, shell } from 'electron'
+import { app, BrowserWindow, ipcMain, dialog, Menu, shell } from 'electron'
 import is_dev from 'electron-is-dev'
 import dotenv from 'dotenv'
 import Store from 'electron-store'
@@ -13,17 +13,17 @@ import exec from './shared/exec'
 import readJSON from './shared/readJSON'
 import * as path from 'path'
 import degit from 'degit'
+import chokidar from 'chokidar'
 
 const readFile = util.promisify(fs.readFile)
 const store = new Store()
-let projectDir = ``
-const darkBackgroundColor = 'black';
-const lightBackgroundColor = 'white';
-let ptyProcess
+const darkBackgroundColor = 'black'
 
+let ptyProcess
+let watcher
+let projectDir = ``
 let launcherWindow: BrowserWindow
 let win: BrowserWindow
-
 
 const userData = app.getPath('userData')
 const recent = readJSON(path.join(userData, 'recent.json')) || []
@@ -164,14 +164,21 @@ function openProject(dir) {
 	createApplicationMenu()
 	new createWin()
 	// watchProjectForChanges()
-	fs.watch(projectDir, { recursive: true }, (eventType, filename) => {
-		if (!filename.includes('node_modules') && !filename.includes('_tmp_')
-		 && !filename.includes('pnpm-lock') && !filename.includes('.routify') && !filename.includes('.DS_Store')) {
-			console.log(eventType)
+
+	watcher = chokidar.watch(projectDir).on('all', (event, path) => {
+		if (!path.includes('node_modules') && !path.includes('_tmp_')
+			&& !path.includes('pnpm-lock') && !path.includes('.routify') && !path.includes('.DS_Store')) {
 			win.webContents.send('send-proj-struct', buildTree(projectDir))
-			console.log(filename)
-		}	
-	})
+		}
+	});
+	// fs.watch(projectDir, { recursive: true }, (eventType, filename) => {
+	// 	if (!filename.includes('node_modules') && !filename.includes('_tmp_')
+	// 		&& !filename.includes('pnpm-lock') && !filename.includes('.routify') && !filename.includes('.DS_Store')) {
+	// 		console.log(eventType)
+	// 		win.webContents.send('send-proj-struct', buildTree(projectDir))
+	// 		console.log(filename)
+	// 	}
+	// })
 }
 
 function existingProjectDialog(dir) {
@@ -216,13 +223,13 @@ function createProjectDialog(event) {
 			try {
 				const emitter = degit('patrickjquinn/warp-project-template')
 				await emitter.clone(filename)
-	
+
 				if (event) event.sender.send('status', `installing dependencies...`)
-	
+
 				// install dependencies
 				await exec(`npm i -g pnpm`, { cwd: filename })
 				await exec(`pnpm install`, { cwd: filename })
-	
+
 				if (event) event.sender.send('status', `opening project...`)
 				openProject(filename)
 			} catch (err) {
@@ -247,7 +254,7 @@ ipcMain.on('term-resize', async (event, size, term) => {
 			Math.max(size ? size.rows : term.rows, 1)
 		);
 	} catch (err) {
-		
+		console.log(err)
 	}
 })
 
@@ -281,7 +288,7 @@ ipcMain.on('open-file', async (e, filePath) => {
 
 ipcMain.on('read-recents', async (event) => {
 	try {
-		const recents  = await getRecents()	
+		const recents = await getRecents()
 		event.sender.send('recents-sent', recents)
 	} catch (err) {
 		console.log(err)
@@ -309,6 +316,7 @@ const createMenuProject = async () => {
 
 const quitMenuProject = async () => {
 	ptyProcess.kill('9')
+	await watcher.close()
 	win.close()
 	launch()
 }
@@ -316,7 +324,7 @@ const quitMenuProject = async () => {
 const runMenuWeb = async () => {
 	console.log('running web...')
 	shell.openExternal("http://localhost:5001")
-	await exec('pnpm dev:start', {cwd: projectDir})
+	await exec('pnpm dev:start', { cwd: projectDir })
 	return
 }
 

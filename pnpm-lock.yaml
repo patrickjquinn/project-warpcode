@@ -61,7 +61,6 @@ specifiers:
   wait-on: ^6.0.0
   xterm: ^4.13.0
   xterm-addon-fit: ^0.5.0
-  xterm-addon-ligatures: ^0.5.1
   xterm-webfont: ^2.0.0
 
 dependencies:
@@ -128,7 +127,6 @@ devDependencies:
   vite: 2.5.3
   vite-plugin-commonjs-externals: 0.1.1
   wait-on: 6.0.0
-  xterm-addon-ligatures: 0.5.1_xterm@4.13.0
 
 packages:
 
@@ -2025,6 +2023,11 @@ packages:
     engines: {'0': node >=0.6.0}
     dev: true
 
+  /extsprintf/1.4.0:
+    resolution: {integrity: sha1-4mifjzVvrWLMplo6kcXfX5VRaS8=}
+    engines: {'0': node >=0.6.0}
+    dev: true
+
   /fast-deep-equal/3.1.3:
     resolution: {integrity: sha512-f3qQ9oQy9j2AhBe/H9VC91wLmKBCCU/gDOnKNAYG5hswO7BLKj09Hc5HYNz9cGI++xlpDCIgDaitVs03ATR84Q==}
 
@@ -2105,23 +2108,6 @@ packages:
     peerDependenciesMeta:
       debug:
         optional: true
-    dev: true
-
-  /font-finder/1.1.0:
-    resolution: {integrity: sha512-wpCL2uIbi6GurJbU7ZlQ3nGd61Ho+dSU6U83/xJT5UPFfN35EeCW/rOtS+5k+IuEZu2SYmHzDIPL9eA5tSYRAw==}
-    engines: {node: '>8.0.0'}
-    dependencies:
-      get-system-fonts: 2.0.2
-      promise-stream-reader: 1.0.1
-    dev: true
-
-  /font-ligatures/1.4.0:
-    resolution: {integrity: sha512-n7DFnnEpJ0NrVoLqZIL4tMGVs+CnFwQc92m80LWyrbgAFO4x234+t2/H9o4eOYA1eh6ta9dZAEEsJAwsBdNezA==}
-    engines: {node: '>8.0.0'}
-    dependencies:
-      font-finder: 1.1.0
-      lru-cache: 6.0.0
-      opentype.js: 0.8.0
     dev: true
 
   /fontfaceobserver/2.1.0:
@@ -2245,11 +2231,6 @@ packages:
     engines: {node: '>=8'}
     dependencies:
       pump: 3.0.0
-    dev: true
-
-  /get-system-fonts/2.0.2:
-    resolution: {integrity: sha512-zzlgaYnHMIEgHRrfC7x0Qp0Ylhw/sHpM6MHXeVBTYIsvGf5GpbnClB+Q6rAPdn+0gd2oZZIo6Tj3EaWrt4VhDQ==}
-    engines: {node: '>8.0.0'}
     dev: true
 
   /getpass/0.1.7:
@@ -3252,13 +3233,6 @@ packages:
     dependencies:
       mimic-fn: 2.1.0
 
-  /opentype.js/0.8.0:
-    resolution: {integrity: sha1-rKvPoWQvvolKPk11nkO6aU4CvTU=}
-    hasBin: true
-    dependencies:
-      tiny-inflate: 1.0.3
-    dev: true
-
   /optionator/0.9.1:
     resolution: {integrity: sha512-74RlY5FCnhq4jRxVUPKDaRwrVNXMqsGsiW6AJw4XK8hmtm10wC0ypZBLw5IIp85NZMr91+qd1RvvENwg7jjRFw==}
     engines: {node: '>= 0.8.0'}
@@ -3477,11 +3451,6 @@ packages:
   /progress/2.0.3:
     resolution: {integrity: sha512-7PiHtLll5LdnKIMw100I+8xJXR5gW2QwWYkT6iJva0bXitZKa/XMrSbdmg3r2Xnaidz9Qumd0VPaMrZlF9V9sA==}
     engines: {node: '>=0.4.0'}
-    dev: true
-
-  /promise-stream-reader/1.0.1:
-    resolution: {integrity: sha512-Tnxit5trUjBAqqZCGWwjyxhmgMN4hGrtpW3Oc/tRI4bpm/O2+ej72BB08l6JBnGQgVDGCLvHFGjGgQS6vzhwXg==}
-    engines: {node: '>8.0.0'}
     dev: true
 
   /proto-list/1.2.4:
@@ -4329,10 +4298,6 @@ packages:
       globrex: 0.1.2
     dev: true
 
-  /tiny-inflate/1.0.3:
-    resolution: {integrity: sha512-pkY1fj1cKHb2seWDy0B16HeWyczlJA9/WW3u3c4z/NiWDsO3DOU5D7nhTLE9CF0yXv/QZFY7sEJmj24dK+Rrqw==}
-    dev: true
-
   /tmp-promise/3.0.2:
     resolution: {integrity: sha512-OyCLAKU1HzBjL6Ev3gxUeraJNlbNingmi8IrHHEsYH8LTmEuhvYfqvhn2F/je+mjf4N58UmZ96OMEy1JanSCpA==}
     dependencies:
@@ -4542,7 +4507,7 @@ packages:
     dependencies:
       assert-plus: 1.0.0
       core-util-is: 1.0.2
-      extsprintf: 1.3.0
+      extsprintf: 1.4.0
     dev: true
 
   /vite-plugin-commonjs-externals/0.1.1:
@@ -4673,17 +4638,6 @@ packages:
     dependencies:
       xterm: 4.13.0
     dev: false
-
-  /xterm-addon-ligatures/0.5.1_xterm@4.13.0:
-    resolution: {integrity: sha512-L70vyVAapDvBBti1bqFTUQOd6R6LH5qKzqZ76sERKkf75+u++sylqflCdwT8zmorK6zxcc3vq4+I4GDYawgYrQ==}
-    engines: {node: '>8.0.0'}
-    peerDependencies:
-      xterm: ^4.0.0
-    dependencies:
-      font-finder: 1.1.0
-      font-ligatures: 1.4.0
-      xterm: 4.13.0
-    dev: true
 
   /xterm-webfont/2.0.0:
     resolution: {integrity: sha512-i0MMpWvpvl56VJDF34WPieTAgAM0dPVpTQ4odGFy3nlo8aQVnu5jdAfMf02eSqG03tBg0gdlY00PjGXDA/I2Yw==}
