@@ -4,6 +4,10 @@ import cssbeautify from 'cssbeautify'
 import * as Css from 'json-to-css'
 import { validate } from 'csstree-validator'
 import css2json from 'css2json'
+
+const stockWidgets = ['image','button','image','label','textBox','textInput','videoPlayer']
+const importRE = /import(?:["'\s]*([\w*{}\n, ]+)from\s*)?["'\s]*([@\w/_-]+)["'\s].*/g
+
 export class CodeMap {
 	lang: string
 	constructor(lang: string) {
@@ -18,11 +22,26 @@ export class CodeMap {
 		return true
 	}
 
-	public mapToCode(canvas: Record<string, unknown>): string {
+	public mapToCode(canvas: Record<string, unknown>, oldCode: string): string {
 		const items: Array<Record<string, unknown>> = canvas.items as Array<Record<string, unknown>>
 		let scriptItems = ``
 		let mainItems = ``
 		let cssItems = ``
+		let scriptTag: string
+		if (oldCode.includes('<script lang="ts">') && oldCode.includes('</script>')){
+			scriptTag = oldCode.split('<script')[1].split('>')[1].split('</script')[0] ?? ''
+			let extractedWarpImports = [...scriptTag.matchAll(importRE)]
+			for (const item of extractedWarpImports) {
+				if (item[0].includes('warp')) {
+					console.log(`stripping old import: ${item[0]}`)
+					if (scriptTag.includes(item[0])) {
+						console.log('old import existed')
+					}
+					scriptTag = scriptTag.replaceAll(item[0].trim(),'')
+				}
+			}
+		}
+
 		for (const item of items) {
 			const widgetType: string = item.widget as string
 			const widgetID: string = item.id as string
@@ -39,9 +58,12 @@ export class CodeMap {
 			cssItems = cssItems + this.extractStyleAndCodeify(item)
 
 			if (!scriptItems.includes(`{ ${CodeMap.capFirstLetter(widgetType)} }`)) {
-				scriptItems =
+				if (stockWidgets.includes(widgetType)) {
+					scriptItems =
 					scriptItems + `import { ${CodeMap.capFirstLetter(widgetType)} } from "@components/warp/"
 	`
+				}
+
 			}
 
 			const widget = this.transformTemplateToWidget({
@@ -65,6 +87,7 @@ export class CodeMap {
 		return `
         <script lang="${this.lang}">
             ${scriptItems.trim()}
+			${scriptTag.trim()}
         </script>
 
         <main>

@@ -166,7 +166,7 @@ function openProject(dir) {
 	// watchProjectForChanges()
 	fs.watch(projectDir, { recursive: true }, (eventType, filename) => {
 		if (!filename.includes('node_modules') && !filename.includes('_tmp_')
-		 && !filename.includes('pnpm-lock') && !filename.includes('.routify')) {
+		 && !filename.includes('pnpm-lock') && !filename.includes('.routify') && !filename.includes('.DS_Store')) {
 			console.log(eventType)
 			win.webContents.send('send-proj-struct', buildTree(projectDir))
 			console.log(filename)

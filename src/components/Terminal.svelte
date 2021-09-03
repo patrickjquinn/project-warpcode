@@ -59,7 +59,9 @@
 		initializeXterm()
 	})
 	function handleTermResize() {
-		termFit.fit()
+		if (termFit){
+			termFit.fit()
+		}
 	}
 </script>
 

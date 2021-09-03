@@ -169,9 +169,9 @@
 
 	const handleCanvasChange = (event) => {
 		const canvas: Record<string, unknown> = event.detail
-		if (canvas) {
+		if (canvas && shouldCanvasShowByFile) {
 			const codeMap: CodeMap = new CodeMap('ts')
-			currentCode = codeMap.mapToCode(canvas)
+			currentCode = codeMap.mapToCode(canvas, currentCode)
 		}
 	}
 </script>
