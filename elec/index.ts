@@ -163,22 +163,25 @@ function openProject(dir) {
 	launcherWindow.close()
 	createApplicationMenu()
 	new createWin()
-	// watchProjectForChanges()
 
-	watcher = chokidar.watch(projectDir).on('all', (event, path) => {
-		if (!path.includes('node_modules') && !path.includes('_tmp_')
-			&& !path.includes('pnpm-lock') && !path.includes('.routify') && !path.includes('.DS_Store')) {
-			win.webContents.send('send-proj-struct', buildTree(projectDir))
-		}
-	});
-	// fs.watch(projectDir, { recursive: true }, (eventType, filename) => {
-	// 	if (!filename.includes('node_modules') && !filename.includes('_tmp_')
-	// 		&& !filename.includes('pnpm-lock') && !filename.includes('.routify') && !filename.includes('.DS_Store')) {
-	// 		console.log(eventType)
+	// watcher = chokidar.watch(projectDir, {
+	// 	usePolling: true,
+	// 	ignored: (path) => path.includes('node_modules')
+	// }).on('all', (event, path) => {
+	// 	console.log(event)
+	// 	if (!path.includes('node_modules') && !path.includes('_tmp_')
+	// 		&& !path.includes('pnpm-lock') && !path.includes('.routify') && !path.includes('.DS_Store')) {
 	// 		win.webContents.send('send-proj-struct', buildTree(projectDir))
-	// 		console.log(filename)
 	// 	}
 	// })
+	fs.watch(projectDir, { recursive: true }, (eventType, filename) => {
+		if (!filename.includes('node_modules') && !filename.includes('_tmp_')
+			&& !filename.includes('pnpm-lock') && !filename.includes('.routify') && !filename.includes('.DS_Store')) {
+			console.log(eventType)
+			win.webContents.send('send-proj-struct', buildTree(projectDir))
+			console.log(filename)
+		}
+	})
 }
 
 function existingProjectDialog(dir) {

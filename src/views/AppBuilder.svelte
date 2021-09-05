@@ -57,6 +57,7 @@
 		console.log('canvas update')
 		const codeMap = new CodeMap('ts')
 		const codeCanvas = codeMap.convertCodeToCanvas(currentCode)
+		console.log(codeCanvas)
 		const isSame = JSON.stringify(codeCanvas) == JSON.stringify(editorItems)
 
 		if (!isSame) {
@@ -71,8 +72,8 @@
 	const shouldCanvasShowByFile = (file) => {
 		if ((file?.path?.includes('components') || file?.path?.includes('pages')) && 
 			file.name.toLowerCase().includes('.svelte')) {
-			shouldShowCanvas = true
 			setTimeout(() => { 
+				shouldShowCanvas = true
 				updateCanvas()
 			}, 500)
 			return

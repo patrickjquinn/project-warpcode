@@ -55,7 +55,7 @@
 		"svelte-awesome": "^2.3.2",
 		"svelte-check": "^2.2.5",
 		"svelte-dnd-action": "^0.9.11",
-		"svelte-preprocess": "^4.8.0",
+		"svelte-preprocess": "^4.9.0",
 		"svelte-spa-router": "^3.2.0",
 		"svelte-split-pane": "^0.1.2",
 		"svelte-touch-to-mouse": "^0.1.12",

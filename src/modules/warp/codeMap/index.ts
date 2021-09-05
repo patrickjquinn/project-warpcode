@@ -55,7 +55,9 @@ export class CodeMap {
 				contentType = 'slot'
 			}
 
-			cssItems = cssItems + this.extractStyleAndCodeify(item)
+			if (item.style) {
+				cssItems = cssItems + this.extractStyleAndCodeify(item)
+			}
 
 			if (!scriptItems.includes(`{ ${CodeMap.capFirstLetter(widgetType)} }`)) {
 				if (stockWidgets.includes(widgetType)) {
@@ -102,8 +104,11 @@ export class CodeMap {
 
 	public convertCSSJSONtoInline(css: Record<string, unknown>, id: string): string {
 		let styled = ''
-
+		let isGlobalStyle = false
 		if (!id.includes('placeholder')) {
+			if (css.hasOwnProperty(`:global(${id})`)) {
+				isGlobalStyle = true
+			}
 			const mapped = this.convertJSONToCSS(css)
 
 			if (mapped) {
@@ -112,7 +117,14 @@ export class CodeMap {
 					console.log(`Invalid CSS on widget ${id} : ${validateCSS}`)
 					return ``
 				}
-				const styleSplit = mapped.split(`#${id}`)
+				let styleSplit
+				if (isGlobalStyle){
+					styleSplit = mapped.split(`:global(#${id})`)
+				} else {
+					styleSplit = mapped.split(id)
+
+				}
+
 				if (styleSplit?.length > 0) {
 					const splitValue = styleSplit[1].trim()
 					if (splitValue?.includes('{') && splitValue?.includes('}')) {
@@ -199,12 +211,19 @@ export class CodeMap {
 		let contentType: string = item.contentsType as string
 		let cssItems = ``
 
+		let formattetStyle = { }
+
+		for (let [key, value] of Object.entries(widgetStyle)) {
+			if (widgetStyle.hasOwnProperty(key)) {
+				formattetStyle[key] = value
+			}
+		}
 
 		if (!contentType) {
 			contentType = 'slot'
 		}
 
-		cssItems = cssItems + this.convertJSONToCSS(widgetStyle)
+		cssItems = cssItems + this.convertJSONToCSS(formattetStyle)
 
 		if (contentType === 'slot') {
 			const subItems: Array<Record<string, unknown>> = item.items as Array<Record<string, unknown>> | null
@@ -270,8 +289,11 @@ export class CodeMap {
 	private fetchRelevantCSSTag(id: string, css: Array<Record<string, unknown>>) {
 		const obj = { }
 		for (const style of css) {
-			if (style[id]) {
-				obj[`${id}`] = style[id]
+			if (style.hasOwnProperty(`:global(${id})`)) {
+				obj[`:global(${id})`] = style[`:global(${id})`]
+				return obj
+			} else if (style.hasOwnProperty(id)) {
+				obj[id] = style[id]
 				return obj
 			}
 		}
@@ -315,7 +337,6 @@ export class CodeMap {
 					items.push(this.transformCodeToCanvas(child))
 				}
 			}
-			console.log("HELLO")
 			return {
 				id,
 				name: widget,

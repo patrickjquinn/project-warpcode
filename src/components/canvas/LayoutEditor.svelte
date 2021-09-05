@@ -13,19 +13,26 @@
 		if (localSelect){
 			const localStyle: any = localSelect.style
 			if (style && codeMap.validateCssString(codeMap.convertJSONToCSS(localStyle))) {
-				localSelect.style[`#${localSelect.widget}${localSelect.id}`] = style
-				selected.update((select) => {
-					return localSelect
-				})
+				if (localSelect.style.hasOwnProperty(`:global(#${localSelect.widget}${localSelect.id})`)) {
+					localSelect.style[`:global(#${localSelect.widget}${localSelect.id})`] = style
+				} else {
+					localSelect.style[`#${localSelect.widget}${localSelect.id}`] = style
+				}
+				selected.update((select) => localSelect)
 			}
 		}
 		
 	}
 
 	onMount(async () => {
-		localSelect = $selected
+		const localSelect: any = $selected
+
 		if (localSelect && localSelect.style) {
-			style = localSelect.style[`#${localSelect.widget}${localSelect.id}`]
+			if (localSelect.style.hasOwnProperty(`:global(#${localSelect.widget}${localSelect.id})`)) {
+				style = localSelect.style[`:global(#${localSelect.widget}${localSelect.id})`]
+			} else if (localSelect.style.hasOwnProperty(`#${localSelect.widget}${localSelect.id}`)) {
+				style = localSelect.style[`#${localSelect.widget}${localSelect.id}`]
+			}
 		}
 	})
 </script>

@@ -13,7 +13,7 @@
 	let rendered = false
 
 	$: {
-		if (rendered) {
+		if (rendered && css) {
 			styled = codeMap.convertCSSJSONtoInline(css, id)
 			formatted = `<${tag.toLowerCase()} id="${id}" style="${styled}">${value}</${tag.toLowerCase()}>`
 		}

@@ -28,7 +28,11 @@
 		if (data && data.style && data.id) {
 			const idx = items.findIndex((item) => item.id === data.id)
 			const style = {}
-			style[`#${data.widget}${data.id}`] = data.style[`#${data.widget}${data.id}`]
+			if (data.style.hasOwnProperty(`:global(#${data.widget}${data.id})`)) {
+				style[`:global(#${data.widget}${data.id})`] = data.style[`:global(#${data.widget}${data.id})`]
+			} else {
+				style[`#${data.widget}${data.id}`] = data.style[`#${data.widget}${data.id}`]
+			}
 			if (items[idx]) {
 				items[idx].style = style
 			}
@@ -85,7 +89,11 @@
 		const newId = generateUniqueID(item.id)
 		let newItem
 		const style = {}
-		style[`#${item.widget}${newId}`] = item.style[`#${item.widget}${item.id}`]
+		if (item.style.hasOwnProperty(`:global(#${item.widget}${item.id})`)) {
+			style[`:global(#${item.widget}${item.id})`] = item.style[`:global(#${item.widget}${item.id})`]
+		} else {
+			style[`#${item.widget}${newId}`] = item.style[`#${item.widget}${item.id}`]
+		}
 		newItem = { ...item, id: newId, style }
 		items.push(newItem)
 		items = [...items]
@@ -94,7 +102,7 @@
 	}
 
 	function disableCopyPaste(elm) {
-		elm.oncontextmenu = function () {
+		elm.oncontextmenu = () => {
 			return false
 		}
 	}
@@ -155,9 +163,7 @@
 
 	const deleteItem = (selectItem) => {
 		const idx = items.findIndex((item) => item.id === selectItem.id)
-		selected.update((select) => {
-			return null
-		})
+		selected.update((select) => null)
 		items.splice(idx, 1)
 		items = [...items]
 		canvasChanged()
@@ -213,9 +219,7 @@
 	}
 
 	function removeSelectorHighlights() {
-		selected.update((select) => {
-			return null
-		})
+		selected.update((select) => null)
 		const columnContent = document.querySelector('.column-content')
 		const selectors = columnContent.querySelectorAll('.selector')
 		const handles = columnContent.querySelectorAll('.handle')
@@ -234,9 +238,7 @@
 		e.stopPropagation()
 		if (e.target.parentElement.className.includes('selector')) {
 			removeSelectorHighlights()
-			selected.update((select) => {
-				return item
-			})
+			selected.update((select) => item)
 			console.log(e.target.parentNode.parentElement.className)
 			e.target.parentElement.style.border = '2px solid yellow'
 			e.target.parentElement.querySelector('.handle').style.display = 'flex'
@@ -327,7 +329,7 @@
 								{:else}
 									<Generic
 										tag="{item.widget}"
-										css="${item.style}"
+										css="{item.style}"
 										id="{`${item.widget}${item.id}`}"
 										bind:value="{item.value}"
 									/>
