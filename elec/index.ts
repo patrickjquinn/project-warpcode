@@ -294,6 +294,18 @@ ipcMain.on('open-file', async (e, filePath) => {
 	}
 })
 
+ipcMain.on('open-readme', async (e) => {
+	try {
+		const filePath = `${projectDir}/README.md`
+		if (fs.existsSync(filePath)){
+			const fileContents = await readFileAt(filePath)
+			e.sender.send('file-sent', fileContents)
+		}
+	} catch (err) {
+		console.log(err)
+	}
+})
+
 ipcMain.on('read-recents', async (event) => {
 	try {
 		const recents = await getRecents()

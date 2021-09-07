@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { HSplitPane, VSplitPane } from 'svelte-split-pane'
 	import Icon from 'svelte-awesome'
+	import { onMount } from 'svelte'
 	import { bell, refresh, comment, codeFork } from 'svelte-awesome/icons'
 	import { CodeMap } from '../modules/warp/codeMap'
 	import Monaco from '../components/Editor.svelte'
@@ -174,6 +175,10 @@
 			currentCode = codeMap.mapToCode(canvas, currentCode)
 		}
 	}
+
+	onMount(async () => {
+		ipcRenderer.send('open-readme')
+	})
 </script>
 
 <main>
