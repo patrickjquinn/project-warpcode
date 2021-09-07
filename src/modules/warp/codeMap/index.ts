@@ -1,3 +1,4 @@
+/* eslint-disable no-prototype-builtins */
 import { parse } from 'himalaya'
 
 import cssbeautify from 'cssbeautify'
@@ -28,6 +29,7 @@ export class CodeMap {
 		let mainItems = ``
 		let cssItems = ``
 		const scriptTag: string = this.removeWarpImports(oldCode)
+		const styleTag: string = this.removeWarpStyles(oldCode, items)
 		// if (oldCode.includes('<script lang="ts">') && oldCode.includes('</script>')) {
 		// 	scriptTag = oldCode.split('<script')[1].split('>')[1].split('</script')[0] ?? ''
 		// 	const extractedWarpImports = [...scriptTag.matchAll(importRE)]
@@ -98,6 +100,7 @@ export class CodeMap {
 
 		<style>
 			${cssItems.trim()}
+			${styleTag.trim()}
 		</style>
         `
 	}
@@ -167,6 +170,23 @@ export class CodeMap {
 		return canvas
 	}
 
+	private removeWarpStyles(code: string, canvas: Array<Record<string, unknown>>): string {
+		let styleTag = ``
+		if (code.includes('<style>') && code.includes('</style>')) {
+			styleTag = code.split('<style')[1].split('>')[1].split('</style')[0] ?? ''
+			const styleConversion = this.convertCSSToJSON(styleTag)
+			for (const item of canvas) {
+				if (styleConversion[`#${item.widget}${item.id}`]) {
+					delete styleConversion[`#${item.widget}${item.id}`]
+				} else if (styleConversion[`:global(#${item.widget}${item.id})`]) {
+					delete styleConversion[`:global(#${item.widget}${item.id})`]
+				}
+			}
+			styleTag = this.convertJSONToCSS(styleConversion)
+		}
+		return styleTag
+	}
+
 	private removeWarpImports(code: string): string {
 		let scriptTag = ``
 		if ((code.includes('<script lang="ts">') || code.includes('<script>')) && code.includes('</script>')) {
@@ -211,9 +231,9 @@ export class CodeMap {
 		let contentType: string = item.contentsType as string
 		let cssItems = ``
 
-		let formattetStyle = {}
+		const formattetStyle = {}
 
-		for (let [key, value] of Object.entries(widgetStyle)) {
+		for (const [key, value] of Object.entries(widgetStyle)) {
 			if (widgetStyle.hasOwnProperty(key)) {
 				formattetStyle[key] = value
 			}

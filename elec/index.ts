@@ -14,7 +14,7 @@ import exec from './shared/exec'
 import readJSON from './shared/readJSON'
 import * as path from 'path'
 import degit from 'degit'
-import chokidar from 'chokidar'
+// import chokidar from 'chokidar'
 
 const readFile = util.promisify(fs.readFile)
 const store = new Store()
