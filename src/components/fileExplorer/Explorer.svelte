@@ -10,8 +10,8 @@
 	const filterByExclusions = (arg) => {
 		const filtered = []
 		for (let file of arg.children) {
-			if (!exclusionList.includes(file.name) && file.name.charAt(0) !== '.' ) {
-				if (file?.children?.length > 0){
+			if (!exclusionList.includes(file.name) && file.name.charAt(0) !== '.') {
+				if (file?.children?.length > 0) {
 					file = filterByExclusions(file)
 				}
 				filtered.push(file)

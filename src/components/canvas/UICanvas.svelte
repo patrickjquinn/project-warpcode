@@ -29,7 +29,8 @@
 			const idx = items.findIndex((item) => item.id === data.id)
 			const style = {}
 			if (data.style.hasOwnProperty(`:global(#${data.widget}${data.id})`)) {
-				style[`:global(#${data.widget}${data.id})`] = data.style[`:global(#${data.widget}${data.id})`]
+				style[`:global(#${data.widget}${data.id})`] =
+					data.style[`:global(#${data.widget}${data.id})`]
 			} else {
 				style[`#${data.widget}${data.id}`] = data.style[`#${data.widget}${data.id}`]
 			}

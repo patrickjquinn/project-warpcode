@@ -1,9 +1,9 @@
 <script>
-	import {onMount} from "svelte"
-	
+	import { onMount } from 'svelte'
+
 	const path = window.require('path')
 	const fs = window.require('fs')
-	
+
 	const { ipcRenderer } = window.require('electron')
 
 	let status
@@ -45,9 +45,7 @@
 			<button class="large" on:click="{() => openExistingProject(null)}">Open project</button>
 
 			{#each recent as dir}
-				<button
-					class="small"
-					on:click="{() => openExistingProject(dir)}"
+				<button class="small" on:click="{() => openExistingProject(dir)}"
 					>{path.basename(dir)}</button
 				>
 			{:else}

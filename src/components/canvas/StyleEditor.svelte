@@ -22,7 +22,7 @@
 	$: {
 		let codeMap = new CodeMap('ts')
 		const localSelect: any = $selected
-		if (localSelect){
+		if (localSelect) {
 			const localStyle: any = localSelect.style
 			if (style && codeMap.validateCssString(codeMap.convertJSONToCSS(localStyle))) {
 				const localSelect: any = $selected
@@ -36,7 +36,6 @@
 				})
 			}
 		}
-		
 	}
 
 	onMount(async () => {

@@ -1,8 +1,7 @@
-<script lang="ts">	
+<script lang="ts">
 	import Canvas from './views/AppBuilder.svelte'
 	import Launcher from './views/Launcher.svelte'
 	import Router from 'svelte-spa-router'
-
 </script>
 
 <main>

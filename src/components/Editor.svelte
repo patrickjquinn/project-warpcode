@@ -17,7 +17,7 @@
 	})
 
 	function codeSaved() {
-		const assocFile = $activeFile as Record <string, unknown>
+		const assocFile = $activeFile as Record<string, unknown>
 		ipcRenderer.send('save-file', {
 			path: assocFile.path,
 			contents: code

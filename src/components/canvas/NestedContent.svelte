@@ -10,12 +10,13 @@
 		Label,
 		Button,
 		VideoPlayer,
-		Image
+		Image,
+		Generic
 	} from '../warp/widgets/index'
 
 	export let items: Array<any>
-	export let parent: { id?: any; }
-	let copiedItem: Record<string,unknown>
+	export let parent: { id?: any }
+	let copiedItem: Record<string, unknown>
 
 	let dragDisabled = true
 	let isFinalCanvas = false
@@ -36,7 +37,11 @@
 	const flipDurationMs = 50
 	const dispatch = createEventDispatcher()
 
-	const onKeyCombo = (e: { preventDefault: () => void; stopPropagation: () => void; keyCode: any; }) => {
+	const onKeyCombo = (e: {
+		preventDefault: () => void
+		stopPropagation: () => void
+		keyCode: any
+	}) => {
 		e.preventDefault()
 		e.stopPropagation()
 		if (
@@ -74,7 +79,7 @@
 		}
 	}
 
-	const deleteItem = (selectItem: Record<string,unknown>) => {
+	const deleteItem = (selectItem: Record<string, unknown>) => {
 		const idx = items.findIndex((item) => item.id === selectItem.id)
 		selected.update((select) => {
 			return null
@@ -93,7 +98,7 @@
 		}
 	}
 
-	const pasteInItem = (item: Record<string,unknown>) => {
+	const pasteInItem = (item: Record<string, unknown>) => {
 		const id: number = item.id as number
 		const newId = generateUniqueID(id)
 		let newItem
@@ -310,6 +315,13 @@
 				/>
 			{:else if item.widget == 'image'}
 				<Image css="{item.style}" src="{item.value ?? ''}" id="{`${item.widget}${item.id}`}" />
+			{:else}
+				<Generic
+					tag="{item.widget}"
+					css="{item.style}"
+					id="{`${item.widget}${item.id}`}"
+					bind:value="{item.value}"
+				/>
 			{/if}
 		</div>
 	{/each}

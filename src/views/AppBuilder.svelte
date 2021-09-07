@@ -14,11 +14,8 @@
 	import OnlyTabs from '../components/tabs/OnlyTabs.svelte'
 	import RemovableTabs from '../components/tabs/RemovableTabs.svelte'
 	import activeFile from '../stores/activeFile'
-	
-	const { promisify } = window.require('util')
-	const { ipcRenderer } = window.require('electron')
 
-	const delay = promisify(setTimeout);
+	const { ipcRenderer } = window.require('electron')
 
 	let editorItems: Array<any> = []
 
@@ -39,7 +36,7 @@
 	}
 
 	let currentCode: string = '/** Code Will Appear Here **/'
-		// '<script lang="ts">\n\n</script' + '>\n\n<main>\n\n</main>\n\n<style></style>'
+	// '<script lang="ts">\n\n</script' + '>\n\n<main>\n\n</main>\n\n<style></style>'
 
 	// $: currentCode && updateCanvas()
 	let editorTabs: Array<Record<string, unknown>> = [
@@ -70,9 +67,11 @@
 	}
 
 	const shouldCanvasShowByFile = (file) => {
-		if ((file?.path?.includes('components') || file?.path?.includes('pages')) && 
-			file.name.toLowerCase().includes('.svelte')) {
-			setTimeout(() => { 
+		if (
+			(file?.path?.includes('components') || file?.path?.includes('pages')) &&
+			file.name.toLowerCase().includes('.svelte')
+		) {
+			setTimeout(() => {
 				shouldShowCanvas = true
 				updateCanvas()
 			}, 500)
@@ -261,7 +260,6 @@
 							</right>
 						</HSplitPane>
 					{/if}
-					
 				</right>
 			</HSplitPane>
 		</div>

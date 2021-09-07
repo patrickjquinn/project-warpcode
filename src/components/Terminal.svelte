@@ -40,7 +40,7 @@
 	function initializeXterm() {
 		terminalController = new xterm.Terminal({
 			fontFamily: 'Fira Code, Iosevka, monospace',
-    		fontSize: 12
+			fontSize: 12
 		})
 		termFit = new fit.FitAddon()
 		terminalController.loadAddon(termFit)
@@ -59,7 +59,7 @@
 		initializeXterm()
 	})
 	function handleTermResize() {
-		if (termFit){
+		if (termFit) {
 			termFit.fit()
 		}
 	}

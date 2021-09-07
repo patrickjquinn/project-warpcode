@@ -1,3 +1,4 @@
+import 'v8-compile-cache'
 import { join } from 'path'
 import { app, BrowserWindow, ipcMain, dialog, Menu, shell } from 'electron'
 import is_dev from 'electron-is-dev'
@@ -74,6 +75,17 @@ class createWin {
 			: `file://${join(__dirname, '../../dist/index.html')}`
 
 		win.loadURL(URL)
+
+		win.on('ready-to-show', () => {
+			watcher = fs.watch(projectDir, { recursive: true }, (eventType, filename) => {
+				if (!filename.includes('node_modules') && !filename.includes('_tmp_')
+					&& !filename.includes('pnpm-lock') && !filename.includes('.routify') && !filename.includes('.DS_Store')) {
+					console.log(eventType)
+					win.webContents.send('send-proj-struct', buildTree(projectDir))
+					console.log(filename)
+				}
+			})
+		})
 
 		win.on('focus', () => {
 			win.webContents.send('focus');
@@ -174,14 +186,7 @@ function openProject(dir) {
 	// 		win.webContents.send('send-proj-struct', buildTree(projectDir))
 	// 	}
 	// })
-	fs.watch(projectDir, { recursive: true }, (eventType, filename) => {
-		if (!filename.includes('node_modules') && !filename.includes('_tmp_')
-			&& !filename.includes('pnpm-lock') && !filename.includes('.routify') && !filename.includes('.DS_Store')) {
-			console.log(eventType)
-			win.webContents.send('send-proj-struct', buildTree(projectDir))
-			console.log(filename)
-		}
-	})
+
 }
 
 function existingProjectDialog(dir) {
@@ -319,7 +324,7 @@ const createMenuProject = async () => {
 
 const quitMenuProject = async () => {
 	ptyProcess.kill('9')
-	await watcher.close()
+	watcher.close()
 	win.close()
 	launch()
 }

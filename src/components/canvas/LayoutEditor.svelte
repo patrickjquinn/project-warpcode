@@ -10,7 +10,7 @@
 	$: (style) => {
 		let codeMap = new CodeMap('ts')
 		localSelect = $selected
-		if (localSelect){
+		if (localSelect) {
 			const localStyle: any = localSelect.style
 			if (style && codeMap.validateCssString(codeMap.convertJSONToCSS(localStyle))) {
 				if (localSelect.style.hasOwnProperty(`:global(#${localSelect.widget}${localSelect.id})`)) {
@@ -21,7 +21,6 @@
 				selected.update((select) => localSelect)
 			}
 		}
-		
 	}
 
 	onMount(async () => {

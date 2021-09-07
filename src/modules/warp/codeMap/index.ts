@@ -118,7 +118,7 @@ export class CodeMap {
 					return ``
 				}
 				let styleSplit
-				if (isGlobalStyle){
+				if (isGlobalStyle) {
 					styleSplit = mapped.split(`:global(#${id})`)
 				} else {
 					styleSplit = mapped.split(id)
@@ -211,7 +211,7 @@ export class CodeMap {
 		let contentType: string = item.contentsType as string
 		let cssItems = ``
 
-		let formattetStyle = { }
+		let formattetStyle = {}
 
 		for (let [key, value] of Object.entries(widgetStyle)) {
 			if (widgetStyle.hasOwnProperty(key)) {
@@ -287,7 +287,7 @@ export class CodeMap {
 	}
 
 	private fetchRelevantCSSTag(id: string, css: Array<Record<string, unknown>>) {
-		const obj = { }
+		const obj = {}
 		for (const style of css) {
 			if (style.hasOwnProperty(`:global(${id})`)) {
 				obj[`:global(${id})`] = style[`:global(${id})`]
@@ -307,7 +307,7 @@ export class CodeMap {
 		let value = ''
 
 		// Come back to this, this is a blind stab of a fix.
-		if (!item.attributes) return { }
+		if (!item.attributes) return {}
 
 		for (const obj of item.attributes) {
 			if (obj.key === 'src' || obj.key === 'value') {
