@@ -128,7 +128,7 @@ export class CodeMap {
 
 				}
 
-				if (styleSplit?.length > 0) {
+				if (styleSplit?.length > 0 && styleSplit[1]) {
 					const splitValue = styleSplit[1].trim()
 					if (splitValue?.includes('{') && splitValue?.includes('}')) {
 						styled = styleSplit[1].replace('{', '').replace('}', '').trim()
@@ -151,7 +151,7 @@ export class CodeMap {
 					if (inner.type === 'element') {
 						const mappedElement = this.transformCodeToCanvas(inner)
 						if (mappedElement) {
-							canvas.push(this.transformCodeToCanvas(inner))
+							canvas.push(mappedElement)
 						}
 					}
 				}
@@ -266,12 +266,12 @@ export class CodeMap {
 		if (attributes?.length > 0) {
 			for (const attribute of attributes) {
 				if (attribute?.key) {
-					stringAttributes += `${attribute.key}="${attribute.valye}" `
+					stringAttributes += `${attribute.key}="${attribute.value}" `
 				}
 			}
 		}
 
-		
+
 
 		return stringAttributes
 	}
@@ -346,7 +346,7 @@ export class CodeMap {
 		const widget = item.tagName
 		let contentsType = ''
 		let value = ''
-		let attrs: any[] = []
+		const attrs: unknown[] = []
 
 		// Come back to this, this is a blind stab of a fix.
 		if (item.attributes?.length == 0) return null
@@ -377,8 +377,6 @@ export class CodeMap {
 			}
 		}
 
-		console.log('attrs '+ JSON.stringify(attrs))
-
 		if (item.tagName.toLowerCase() === 'container' && item.children?.length > 0) {
 			const items = []
 			for (const child of item.children) {
@@ -396,7 +394,7 @@ export class CodeMap {
 				value,
 				contentsType,
 				items,
-				attrs
+				attributes: attrs
 			}
 		}
 
@@ -406,7 +404,7 @@ export class CodeMap {
 			widget,
 			value,
 			contentsType,
-			attrs
+			attributes: attrs
 		}
 	}
 

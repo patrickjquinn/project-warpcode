@@ -51,11 +51,9 @@
 	]
 
 	const updateCanvas = () => {
-		if (!shouldShowCanvas) return
-		console.log('canvas update')
+		if (!shouldShowCanvas || currentCode?.trim().length === 0) return
 		const codeMap = new CodeMap('ts')
 		const codeCanvas = codeMap.convertCodeToCanvas(currentCode)
-		console.log(codeCanvas)
 		const isSame = JSON.stringify(codeCanvas) == JSON.stringify(editorItems)
 
 		if (!isSame) {
@@ -75,7 +73,7 @@
 			setTimeout(() => {
 				shouldShowCanvas = true
 				updateCanvas()
-			}, 500)
+			}, 300)
 			return
 		}
 		shouldShowCanvas = false
