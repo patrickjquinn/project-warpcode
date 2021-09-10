@@ -137,7 +137,7 @@
 		false
 	)
 
-	const fileExtension = (name) => {
+	const fileExtension = (name: string|string[]) => {
 		const extension = name.slice(name.lastIndexOf('.') + 1)
 
 		switch (extension) {
@@ -158,7 +158,7 @@
 		}
 	}
 
-	const incrementTabs = (file) => {
+	const incrementTabs = (file: any) => {
 		// editorTabs = editorTabs.filter((el) => {
 		// 	return el.label != file.name && el.path != file.path
 		// })

@@ -149,7 +149,10 @@ export class CodeMap {
 			if (item.tagName === 'main') {
 				for (const inner of item.children) {
 					if (inner.type === 'element') {
-						canvas.push(this.transformCodeToCanvas(inner))
+						const mappedElement = this.transformCodeToCanvas(inner)
+						if (mappedElement) {
+							canvas.push(this.transformCodeToCanvas(inner))
+						}
 					}
 				}
 			} else if (item.tagName === 'style') {
@@ -257,8 +260,26 @@ export class CodeMap {
 		return cssItems
 	}
 
+	private convertAttributesToInline(attributes) {
+		let stringAttributes = ``
+
+		if (attributes?.length > 0) {
+			for (const attribute of attributes) {
+				if (attribute?.key) {
+					stringAttributes += `${attribute.key}="${attribute.valye}" `
+				}
+			}
+		}
+
+		
+
+		return stringAttributes
+	}
+
 	private transformTemplateToWidget({ type, widget, value, id, item }): string {
 		const defaultWidgets = ['Label', 'Container', 'ScrollContainer', 'TextBox', 'VideoPlayer', 'TextInput', 'Image', 'Button']
+
+		const attributes = this.convertAttributesToInline(item.attributes)
 
 		if (type === 'slot') {
 			if (item.items?.length > 0) {
@@ -286,24 +307,24 @@ export class CodeMap {
 				}
 				if (defaultWidgets.includes(CodeMap.capFirstLetter(widget))) {
 					return `<${CodeMap.capFirstLetter(widget)} id="${widget + id
-						}">${innerItem}</${CodeMap.capFirstLetter(widget)}>`
+						}" ${attributes}>${innerItem}</${CodeMap.capFirstLetter(widget)}>`
 				}
 				return `<${widget} id="${widget + id
-					}">${innerItem}</${widget}>`
+					}" ${attributes}>${innerItem}</${widget}>`
 
 			}
 			if (defaultWidgets.includes(CodeMap.capFirstLetter(widget))) {
 				return `<${CodeMap.capFirstLetter(widget)} id="${widget + id
-					}">${value}</${CodeMap.capFirstLetter(widget)}>`
+					}" ${attributes}>${value}</${CodeMap.capFirstLetter(widget)}>`
 			}
 			return `<${widget} id="${widget + id
-				}">${value}</${widget}>`
+				}" ${attributes}>${value}</${widget}>`
 
 		}
 		if (defaultWidgets.includes(CodeMap.capFirstLetter(widget))) {
-			return `<${CodeMap.capFirstLetter(widget)} ${type}="${value}" id="${widget + id}"/>`
+			return `<${CodeMap.capFirstLetter(widget)} ${type}="${value}" id="${widget + id}" ${attributes}/>`
 		}
-		return `<${widget} ${type}="${value}" id="${widget + id}"/>`
+		return `<${widget} ${type}="${value}" id="${widget + id}" ${attributes}/>`
 	}
 
 	private fetchRelevantCSSTag(id: string, css: Array<Record<string, unknown>>) {
@@ -325,20 +346,26 @@ export class CodeMap {
 		const widget = item.tagName
 		let contentsType = ''
 		let value = ''
+		let attrs: any[] = []
 
 		// Come back to this, this is a blind stab of a fix.
-		if (!item.attributes) return {}
+		if (item.attributes?.length == 0) return null
 
 		for (const obj of item.attributes) {
 			if (obj.key === 'src' || obj.key === 'value') {
 				contentsType = obj.key
 				value = obj.value
-			}
-
-			if (obj.key === 'id') {
+			} else if (obj.key === 'id') {
 				id = parseInt(obj.value.split(item.tagName)[1])
+			} else {
+				if (obj?.key) {
+					const otherObj = {}
+					otherObj[obj.key] = obj.value
+					attrs.push(obj)
+				}
 			}
 		}
+
 
 		if (contentsType.length === 0) {
 			contentsType = 'slot'
@@ -350,11 +377,16 @@ export class CodeMap {
 			}
 		}
 
+		console.log('attrs '+ JSON.stringify(attrs))
+
 		if (item.tagName.toLowerCase() === 'container' && item.children?.length > 0) {
 			const items = []
 			for (const child of item.children) {
 				if (child.type === 'element') {
-					items.push(this.transformCodeToCanvas(child))
+					const mapped = this.transformCodeToCanvas(child)
+					if (mapped) {
+						items.push(mapped)
+					}
 				}
 			}
 			return {
@@ -363,7 +395,8 @@ export class CodeMap {
 				widget,
 				value,
 				contentsType,
-				items
+				items,
+				attrs
 			}
 		}
 
@@ -372,7 +405,8 @@ export class CodeMap {
 			name: widget,
 			widget,
 			value,
-			contentsType
+			contentsType,
+			attrs
 		}
 	}
 
