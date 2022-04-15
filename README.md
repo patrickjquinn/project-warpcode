@@ -4,6 +4,12 @@ An electron based Svelte app builder that allows you to visually create applicat
 
 Capacitor is used to build and deploy to mobile applications.
 
+## What does it look like?
+
+
+![alt text](https://github.com/patrickjquinn/project-warp/blob/main/warp.png?raw=true)
+
+
 ## Recommended IDE Setup
 
 [VSCode](https://code.visualstudio.com/) + [Svelte](https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode).
