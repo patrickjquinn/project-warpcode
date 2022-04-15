@@ -6,11 +6,11 @@ Capacitor is used to build and deploy to mobile applications.
 
 It will also support standard web and native desktop applications down the line.
 
-Note: This is in very early alpha and serves as proof of concept in it's current stage. There be dragons, etc etc.
+Note: This is in very early pre-alpha and serves as proof of concept in it's current state. Here be dragons, etc etc.
 
 Active contributors very welcome.
 
-## What does it look like?
+## What does it look like (for now)?
 
 
 ![alt text](https://github.com/patrickjquinn/project-warp/blob/main/warp.png?raw=true)
