@@ -1,6 +1,8 @@
 # Warp Code IDE
 
-An electron based Svelte app builder using Vite for the UI (Svelte based) and Rollup for the Electron components (Typescript).
+An electron based Svelte app builder that allows you to visually create applications, whilst generating clean Svelte code, using Vite for the UI build step (Svelte based) and Rollup for the Electron components (Typescript).
+
+Capacitor is used to build and deploy to mobile applications.
 
 ## Recommended IDE Setup
 
