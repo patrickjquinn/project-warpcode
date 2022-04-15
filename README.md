@@ -4,6 +4,8 @@ An electron based Svelte app builder that allows you to visually create applicat
 
 Capacitor is used to build and deploy to mobile applications.
 
+Note: This is in very early alpha and serves as proof of concept in it's current stage. There be dragons, etc etc.
+
 ## What does it look like?
 
 
