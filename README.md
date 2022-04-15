@@ -39,5 +39,3 @@ And:
 ```
 
 On NT machines (Windows, ReactOS, Wine).
-
-

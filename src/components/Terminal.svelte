@@ -30,7 +30,7 @@
 	let terminalController: xterm.Terminal
 	let termFit
 	let theme: xterm.ITheme = SOLARIZED_DARK
-	let bgColor: string = '#1e1e1e'
+	let bgColor = '#1e1e1e'
 	$: {
 		if (terminalController) {
 			bgColor = theme.background

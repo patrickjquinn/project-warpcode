@@ -25,7 +25,7 @@
 	<ul transition:slide="{{ duration: 150 }}">
 		{#each children as file}
 			<li>
-				{#if file.type === 'directory'}
+				{#if file.type === 'directory' || file.children}
 					<svelte:self {...file} />
 				{:else}
 					<File {...file} />
@@ -37,7 +37,7 @@
 	<ul transition:slide="{{ duration: 300 }}">
 		{#each children as file}
 			<li>
-				{#if file.type === 'directory'}
+				{#if file.type === 'directory' || file.children}
 					<svelte:self {...file} />
 				{:else}
 					<File {...file} />

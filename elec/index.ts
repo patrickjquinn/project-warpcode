@@ -50,7 +50,6 @@ function buildTree(rootPath: string) {
 
 dotenv.config({ path: join(__dirname, '../../.env') })
 
-
 class createWin {
 	constructor() {
 		win = new BrowserWindow({
@@ -69,7 +68,6 @@ class createWin {
 		win.maximize()
 		win.show()
 
-
 		const URL = is_dev
 			? 'http://localhost:3000'
 			: `file://${join(__dirname, '../../dist/index.html')}`
@@ -78,8 +76,13 @@ class createWin {
 
 		win.on('ready-to-show', () => {
 			watcher = fs.watch(projectDir, { recursive: true }, (eventType, filename) => {
-				if (!filename.includes('node_modules') && !filename.includes('_tmp_')
-					&& !filename.includes('pnpm-lock') && !filename.includes('.routify') && !filename.includes('.DS_Store')) {
+				if (
+					!filename.includes('node_modules') &&
+					!filename.includes('_tmp_') &&
+					!filename.includes('pnpm-lock') &&
+					!filename.includes('.routify') &&
+					!filename.includes('.DS_Store')
+				) {
 					console.log(eventType)
 					win.webContents.send('send-proj-struct', buildTree(projectDir))
 					console.log(filename)
@@ -88,11 +91,11 @@ class createWin {
 		})
 
 		win.on('focus', () => {
-			win.webContents.send('focus');
+			win.webContents.send('focus')
 		})
 
 		win.on('blur', () => {
-			win.webContents.send('blur');
+			win.webContents.send('blur')
 		})
 
 		ptyProcess = pty.spawn(defaultShell, [], {
@@ -135,8 +138,8 @@ function launch() {
 	launcherWindow.loadURL('http://localhost:3000/#/launch')
 
 	launcherWindow.once('ready-to-show', () => {
-		launcherWindow.show();
-	});
+		launcherWindow.show()
+	})
 }
 
 async function readFileAt(path) {
@@ -186,7 +189,6 @@ function openProject(dir) {
 	// 		win.webContents.send('send-proj-struct', buildTree(projectDir))
 	// 	}
 	// })
-
 }
 
 function existingProjectDialog(dir) {
@@ -227,7 +229,6 @@ function createProjectDialog(event) {
 
 			if (event) event.sender.send('status', `cloning repo to ${path.basename(filename)}...`)
 
-
 			try {
 				const emitter = degit('patrickjquinn/warp-project-template')
 				await emitter.clone(filename)
@@ -260,7 +261,7 @@ ipcMain.on('term-resize', async (event, size, term) => {
 		ptyProcess.resize(
 			Math.max(size ? size.cols : term.cols, 1),
 			Math.max(size ? size.rows : term.rows, 1)
-		);
+		)
 	} catch (err) {
 		console.log(err)
 	}
@@ -297,7 +298,7 @@ ipcMain.on('open-file', async (e, filePath) => {
 ipcMain.on('open-readme', async (e) => {
 	try {
 		const filePath = `${projectDir}/README.md`
-		if (fs.existsSync(filePath)){
+		if (fs.existsSync(filePath)) {
 			const fileContents = await readFileAt(filePath)
 			e.sender.send('file-sent', fileContents)
 		}
@@ -317,7 +318,7 @@ ipcMain.on('read-recents', async (event) => {
 })
 
 const getRecents = async () => {
-	const userData = app.getPath('userData');
+	const userData = app.getPath('userData')
 	const file = path.join(userData, 'recent.json')
 	return fs.existsSync(file) ? JSON.parse(await fs.promises.readFile(file, 'utf-8')) : null
 }
@@ -343,7 +344,7 @@ const quitMenuProject = async () => {
 
 const runMenuWeb = async () => {
 	console.log('running web...')
-	shell.openExternal("http://localhost:5001")
+	shell.openExternal('http://localhost:5001')
 	await exec('pnpm dev:start', { cwd: projectDir })
 	return
 }

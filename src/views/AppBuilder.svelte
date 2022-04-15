@@ -28,15 +28,15 @@
 
 	let shouldShowCanvas = false
 
-	let activeEditorTab: number = 1
+	let activeEditorTab = 1
 
-	let lang: string = 'html'
+	let lang = 'html'
 
 	const onEditorTabUpdate = (event) => {
 		activeEditorTab = event.detail
 	}
 
-	let currentCode: string = '/** Code Will Appear Here **/'
+	let currentCode = '/** Code Will Appear Here **/'
 	// '<script lang="ts">\n\n</script' + '>\n\n<main>\n\n</main>\n\n<style></style>'
 
 	// $: currentCode && updateCanvas()
@@ -135,7 +135,7 @@
 		false
 	)
 
-	const fileExtension = (name: string|string[]) => {
+	const fileExtension = (name: string | string[]) => {
 		const extension = name.slice(name.lastIndexOf('.') + 1)
 
 		switch (extension) {

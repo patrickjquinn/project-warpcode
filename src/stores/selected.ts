@@ -1,7 +1,5 @@
-import { writable } from "svelte/store"
+import { writable } from 'svelte/store'
 
-const selected = writable({
-
-})
+const selected = writable({})
 
 export default selected

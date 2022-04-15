@@ -27,22 +27,23 @@ const watchFunc = function () {
 	})
 }
 
-waitOn({
-	resources: [resource],
-	timeout: 5000
-}, (err) => {
-	if (err) {
-		const { port, hostname } = new URL(resource)
-		const serverSocket = net.connect(port || 80, hostname, () => {
+waitOn(
+	{
+		resources: [resource],
+		timeout: 5000
+	},
+	(err) => {
+		if (err) {
+			const { port, hostname } = new URL(resource)
+			const serverSocket = net.connect(port || 80, hostname, () => {
+				watchFunc()
+			})
+			serverSocket.on('error', (err) => {
+				console.log(err)
+				process.exit(1)
+			})
+		} else {
 			watchFunc()
-		})
-		serverSocket.on('error', (err) => {
-			console.log(err)
-			process.exit(1)
-		})
-	} else {
-		watchFunc()
+		}
 	}
-}
 )
-

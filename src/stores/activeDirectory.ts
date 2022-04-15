@@ -1,7 +1,5 @@
-import { writable } from "svelte/store"
+import { writable } from 'svelte/store'
 
-const activeDirectory = writable({
-
-})
+const activeDirectory = writable({})
 
 export default activeDirectory

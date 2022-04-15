@@ -1,5 +1,3 @@
 import { writable } from 'svelte/store'
 
-export const activeLayout = writable({
-    
-})
+export const activeLayout = writable({})

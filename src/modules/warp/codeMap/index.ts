@@ -3,8 +3,10 @@ import { parse } from 'himalaya'
 
 import cssbeautify from 'cssbeautify'
 import * as Css from 'json-to-css'
-import { validate } from 'csstree-validator'
+// import { validate } from 'csstree-validator'
 import css2json from 'css2json'
+
+const validateCss = window.require('css-validator')
 
 const stockWidgets = ['image', 'button', 'image', 'label', 'textBox', 'textInput', 'videoPlayer']
 const importRE = /import(?:["'\s]*([\w*{}\n, ]+)from\s*)?["'\s]*([@\w/_-]+)["'\s].*/g
@@ -16,8 +18,8 @@ export class CodeMap {
 	}
 
 	public validateCssString(cssString: string): boolean {
-		const validateCSS = validate(cssString)
-		if (validateCSS.length !== 0) {
+		const validateCSS = validateCss(cssString)
+		if (validateCSS === false) {
 			return false
 		}
 		return true
@@ -64,10 +66,10 @@ export class CodeMap {
 			if (!scriptItems.includes(`{ ${CodeMap.capFirstLetter(widgetType)} }`)) {
 				if (stockWidgets.includes(widgetType)) {
 					scriptItems =
-						scriptItems + `import { ${CodeMap.capFirstLetter(widgetType)} } from "@components/warp/"
+						scriptItems +
+						`import { ${CodeMap.capFirstLetter(widgetType)} } from "@components/warp/"
 	`
 				}
-
 			}
 
 			const widget = this.transformTemplateToWidget({
@@ -115,8 +117,8 @@ export class CodeMap {
 			const mapped = this.convertJSONToCSS(css)
 
 			if (mapped) {
-				const validateCSS = validate(mapped)
-				if (validate(mapped).length !== 0) {
+				const validateCSS = validateCss(mapped)
+				if (validateCSS) {
 					console.log(`Invalid CSS on widget ${id} : ${validateCSS}`)
 					return ``
 				}
@@ -125,7 +127,6 @@ export class CodeMap {
 					styleSplit = mapped.split(`:global(#${id})`)
 				} else {
 					styleSplit = mapped.split(id)
-
 				}
 
 				if (styleSplit?.length > 0 && styleSplit[1]) {
@@ -192,7 +193,10 @@ export class CodeMap {
 
 	private removeWarpImports(code: string): string {
 		let scriptTag = ``
-		if ((code.includes('<script lang="ts">') || code.includes('<script>')) && code.includes('</script>')) {
+		if (
+			(code.includes('<script lang="ts">') || code.includes('<script>')) &&
+			code.includes('</script>')
+		) {
 			scriptTag = code.split('<script')[1].split('>')[1].split('</script')[0] ?? ''
 			const extractedWarpImports = [...scriptTag.matchAll(importRE)]
 			for (const item of extractedWarpImports) {
@@ -249,7 +253,9 @@ export class CodeMap {
 		cssItems = cssItems + this.convertJSONToCSS(formattetStyle)
 
 		if (contentType === 'slot') {
-			const subItems: Array<Record<string, unknown>> = item.items as Array<Record<string, unknown>> | null
+			const subItems: Array<Record<string, unknown>> = item.items as Array<
+				Record<string, unknown>
+			> | null
 			if (subItems?.length > 0) {
 				for (const subStyle of subItems) {
 					cssItems = cssItems + this.extractStyleAndCodeify(subStyle)
@@ -271,13 +277,20 @@ export class CodeMap {
 			}
 		}
 
-
-
 		return stringAttributes
 	}
 
 	private transformTemplateToWidget({ type, widget, value, id, item }): string {
-		const defaultWidgets = ['Label', 'Container', 'ScrollContainer', 'TextBox', 'VideoPlayer', 'TextInput', 'Image', 'Button']
+		const defaultWidgets = [
+			'Label',
+			'Container',
+			'ScrollContainer',
+			'TextBox',
+			'VideoPlayer',
+			'TextInput',
+			'Image',
+			'Button'
+		]
 
 		const attributes = this.convertAttributesToInline(item.attributes)
 
@@ -306,23 +319,23 @@ export class CodeMap {
 					innerItem += `${transformedInner}\n`
 				}
 				if (defaultWidgets.includes(CodeMap.capFirstLetter(widget))) {
-					return `<${CodeMap.capFirstLetter(widget)} id="${widget + id
-						}" ${attributes}>${innerItem}</${CodeMap.capFirstLetter(widget)}>`
+					return `<${CodeMap.capFirstLetter(widget)} id="${
+						widget + id
+					}" ${attributes}>${innerItem}</${CodeMap.capFirstLetter(widget)}>`
 				}
-				return `<${widget} id="${widget + id
-					}" ${attributes}>${innerItem}</${widget}>`
-
+				return `<${widget} id="${widget + id}" ${attributes}>${innerItem}</${widget}>`
 			}
 			if (defaultWidgets.includes(CodeMap.capFirstLetter(widget))) {
-				return `<${CodeMap.capFirstLetter(widget)} id="${widget + id
-					}" ${attributes}>${value}</${CodeMap.capFirstLetter(widget)}>`
+				return `<${CodeMap.capFirstLetter(widget)} id="${
+					widget + id
+				}" ${attributes}>${value}</${CodeMap.capFirstLetter(widget)}>`
 			}
-			return `<${widget} id="${widget + id
-				}" ${attributes}>${value}</${widget}>`
-
+			return `<${widget} id="${widget + id}" ${attributes}>${value}</${widget}>`
 		}
 		if (defaultWidgets.includes(CodeMap.capFirstLetter(widget))) {
-			return `<${CodeMap.capFirstLetter(widget)} ${type}="${value}" id="${widget + id}" ${attributes}/>`
+			return `<${CodeMap.capFirstLetter(widget)} ${type}="${value}" id="${
+				widget + id
+			}" ${attributes}/>`
 		}
 		return `<${widget} ${type}="${value}" id="${widget + id}" ${attributes}/>`
 	}
@@ -365,7 +378,6 @@ export class CodeMap {
 				}
 			}
 		}
-
 
 		if (contentsType.length === 0) {
 			contentsType = 'slot'

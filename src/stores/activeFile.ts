@@ -1,7 +1,5 @@
-import { writable } from "svelte/store"
+import { writable } from 'svelte/store'
 
-const activeFile = writable({
-
-})
+const activeFile = writable({})
 
 export default activeFile
