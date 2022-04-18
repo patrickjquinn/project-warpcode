@@ -224,7 +224,7 @@
 	}
 
 	function handleSelfDelete(e) {
-		if (onAction){
+		if (onAction) {
 			onAction({
 				item: parent,
 				type: 0
@@ -233,7 +233,7 @@
 	}
 
 	function handleSelfReplicate(e) {
-		if (onAction){
+		if (onAction) {
 			onAction({
 				item: parent,
 				type: 1

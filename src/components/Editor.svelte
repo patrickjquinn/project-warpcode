@@ -3,9 +3,8 @@
 	import Monaco from './Monaco.svelte'
 	import { DirectoryData, openTabs } from '../stores/directoryStore'
 	const { ipcRenderer } = window.require('electron')
-	const fs = require('fs')
-	const path = require('path')
-
+	const fs = window.require('fs')
+	const path = window.require('path')
 
 	export let activeTabValue = 0
 	export let lang = 'html'
@@ -48,7 +47,7 @@
 		activeTabValue = 0
 		activeEditor = activeTabValue
 
-		let active: any = $openTabs.filter(obj => {
+		let active: any = $openTabs.filter((obj) => {
 			return obj.tabId === activeTabValue
 		})
 
@@ -57,7 +56,7 @@
 			console.log(active)
 			code = active.editorValue
 			const event = new CustomEvent('fileSelectedDirect', {
-				detail: { name: active.fileName, type: 'file', path: active.filePath},
+				detail: { name: active.fileName, type: 'file', path: active.filePath },
 				bubbles: true,
 				cancelable: true,
 				composed: false
@@ -68,7 +67,7 @@
 	const handleClick = (tabId) => () => {
 		activeTabValue = tabId
 		activeEditor = activeTabValue
-		let active: any = $openTabs.filter(obj => {
+		let active: any = $openTabs.filter((obj) => {
 			return obj.tabId === tabId
 		})
 
@@ -77,7 +76,7 @@
 			console.log(active)
 			code = active.editorValue
 			const event = new CustomEvent('fileSelectedDirect', {
-				detail: { name: active.fileName, type: 'file', path: active.filePath},
+				detail: { name: active.fileName, type: 'file', path: active.filePath },
 				bubbles: true,
 				cancelable: true,
 				composed: false
@@ -157,7 +156,7 @@
 
 	ipcRenderer.on('file-saved', (event, arg) => {
 		console.log('file saved.')
-		if (onAction){
+		if (onAction) {
 			onAction(code)
 		}
 	})
@@ -165,7 +164,10 @@
 
 <ul>
 	{#each $openTabs as tab}
-		<li style="{activeTabValue === tab.tabId ? '' : 'border: none !important;'}" class="{activeTabValue === tab.tabId ? 'active' : ''}">
+		<li
+			style="{activeTabValue === tab.tabId ? '' : 'border: none !important;'}"
+			class="{activeTabValue === tab.tabId ? 'active' : ''}"
+		>
 			<span class="tab-span" on:click="{handleClick(tab.tabId)}">
 				<img src="../src/icons/file_type_{tab.ext}.svg" alt="{''}" />
 				{tab.fileName}
@@ -183,9 +185,7 @@
 
 {#if $openTabs.length > 0}
 	<div class="editor-body">
-		<Monaco
-			bind:code
-			bind:lang/>
+		<Monaco bind:code bind:lang />
 	</div>
 {/if}
 

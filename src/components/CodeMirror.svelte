@@ -17,8 +17,8 @@
 	import 'codemirror/addon/edit/closebrackets.js'
 	import 'codemirror/addon/edit/matchtags.js'
 	import 'codemirror/addon/edit/closetag.js'
-	const fs = require('fs')
-	const { ipcRenderer } = require('electron')
+	const fs = window.require('fs')
+	const { ipcRenderer } = window.require('electron')
 
 	export let value
 	export let language

@@ -288,7 +288,7 @@ ipcMain.on('open-file', async (e, filePath) => {
 	if (filePath) {
 		try {
 			const fileContents = await readFileAt(filePath)
-			e.sender.send('file-opened', filePath, fileContents.toString());
+			e.sender.send('file-opened', filePath, fileContents.toString())
 			e.sender.send('file-sent', fileContents)
 		} catch (err) {
 			e.sender.send('file-sent', `And error occured opening ${filePath}`)
@@ -301,7 +301,7 @@ ipcMain.on('open-readme', async (e) => {
 		const filePath = `${projectDir}/README.md`
 		if (fs.existsSync(filePath)) {
 			const fileContents = await readFileAt(filePath)
-			e.sender.send('file-opened', filePath, fileContents.toString());
+			e.sender.send('file-opened', filePath, fileContents.toString())
 			e.sender.send('file-sent', fileContents)
 		}
 	} catch (err) {

@@ -18,7 +18,9 @@
 		recent = recents
 	})
 
-	ipcRenderer.on('project-open', (event, stat) => {})
+	ipcRenderer.on('project-open', (event, stat) => {
+		console.log(stat, 'project-open', event)
+	})
 
 	const openExistingProject = (dir) => {
 		ipcRenderer.send('open-existing-project', dir)

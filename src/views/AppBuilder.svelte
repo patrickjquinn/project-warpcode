@@ -48,7 +48,7 @@
 	const updateCanvas = (code?) => {
 		if (!shouldShowCanvas) return
 
-		if (code){
+		if (code) {
 			currentCode = code
 		}
 		const codeMap = new CodeMap('ts')
@@ -163,7 +163,7 @@
 	}
 
 	const handleCanvasChange = (items) => {
-		const canvas: Record<string, unknown> = {items}
+		const canvas: Record<string, unknown> = { items }
 		console.log(canvas)
 		if (canvas && shouldCanvasShowByFile) {
 			const codeMap: CodeMap = new CodeMap('ts')

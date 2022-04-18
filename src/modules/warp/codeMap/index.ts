@@ -6,14 +6,14 @@ import * as Css from 'json-to-css'
 import css2json from 'css2json'
 
 const validateCss = window.require('css-validator')
-const beautify = window.require('simply-beautiful');
+const beautify = window.require('simply-beautiful')
 
 const linting_options = {
 	indent_size: 4,
 	space_before_conditional: true,
 	jslint_happy: true,
-	max_char: 0,
-  }
+	max_char: 0
+}
 
 const stockWidgets = ['image', 'button', 'image', 'label', 'textBox', 'textInput', 'videoPlayer']
 const importRE = /import(?:["'\s]*([\w*{}\n, ]+)from\s*)?["'\s]*([@\w/_-]+)["'\s].*/g
@@ -97,7 +97,8 @@ export class CodeMap {
 			}
 		}
 
-		return beautify.html(`
+		return beautify.html(
+			`
         <script lang="${this.lang}">
             ${scriptItems.trim()}
 			${scriptTag.trim()}
@@ -111,7 +112,9 @@ export class CodeMap {
 			${cssItems.trim()}
 			${styleTag.trim()}
 		</style>
-        `, linting_options)
+        `,
+			linting_options
+		)
 	}
 
 	public convertCSSJSONtoInline(css: Record<string, unknown>, id: string): string {
