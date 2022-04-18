@@ -16,6 +16,7 @@
 
 	export let items: Array<any>
 	export let parent: { id?: any }
+	export let onAction: any
 	let copiedItem: Record<string, unknown>
 
 	let dragDisabled = true
@@ -35,7 +36,7 @@
 	})
 
 	const flipDurationMs = 50
-	const dispatch = createEventDispatcher()
+	// const dispatch = createEventDispatcher()
 
 	const onKeyCombo = (e: {
 		preventDefault: () => void
@@ -223,17 +224,21 @@
 	}
 
 	function handleSelfDelete(e) {
-		dispatch('message', {
-			item: parent,
-			type: 0
-		})
+		if (onAction){
+			onAction({
+				item: parent,
+				type: 0
+			})
+		}
 	}
 
 	function handleSelfReplicate(e) {
-		dispatch('message', {
-			item: parent,
-			type: 1
-		})
+		if (onAction){
+			onAction({
+				item: parent,
+				type: 1
+			})
+		}
 	}
 
 	function handleChildAction(e) {
@@ -287,7 +292,7 @@
 						><NestedContent
 							bind:items="{item.items}"
 							parent="{item}"
-							on:message="{handleChildAction}"
+							onAction="{handleChildAction}"
 						/></Container
 					>
 				{:else}

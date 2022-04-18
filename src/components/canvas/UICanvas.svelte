@@ -17,6 +17,7 @@
 	} from '../warp/widgets/index'
 
 	export let items: Array<any>
+	export let onAction: any
 	let copiedItem
 
 	let dragDisabled = true
@@ -41,7 +42,7 @@
 	})
 
 	const flipDurationMs = 0
-	const dispatch = createEventDispatcher()
+	// const dispatch = createEventDispatcher()
 
 	const onKeyCombo = (e: {
 		preventDefault: () => void
@@ -135,10 +136,8 @@
 	}
 
 	function canvasChanged() {
-		if (isFinalCanvas) {
-			dispatch('message', {
-				items
-			})
+		if (isFinalCanvas && onAction) {
+			onAction(items)
 		}
 	}
 
@@ -291,7 +290,7 @@
 											><NestedContent
 												bind:items="{item.items}"
 												parent="{item}"
-												on:message="{handleChildAction}"
+												onAction="{handleChildAction}"
 											/></Container
 										>
 									{:else}

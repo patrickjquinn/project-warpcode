@@ -4,7 +4,7 @@
 	import { onMount } from 'svelte'
 	import { bell, refresh, comment, codeFork } from 'svelte-awesome/icons'
 	import { CodeMap } from '../modules/warp/codeMap'
-	import Monaco from '../components/Editor.svelte'
+	import Editor from '../components/Editor.svelte'
 	import UIPallete from '../components/canvas/UIPallete.svelte'
 	import UICanvas from '../components/canvas/UICanvas.svelte'
 	import LayoutEditor from '../components/canvas/LayoutEditor.svelte'
@@ -13,7 +13,6 @@
 	import Terminal from '../components/Terminal.svelte'
 	import Warp from '../assets/warpwhite.png'
 	import OnlyTabs from '../components/tabs/OnlyTabs.svelte'
-	import RemovableTabs from '../components/tabs/RemovableTabs.svelte'
 	import activeFile from '../stores/activeFile'
 
 	const { ipcRenderer } = window.require('electron')
@@ -37,12 +36,8 @@
 	}
 
 	let currentCode = '/** Code Will Appear Here **/'
-	// '<script lang="ts">\n\n</script' + '>\n\n<main>\n\n</main>\n\n<style></style>'
 
-	// $: currentCode && updateCanvas()
-	let editorTabs: Array<Record<string, unknown>> = [
-		// { label: 'Start.svelte', value: 1, path: './Start.svelte', type: 'file' }
-	]
+	let editorTabs: Array<Record<string, unknown>> = []
 
 	const upControlTabs: Array<Record<string, unknown>> = [
 		{ label: 'Widgets', value: 1 },
@@ -50,18 +45,23 @@
 		{ label: 'Style', value: 3 }
 	]
 
-	const updateCanvas = () => {
-		if (!shouldShowCanvas || currentCode?.trim().length === 0) return
+	const updateCanvas = (code?) => {
+		if (!shouldShowCanvas) return
+
+		if (code){
+			currentCode = code
+		}
 		const codeMap = new CodeMap('ts')
 		const codeCanvas = codeMap.convertCodeToCanvas(currentCode)
+
 		const isSame = JSON.stringify(codeCanvas) == JSON.stringify(editorItems)
 
-		if (!isSame) {
-			if (codeCanvas?.length > 0) {
-				editorItems = codeCanvas
-			} else {
-				editorItems = []
-			}
+		if (isSame) return
+
+		if (codeCanvas?.length > 0) {
+			editorItems = codeCanvas
+		} else {
+			editorItems = []
 		}
 	}
 
@@ -127,8 +127,6 @@
 
 			incrementTabs(event.detail)
 
-			// alert(JSON.stringify(editorTabs, null, 2))
-
 			lang = fileExtension(event.detail.name)
 			ipcRenderer.send('open-file', event.detail.path)
 		},
@@ -136,6 +134,7 @@
 	)
 
 	const fileExtension = (name: string | string[]) => {
+		if (!name) return 'html'
 		const extension = name.slice(name.lastIndexOf('.') + 1)
 
 		switch (extension) {
@@ -157,17 +156,15 @@
 	}
 
 	const incrementTabs = (file: any) => {
-		// editorTabs = editorTabs.filter((el) => {
-		// 	return el.label != file.name && el.path != file.path
-		// })
 		for (let [index] of editorTabs.entries()) {
 			editorTabs[index].value = index + 1
 		}
 		editorTabs = [...editorTabs]
 	}
 
-	const handleCanvasChange = (event) => {
-		const canvas: Record<string, unknown> = event.detail
+	const handleCanvasChange = (items) => {
+		const canvas: Record<string, unknown> = {items}
+		console.log(canvas)
 		if (canvas && shouldCanvasShowByFile) {
 			const codeMap: CodeMap = new CodeMap('ts')
 			currentCode = codeMap.mapToCode(canvas, currentCode)
@@ -221,9 +218,7 @@
 								minDownPaneSize="0px"
 							>
 								<top slot="top">
-									<!-- Code editor, open files -->
-									<RemovableTabs bind:items="{editorTabs}" add="{true}" />
-									<Monaco bind:lang bind:code="{currentCode}" on:message="{updateCanvas}" />
+									<Editor bind:lang bind:code="{currentCode}" onAction="{updateCanvas}" />
 								</top>
 								<down slot="down">
 									<!-- Terminal, console,  output -->
@@ -248,7 +243,7 @@
 						>
 							<left slot="left">
 								<!-- UI canvas -->
-								<UICanvas items="{editorItems}" on:message="{handleCanvasChange}" />
+								<UICanvas bind:items="{editorItems}" onAction="{handleCanvasChange}" />
 							</left>
 							<right slot="right">
 								<!-- Widget, style, layout tabs for the active item -->

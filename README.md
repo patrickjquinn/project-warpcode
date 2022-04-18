@@ -12,9 +12,7 @@ Active contributors very welcome.
 
 ## What does it look like (for now)?
 
-
 ![alt text](https://github.com/patrickjquinn/project-warp/blob/main/warp.png?raw=true)
-
 
 ## Recommended IDE Setup
 

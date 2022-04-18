@@ -1,12 +1,19 @@
 /* eslint-disable no-prototype-builtins */
 import { parse } from 'himalaya'
-
 import cssbeautify from 'cssbeautify'
 import * as Css from 'json-to-css'
 // import { validate } from 'csstree-validator'
 import css2json from 'css2json'
 
 const validateCss = window.require('css-validator')
+const beautify = window.require('simply-beautiful');
+
+const linting_options = {
+	indent_size: 4,
+	space_before_conditional: true,
+	jslint_happy: true,
+	max_char: 0,
+  }
 
 const stockWidgets = ['image', 'button', 'image', 'label', 'textBox', 'textInput', 'videoPlayer']
 const importRE = /import(?:["'\s]*([\w*{}\n, ]+)from\s*)?["'\s]*([@\w/_-]+)["'\s].*/g
@@ -90,7 +97,7 @@ export class CodeMap {
 			}
 		}
 
-		return `
+		return beautify.html(`
         <script lang="${this.lang}">
             ${scriptItems.trim()}
 			${scriptTag.trim()}
@@ -104,7 +111,7 @@ export class CodeMap {
 			${cssItems.trim()}
 			${styleTag.trim()}
 		</style>
-        `
+        `, linting_options)
 	}
 
 	public convertCSSJSONtoInline(css: Record<string, unknown>, id: string): string {
@@ -118,7 +125,7 @@ export class CodeMap {
 
 			if (mapped) {
 				const validateCSS = validateCss(mapped)
-				if (validateCSS) {
+				if (!validateCSS) {
 					console.log(`Invalid CSS on widget ${id} : ${validateCSS}`)
 					return ``
 				}
@@ -205,7 +212,7 @@ export class CodeMap {
 				}
 			}
 		}
-		return scriptTag
+		return beautify.js(scriptTag, linting_options)
 	}
 
 	private mapStylesToAllCanvasItems(canvas, cssItems) {
@@ -442,7 +449,7 @@ export class CodeMap {
 				autosemicolon: true
 			})
 
-			return beautified
+			return beautify.css(beautified, linting_options)
 		}
 		return ``
 	}
