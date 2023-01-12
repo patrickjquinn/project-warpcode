@@ -34,18 +34,20 @@
 	$: {
 		if (terminalController) {
 			bgColor = theme.background
-			terminalController.setOption('theme', theme)
+			// terminalController.setOption('theme', theme)
 		}
 	}
 	function initializeXterm() {
 		terminalController = new xterm.Terminal({
 			fontFamily: 'Fira Code, Iosevka, monospace',
-			fontSize: 12
+			fontSize: 12,
+			logLevel: 'debug',
+			theme,
 		})
 		termFit = new fit.FitAddon()
 		terminalController.loadAddon(termFit)
 		terminalController.open(terminalElement)
-		terminalController.setOption('logLevel', 'debug')
+		// terminalController.setOption('logLevel', 'debug')
 		termFit.fit()
 		terminalController.write('\x1b[32mWelcome to Warp code!\x1b[m\r\n')
 		terminalController.onData((e) => {

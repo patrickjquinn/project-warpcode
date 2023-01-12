@@ -10,7 +10,7 @@ const electron = electronConnect.server.create({ stopOnClose: true })
 const options = rollupConfig.default
 const opt = options('development')
 const TAG = '[script/build.js]'
-const resource = `http://localhost:${3000}/index.html`
+const resource = `http://localhost:${5173}/index.html`
 
 const watchFunc = function () {
 	const watcher = rollup.watch(opt)

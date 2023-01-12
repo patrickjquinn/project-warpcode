@@ -69,7 +69,7 @@ class createWin {
 		win.show()
 
 		const URL = is_dev
-			? 'http://localhost:3000'
+			? 'http://localhost:5173'
 			: `file://${join(__dirname, '../../dist/index.html')}`
 
 		win.loadURL(URL)
@@ -135,7 +135,7 @@ function launch() {
 		backgroundColor: darkBackgroundColor
 	})
 
-	launcherWindow.loadURL('http://localhost:3000/#/launch')
+	launcherWindow.loadURL('http://localhost:5173/#/launch')
 
 	launcherWindow.once('ready-to-show', () => {
 		launcherWindow.show()
