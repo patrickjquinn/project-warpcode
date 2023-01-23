@@ -8,6 +8,7 @@
 <ul>
 	{#each items as item}
 		<li class="{activeTabValue === item.value ? 'active' : ''}">
+			<!-- svelte-ignore a11y-click-events-have-key-events -->
 			<span on:click="{handleClick(item.value)}">{item.label}</span>
 		</li>
 	{/each}

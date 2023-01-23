@@ -351,8 +351,8 @@ const quitMenuProject = async () => {
 
 const runMenuWeb = async () => {
 	console.log('running web...')
-	shell.openExternal('http://localhost:5001')
 	await exec('pnpm dev:start', { cwd: projectDir })
+	await shell.openExternal('http://localhost:5001')
 	return
 }
 
