@@ -1,10 +1,8 @@
 import * as child_process from 'child_process'
+import util from 'util'
 
-export default function exec(cmd, opts) {
-	return new Promise((fulfil, reject) => {
-		child_process.exec(cmd, opts, (err, stdout, stderr) => {
-			if (err) reject(err)
-			else fulfil({ stdout, stderr })
-		})
-	})
+const exec_async = util.promisify(child_process.exec)
+
+export const exec = (cmd, opts) => {
+	return exec_async(cmd, opts)
 }

@@ -10,7 +10,8 @@ import os from 'os'
 import fs from 'fs'
 import util from 'util'
 import directoryTree from 'directory-tree'
-import exec from './shared/exec'
+import { exec } from './shared/exec'
+import { sleep } from './shared/sleep'
 import readJSON from './shared/readJSON'
 import * as path from 'path'
 import degit from 'degit'
@@ -349,11 +350,18 @@ const quitMenuProject = async () => {
 	launch()
 }
 
+const openProjectInBrowser = async () => {
+	await sleep(1500)
+	return shell.openExternal('http://localhost:5001')
+}
+
+const buildAndRunProject = async () => {
+	return exec('pnpm dev:start', { cwd: projectDir })
+}
+
 const runMenuWeb = async () => {
-	console.log('running web...')
-	await exec('pnpm dev:start', { cwd: projectDir })
-	await shell.openExternal('http://localhost:5001')
-	return
+	const promises = [buildAndRunProject(), openProjectInBrowser()]
+	return Promise.all(promises)
 }
 
 const runMenuAndroid = async () => {
