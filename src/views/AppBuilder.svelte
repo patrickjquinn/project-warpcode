@@ -218,7 +218,7 @@
 								minDownPaneSize="0px"
 							>
 								<top slot="top">
-									<Editor bind:lang bind:code="{currentCode}" onAction="{updateCanvas}" />
+									<Editor bind:lang="{lang}" bind:code="{currentCode}" onAction="{updateCanvas}" />
 								</top>
 								<down slot="down">
 									<!-- Terminal, console,  output -->

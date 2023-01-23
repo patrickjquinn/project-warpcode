@@ -19,7 +19,7 @@
 	}
 </script>
 
-<span class:expanded on:click="{root ? null : folderSelected}">{name}</span>
+<span class:expanded="{expanded}" on:click="{root ? null : folderSelected}">{name}</span>
 
 {#if expanded}
 	<ul transition:slide="{{ duration: 150 }}">

@@ -192,11 +192,13 @@ function openProject(dir) {
 }
 
 function existingProjectDialog(dir) {
+	const focusedWindow: BrowserWindow | null = BrowserWindow.getFocusedWindow()
 	if (dir) {
 		openProject(dir)
 	} else {
+		if (!focusedWindow) return
 		dialog
-			.showOpenDialog(BrowserWindow.getFocusedWindow(), {
+			.showOpenDialog(focusedWindow, {
 				title: 'Open project',
 				buttonLabel: 'Open project',
 				properties: ['openDirectory'],
@@ -215,8 +217,11 @@ function existingProjectDialog(dir) {
 }
 
 function createProjectDialog(event) {
+	const focusedWindow: BrowserWindow | null = BrowserWindow.getFocusedWindow()
+	if (!focusedWindow) return
+
 	dialog
-		.showOpenDialog(BrowserWindow.getFocusedWindow(), {
+		.showOpenDialog(focusedWindow, {
 			title: 'Create project',
 			buttonLabel: 'Create project',
 			properties: ['openDirectory', 'createDirectory'],
@@ -579,6 +584,7 @@ const createApplicationMenu = () => {
 		})
 
 		const windowMenu = template.find((item) => item.label === 'Window')
+		if (!windowMenu) return
 		windowMenu.role = 'window'
 	}
 	return Menu.setApplicationMenu(Menu.buildFromTemplate(template))

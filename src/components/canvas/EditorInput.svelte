@@ -8,7 +8,7 @@
 <div>
 	<label>
 		{label}
-		<input use:typeAction bind:value placeholder="Enter value..." />
+		<input use:typeAction bind:value="{value}" placeholder="Enter value..." />
 	</label>
 </div>
 

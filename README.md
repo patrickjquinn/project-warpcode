@@ -51,3 +51,9 @@ And:
 ```
 
 On NT machines (Windows, ReactOS, Wine).
+
+## Trying it out.
+
+Once you have the service running, create a new project with the onscreen option to do so. It will download and initialize the project from another template repo. By default it will open the README file but if you navigate to `src/pages/index.svelte` the editor will appear and allow you interact with the visual canvas.
+
+Now in the top options bar, click the 'Run+Build' tab and then 'Run Web'. This will start the poject's Vite server in dev mode and changes made in code or on the canvas will reflect in real time.

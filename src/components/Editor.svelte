@@ -168,16 +168,12 @@
 			style="{activeTabValue === tab.tabId ? '' : 'border: none !important;'}"
 			class="{activeTabValue === tab.tabId ? 'active' : ''}"
 		>
+			<!-- svelte-ignore a11y-click-events-have-key-events -->
 			<span class="tab-span" on:click="{handleClick(tab.tabId)}">
 				<img src="../src/icons/file_type_{tab.ext}.svg" alt="{''}" />
 				{tab.fileName}
-				<span
-					class="delete-button"
-					value="{tab.tabId}"
-					on:click="{(value) => deleteTab(tab.tabId)}"
-				>
-					&times
-				</span>
+				<!-- svelte-ignore a11y-click-events-have-key-events -->
+				<span class="delete-button" on:click="{() => deleteTab(tab.tabId)}"> &times </span>
 			</span>
 		</li>
 	{/each}
@@ -185,7 +181,7 @@
 
 {#if $openTabs.length > 0}
 	<div class="editor-body">
-		<Monaco bind:code bind:lang />
+		<Monaco bind:code="{code}" bind:lang="{lang}" />
 	</div>
 {/if}
 

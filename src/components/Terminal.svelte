@@ -34,6 +34,7 @@
 	$: {
 		if (terminalController) {
 			bgColor = theme.background
+			handleTermResize()
 			// terminalController.setOption('theme', theme)
 		}
 	}
@@ -42,7 +43,7 @@
 			fontFamily: 'Fira Code, Iosevka, monospace',
 			fontSize: 12,
 			logLevel: 'debug',
-			theme,
+			theme
 		})
 		termFit = new fit.FitAddon()
 		terminalController.loadAddon(termFit)
