@@ -32,7 +32,7 @@
 		"default-shell": "^2.2.0",
 		"degit": "^2.8.4",
 		"dotenv": "^16.0.3",
-		"electron": "^22.0.3",
+		"electron": "^22.3.24",
 		"electron-builder": "^23.6.0",
 		"electron-connect": "^0.6.3",
 		"electron-rebuild": "^3.2.9",
